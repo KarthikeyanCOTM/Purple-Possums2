@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.tbagproj.controller.GuessingGameController;
-import edu.ycp.cs320.tbagproj.model.GuessingGame;
+import edu.ycp.cs320.tbagproj.model.Actor;
 
 public class GuessingGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,14 +31,14 @@ public class GuessingGameServlet extends HttpServlet {
 		
 		// create GuessingGame model - model does not persist between requests
 		// must recreate it each time a Post comes in 
-		GuessingGame model = new GuessingGame();
+		//Actor model = new Actor();
 
 		// create GuessingGame controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
 		GuessingGameController controller = new GuessingGameController();
 		
 		// assign model reference to controller so that controller can access model
-		controller.setModel(model);
+		//controller.setModel(model);
 		
 		// check if user is starting a new game and call controller method
 		if (req.getParameter("startGame") != null) {
@@ -56,8 +56,8 @@ public class GuessingGameServlet extends HttpServlet {
 			// initialize model with the old min, max values
 			// since the data does not persist between posts, we need to 
 			// recreate and re-initialize the model each time
-			model.setMin(curMin);
-			model.setMax(curMax);
+			//model.setMin(curMin);
+			//model.setMax(curMax);
 
 			// now check to see which button the user pressed
 			// and adjust min, max, and guess accordingly
@@ -77,7 +77,7 @@ public class GuessingGameServlet extends HttpServlet {
 		
 		// set "game" attribute to the model reference
 		// the JSP will reference the model elements through "game"
-		req.setAttribute("game", model);
+		//req.setAttribute("game", model);
 		
 		// now call the JSP to render the new page
 		req.getRequestDispatcher("/_view/guessingGame.jsp").forward(req, resp);
