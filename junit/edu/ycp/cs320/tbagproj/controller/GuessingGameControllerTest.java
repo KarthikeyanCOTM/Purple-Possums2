@@ -6,15 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.ycp.cs320.tbagproj.controller.GuessingGameController;
-import edu.ycp.cs320.tbagproj.model.GuessingGame;
+import edu.ycp.cs320.tbagproj.model.Actor;
 
 public class GuessingGameControllerTest {
-	private GuessingGame model;
+	private Actor model;
 	private GuessingGameController controller;
 	
 	@Before
 	public void setUp() {
-		model = new GuessingGame();
+		model = new Actor();
 		controller = new GuessingGameController();
 		
 		model.setMin(1);

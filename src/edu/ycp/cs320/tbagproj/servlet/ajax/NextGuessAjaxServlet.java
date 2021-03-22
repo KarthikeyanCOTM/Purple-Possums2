@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.tbagproj.controller.GuessingGameController;
-import edu.ycp.cs320.tbagproj.model.GuessingGame;
+import edu.ycp.cs320.tbagproj.model.Actor;
 
 public class NextGuessAjaxServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,15 +36,15 @@ public class NextGuessAjaxServlet extends HttpServlet {
 			return;
 		}
 		
-		GuessingGame model = new GuessingGame();
-		model.setMin(min);
-		model.setMax(max);
+		//Actor model = new Actor();
+		//model.setMin(min);
+		//model.setMax(max);
 		
 		// If an action was specified, use a GuessingGameController to carry it out
 		String action = req.getParameter("action");
 		if (action != null) {
 			GuessingGameController controller = new GuessingGameController();
-			controller.setModel(model);
+			//controller.setModel(model);
 			
 			if (action.equals("less")) {
 				controller.setNumberIsLessThanGuess();
@@ -53,14 +53,14 @@ public class NextGuessAjaxServlet extends HttpServlet {
 			}
 		}
 		
-		int guess = model.getGuess();
+		/*int guess = model.getGuess();
 		
 		// Send back updated model to client
 		resp.setContentType("application/json");
 		resp.getWriter().println(
 				"{ \"min\": " + model.getMin() +
 				", \"max\": " + model.getMax() +
-				", \"guess\": " + guess + "}" );
+				", \"guess\": " + guess + "}" );*/
 	}
 
 	private Integer getInteger(HttpServletRequest req, String name) {
