@@ -55,5 +55,8 @@
 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list><!--Game Servlet--><servlet>
+  	<servlet-name>GameServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.tbagproj.servlet.GameServlet</servlet-class>
+</servlet>
 </web-app>
