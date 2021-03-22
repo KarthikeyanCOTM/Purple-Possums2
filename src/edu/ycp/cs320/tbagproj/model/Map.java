@@ -15,6 +15,11 @@ public class Map {
 		this.rooms = rooms;
 	}
 	
+	public void createRoom(Inventory items, String name, ArrayList<NPC> NPCList, HashMap<String, Room> connections) {
+		Room room = new Room(items, name, NPCList, connections);
+		rooms.put(name, room);
+	}
+	
 	
 	public Room findRoom(String name) {
 		return rooms.get(name);

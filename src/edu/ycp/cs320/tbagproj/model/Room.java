@@ -8,6 +8,18 @@ public class Room {
 	Inventory items;
 	ArrayList<NPC> NPCList;
 	HashMap<String, Room> connections;
+	String name;
+	
+	public Room() {
+		
+	}
+	
+	public Room(Inventory items, String name, ArrayList<NPC> NPCList, HashMap<String, Room> connections) {
+		this.items = items;
+		this.name = name;
+		this.NPCList = NPCList;
+		this.connections = connections;
+	}
 	
 	public Inventory GetInventory(){
 		return items;
@@ -15,6 +27,14 @@ public class Room {
 	
 	public void setInventory(Inventory items) {
 		this.items = items;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public ArrayList<NPC> getNPC(){
