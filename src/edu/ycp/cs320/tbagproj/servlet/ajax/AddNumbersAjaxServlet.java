@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.controller.AddNumbersController;
+import edu.ycp.cs320.tbagproj.controller.GameController;
 
 public class AddNumbersAjaxServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,12 +36,12 @@ public class AddNumbersAjaxServlet extends HttpServlet {
 		}
 		
 		// Use a controller to process the request
-		AddNumbersController controller = new AddNumbersController();
-		Double result = controller.add(first, second);
+		GameController controller = new GameController();
+		//Double result = controller.add(first, second);
 		
 		// Send back a response
 		resp.setContentType("text/plain");
-		resp.getWriter().println(result.toString());
+		//resp.getWriter().println(result.toString());
 	}
 
 	private Double getDouble(HttpServletRequest req, String name) {

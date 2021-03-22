@@ -1,8 +1,12 @@
 package edu.ycp.cs320.tbagproj.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Game {
-	boolean close = false;
-	Command enter;
+	private boolean close = false;
+	private Command enter;
+	private String key;
 	
 	public void exitGame() {
 		if(enter.getPrompt() == "quit") {
@@ -14,10 +18,9 @@ public class Game {
 	}
 	
 	public void newGame() {
-		if(enter.getPrompt() == "new game") {
-			
-		}
-			
+		HashMap<String, Room> rooms = new HashMap<>();
+		Map map = new Map();
+		map.createRoom(null, "Foyar", null, rooms);
 	}
 	
 	public void saveGame() {

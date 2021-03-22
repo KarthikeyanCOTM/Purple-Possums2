@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Room {
-	Inventory items;
-	ArrayList<NPC> NPCList;
-	HashMap<String, Room> connections;
-	String name;
+	private Inventory items;
+	private ArrayList<NPC> NPCList;
+	private HashMap<String, Room> connections;
+	private String name;
 	
 	public Room() {
 		
@@ -21,7 +21,7 @@ public class Room {
 		this.connections = connections;
 	}
 	
-	public Inventory GetInventory(){
+	public Inventory getInventory(){
 		return items;
 	}
 	

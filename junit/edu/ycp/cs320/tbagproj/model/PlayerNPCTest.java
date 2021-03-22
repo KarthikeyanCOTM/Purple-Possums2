@@ -5,55 +5,57 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ycp.cs320.tbagproj.model.Actor;
+import edu.ycp.cs320.tbagproj.model.Player;
+import edu.ycp.cs320.tbagproj.model.NPC;
 
-public class GuessingGameTest {
-	private Actor model;
+public class PlayerNPCTest {
+	private Player player;
+	private NPC npc;
 	
 	@Before
 	public void setUp() {
-		model = new Actor();
+		player = new Player("Player");
+		npc = new NPC("NPC");
 	}
 	
 	@Test
-	public void testSetMin() {
-		model.setMin(1);
-		assertEquals(1, model.getMin());
+	public void testgetName() {
+		assertEquals("Player", player.getName());
 	}
 	
 	public void testSetMax() {
-		model.setMax(100);
-		assertEquals(100, model.getMax());
+		//model.setMax(100);
+		//assertEquals(100, model.getMax());
 	}
 	
 	@Test
 	public void testIsDone() {
-		model.setMax(4);
+		/*model.setMax(4);
 		model.setMin(4);
-		assertEquals(true, model.isDone());
+		assertEquals(true, model.isDone());*/
 	}
 	
 	@Test
 	public void testGetGuess() {
-		model.setMin(1);
+		/*model.setMin(1);
 		model.setMax(100);
-		assertEquals(50, model.getGuess());
+		assertEquals(50, model.getGuess());*/
 	}
 	
 	@Test
 	public void testSetIsLessThan() {
-		model.setMin(1);
+		/*model.setMin(1);
 		model.setMax(100);
 		int guess = model.getGuess();
 		model.setIsLessThan(guess);
-		assertEquals(49, model.getMax());
+		assertEquals(49, model.getMax());*/
 	}
 	
 	public void testSetIsGreaterThan() {
-		model.setMin(1);
+		/*model.setMin(1);
 		model.setMax(100);
 		int guess = model.getGuess();
 		model.setIsGreaterThan(guess);
-		assertEquals(51, model.getMin());
+		assertEquals(51, model.getMin());*/
 	}
 }

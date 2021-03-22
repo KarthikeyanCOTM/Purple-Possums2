@@ -20,8 +20,17 @@ public class Command {
 		return commands;
 	}
 	
-	public void setCommands(ArrayList<String> commands) {
-		this.commands = commands;
+	public void setCommands() {
+		commands.add("north");
+		commands.add("east");
+		commands.add("south");
+		commands.add("west");
+		commands.add("attack");
+		commands.add("get");
+		commands.add("use");
+		commands.add("new game");
+		commands.add("save game");
+		commands.add("load game");
 	}
 	
 	public Stack<String> getPrevious(){
@@ -41,13 +50,19 @@ public class Command {
 	}
 	
 	public void processPrompt() {
-		if (prompt.contains("move")) {
+		if (commands.contains(prompt) == true && prompt == "north") {
 			
 		}
-		if (prompt.contains("attack")) {
+		else if (commands.contains(prompt) == true && prompt == "east") {
 			
 		}
-		if (prompt.contains("use")) {
+		else if (commands.contains(prompt) == true && prompt == "south") {
+			
+		}
+		else if (commands.contains(prompt) == true && prompt == "west") {
+			
+		}
+		else if (commands.contains(prompt) == true && prompt == "attack") {
 			
 		}
 	}
