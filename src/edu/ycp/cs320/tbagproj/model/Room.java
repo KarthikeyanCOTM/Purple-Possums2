@@ -57,8 +57,8 @@ public class Room {
 		return connections;
 	}
 	
-	public void setConnections(HashMap<String, Room> connections) {
-		this.connections = connections;
+	public void setConnections(String key, Room connection) {
+		connections.put(key, connection);
 	}
 	
 	public boolean isConnected(Room other) {

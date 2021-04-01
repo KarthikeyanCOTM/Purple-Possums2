@@ -18,9 +18,9 @@ public class Game {
 	}
 	
 	public void newGame() {
-		HashMap<String, Room> rooms = new HashMap<>();
+		HashMap<String, Room> Rooms = new HashMap<>();
 		Map map = new Map();
-		map.createRoom(null, "Foyar", null, rooms);
+		map.createRoom(null, "Foyar", null, Rooms);
 	}
 	
 	public void saveGame() {

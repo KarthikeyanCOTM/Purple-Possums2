@@ -23,16 +23,15 @@ public class PlayerNPCTest {
 		assertEquals("Player", player.getName());
 	}
 	
-	public void testSetMax() {
-		//model.setMax(100);
-		//assertEquals(100, model.getMax());
+	public void testSetHealth() {
+		player.setHealth(90.0);
+		assertEquals(90.0, player.getCurHealth());
 	}
 	
 	@Test
-	public void testIsDone() {
-		/*model.setMax(4);
-		model.setMin(4);
-		assertEquals(true, model.isDone());*/
+	public void testSetIsNPCAlive() {
+		npc.setIsNPCAlive(false);
+		assertEquals(false, npc.getIsNPCAlive());
 	}
 	
 	@Test

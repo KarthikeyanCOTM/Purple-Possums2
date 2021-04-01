@@ -31,6 +31,7 @@ public class Command {
 		commands.add("new game");
 		commands.add("save game");
 		commands.add("load game");
+		commands.add("help");
 	}
 	
 	public Stack<String> getPrevious(){
