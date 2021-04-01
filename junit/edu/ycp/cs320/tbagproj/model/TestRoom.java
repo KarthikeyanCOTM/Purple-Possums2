@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.ycp.cs320.tbagproj.model.Room;
+
 public class TestRoom {
 	private Room model;
 	private Room secondRoom;
@@ -26,6 +28,7 @@ public class TestRoom {
 	@Test
 	public void testSetConnections() {
 		model.setConnections("room", secondRoom);
+		assertTrue(model.isConnected(secondRoom) == true);
 	}
 
 }
