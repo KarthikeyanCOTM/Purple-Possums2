@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.controller.GuessingGameController;
+import edu.ycp.cs320.tbagproj.controller.TempGameController;
 import edu.ycp.cs320.tbagproj.model.Actor;
 
 public class GuessingGameServlet extends HttpServlet {
@@ -35,14 +35,14 @@ public class GuessingGameServlet extends HttpServlet {
 
 		// create GuessingGame controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
-		GuessingGameController controller = new GuessingGameController();
+		TempGameController controller = new TempGameController();
 		
 		// assign model reference to controller so that controller can access model
 		//controller.setModel(model);
 		
 		// check if user is starting a new game and call controller method
 		if (req.getParameter("startGame") != null) {
-			controller.startGame();
+			//controller.startGame();
 		}
 		// otherwise, user is already playing the game - get the old min and max
 		// from the posted form
@@ -64,7 +64,7 @@ public class GuessingGameServlet extends HttpServlet {
 			// must call controller methods to do this since the
 			// view only reads the model data, it never changes
 			// the model - only the controller can change the model
-			if (req.getParameter("gotIt") != null) {
+			/*if (req.getParameter("gotIt") != null) {
 				controller.setNumberFound();
 			} else if (req.getParameter("less") != null) {
 				controller.setNumberIsLessThanGuess();
@@ -72,7 +72,7 @@ public class GuessingGameServlet extends HttpServlet {
 				controller.setNumberIsGreaterThanGuess();
 			} else {
 				throw new ServletException("Unknown command");
-			}
+			}*/
 		}
 		
 		// set "game" attribute to the model reference

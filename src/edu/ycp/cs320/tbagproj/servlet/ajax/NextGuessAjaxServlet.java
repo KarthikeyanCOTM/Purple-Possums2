@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.controller.GuessingGameController;
+import edu.ycp.cs320.tbagproj.controller.TempGameController;
 import edu.ycp.cs320.tbagproj.model.Actor;
 
 public class NextGuessAjaxServlet extends HttpServlet {
@@ -43,13 +43,13 @@ public class NextGuessAjaxServlet extends HttpServlet {
 		// If an action was specified, use a GuessingGameController to carry it out
 		String action = req.getParameter("action");
 		if (action != null) {
-			GuessingGameController controller = new GuessingGameController();
+			TempGameController controller = new TempGameController();
 			//controller.setModel(model);
 			
 			if (action.equals("less")) {
-				controller.setNumberIsLessThanGuess();
+				//controller.setNumberIsLessThanGuess();
 			} else if (action.equals("more")) {
-				controller.setNumberIsGreaterThanGuess();
+				//controller.setNumberIsGreaterThanGuess();
 			}
 		}
 		
