@@ -1,37 +1,33 @@
 package edu.ycp.cs320.tbagproj.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Game {
-	boolean close = false;
-	Command enter;
+	private boolean close = false;
+	private Command enter;
+	private String key;
 	
 	public void exitGame() {
-		if(enter.getPrompt() == "quit") {
 			close = true;
-		}
-		else {
-			close = false;
-		}
 	}
 	
 	public void newGame() {
-		if(enter.getPrompt() == "new game") {
-			
-		}
-			
+		HashMap<String, Room> Rooms = new HashMap<>();
+		Map map = new Map();
+		map.createRoom(null, "Foyar", null, Rooms);
 	}
 	
 	public void saveGame() {
-		if(enter.getPrompt() == "save game") {
-			
-		}
-			
+		
 	}
 	
 	public void loadGame() {
-		if(enter.getPrompt() == "load game") {
-			
-		}
-			
+		
+	}
+	
+	public void runGame(String prompt) {
+		enter.setPrompt(prompt);
 	}
 
 }

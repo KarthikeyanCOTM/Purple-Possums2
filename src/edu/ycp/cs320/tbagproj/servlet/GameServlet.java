@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.controller.AddNumbersController;
+import edu.ycp.cs320.tbagproj.controller.GameController;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -49,8 +49,8 @@ public class GameServlet extends HttpServlet {
 			// the view does not alter data, only controller methods should be used for that
 			// thus, always call a controller method to operate on the data
 			else {
-				AddNumbersController controller = new AddNumbersController();
-				result = controller.add(first, second);
+				GameController controller = new GameController();
+				//result = controller.add(first, second);
 			}
 		} catch (NumberFormatException e) {
 			errorMessage = "Invalid double";

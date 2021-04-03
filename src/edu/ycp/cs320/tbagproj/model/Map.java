@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.Map.*;
 
 public class Map {
-	HashMap<String, Room> rooms;
+	private HashMap<String, Room> rooms;
 
 	public HashMap<String, Room> getRooms(){
 		return rooms;

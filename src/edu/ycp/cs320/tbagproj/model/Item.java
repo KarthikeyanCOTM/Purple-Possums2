@@ -5,7 +5,7 @@ public class Item {
 	private double damage;
 	private double armour;
 	
-	public void newItem(String name, double damage, double armour) {
+	public Item(String name, double damage, double armour) {
 		this.name = name;
 		this.damage = damage;
 		this.armour = armour;
