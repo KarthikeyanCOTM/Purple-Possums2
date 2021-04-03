@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class Actor {
 	private String name;
 	private double health = 100.0;
-	private double baseDamage = 1.0;
 	private double totalDamage;
 	private double defence;
 	private Inventory inventory;
@@ -20,7 +19,7 @@ public class Actor {
 		this.name = name;
 		inventory = new Inventory();
 		equipment = new ArrayList<>();
-		totalDamage = baseDamage;
+		totalDamage = 1.0;
 		defence = 0.0;
 	}
 	
@@ -34,10 +33,6 @@ public class Actor {
 	
 	public void setHealth(double health) {
 		this.health += health;
-	}
-	
-	public double getBaseDamage() {
-		return baseDamage;
 	}
 	
 	public double getTotalDamage() {

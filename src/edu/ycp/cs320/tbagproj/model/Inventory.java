@@ -3,16 +3,16 @@ package edu.ycp.cs320.tbagproj.model;
 import java.util.ArrayList;
 
 public class Inventory {
-	private ArrayList<Object> itemArrayList;
+	private ArrayList<Item> itemArrayList;
 	private int gold;
 	
 	public  Inventory() {
-		itemArrayList = new ArrayList<Object>();
+		itemArrayList = new ArrayList<Item>();
 		gold = 0;
 	}
 	
 	public Inventory(ArrayList items, int gold) {
-		itemArrayList = new ArrayList<Object>(items);
+		itemArrayList = new ArrayList<Item>(items);
 		this.gold = gold;
 	}
 	
@@ -24,7 +24,7 @@ public class Inventory {
 		this.gold += gold;
 	}
 	
-	public Object getItem(Object item) {
+	public Object getItem(Item item) {
 		if (itemArrayList.contains(item) == true) {
 			for (int i = 0; i < itemArrayList.size(); i++) {
 				if (itemArrayList.get(i) == item) {
@@ -35,7 +35,11 @@ public class Inventory {
 		return null;
 	}
 	
-	public void addItem(Object item) {
+	public void addItem(Item item) {
 		itemArrayList.add(item);
+	}
+	
+	public int getNumItems() {
+		return itemArrayList.size();
 	}
 }

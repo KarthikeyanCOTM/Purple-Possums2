@@ -11,6 +11,7 @@ public class Command {
 	private String second;
 	private Attack attackModel = new Attack();
 	private NPC npcModel = new NPC();
+	private Game game = new Game();
 	
 	public String getPrompt(){
 		return prompt;
@@ -35,6 +36,7 @@ public class Command {
 				first += prompt.charAt(x);
 			}
 		}
+		setLatest();
 	}
 	
 	public String getFirst() {
@@ -84,20 +86,22 @@ public class Command {
 	public void processPrompt(Player player, Room room) {
 		if (commands.contains(first) == true && prompt == "north") {
 			
-		}
-		else if (commands.contains(first) == true && prompt == "east") {
+		}else if (commands.contains(first) == true && first == "east") {
 			
-		}
-		else if (commands.contains(first) == true && prompt == "south") {
+		}else if (commands.contains(first) == true && first == "south") {
 			
-		}
-		else if (commands.contains(first) == true && prompt == "west") {
+		}else if (commands.contains(first) == true && first == "west") {
 			
-		}
-		else if (commands.contains(first) == true && prompt == "attack") {
+		}else if (commands.contains(first) == true && first == "attack") {
 			if (room.containsNPC(second) == true) {
 				attackModel.attack(player, room.getNPC(second), true);
 			}
+		}else if (commands.contains(first) == true && first == "new") {
+			game.newGame();
+		}else if (commands.contains(first) ==  true && first == "load") {
+			
+		}else if (commands.contains(first) == true && first == "save") {
+			
 		}
 	}
 }

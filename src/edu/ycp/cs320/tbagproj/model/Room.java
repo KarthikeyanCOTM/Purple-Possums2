@@ -9,6 +9,7 @@ public class Room {
 	private ArrayList<NPC> NPCList;
 	private HashMap<String, Room> connections;
 	private String name;
+	private String description;
 	
 	public Room() {
 		

@@ -9,12 +9,7 @@ public class Game {
 	private String key;
 	
 	public void exitGame() {
-		if(enter.getPrompt() == "quit") {
 			close = true;
-		}
-		else {
-			close = false;
-		}
 	}
 	
 	public void newGame() {
@@ -24,17 +19,15 @@ public class Game {
 	}
 	
 	public void saveGame() {
-		if(enter.getPrompt() == "save game") {
-			
-		}
-			
+		
 	}
 	
 	public void loadGame() {
-		if(enter.getPrompt() == "load game") {
-			
-		}
-			
+		
+	}
+	
+	public void runGame(String prompt) {
+		enter.setPrompt(prompt);
 	}
 
 }
