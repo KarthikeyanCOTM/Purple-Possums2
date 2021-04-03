@@ -37,11 +37,20 @@ public class Room {
 		this.name = name;
 	}
 	
-	public ArrayList<NPC> getNPC(){
+	public ArrayList<NPC> getNPCs(){
 		return NPCList;
 	}
 	
-	public void setNPC(ArrayList<NPC> NPCList){
+	public NPC getNPC(String name) {
+		for (int x = 0; x < NPCList.size(); x++) {
+			if (NPCList.get(x).getName() == name) {
+				return NPCList.get(x);
+			} 
+		}
+		return null;
+	}
+	
+	public void setNPCs(ArrayList<NPC> NPCList){
 		this.NPCList = NPCList;
 	}
 	
@@ -51,6 +60,15 @@ public class Room {
 	
 	public void removeNPCs(ArrayList<NPC> NPCList) {
 		this.NPCList.removeAll(NPCList);
+	}
+	
+	public boolean containsNPC(String name) {
+		for (int x = 0; x < NPCList.size(); x++) {
+			if (NPCList.get(x).getName() == name) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public HashMap<String, Room> getConnections(){

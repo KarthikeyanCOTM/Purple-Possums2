@@ -2,12 +2,15 @@ package edu.ycp.cs320.tbagproj.model;
 
 import java.util.*;
 
+
 public class Command {
 	private String prompt;
 	private Stack<String> previous;
 	private ArrayList<String> commands;
 	private String first;
 	private String second;
+	private Attack attackModel = new Attack();
+	private NPC npcModel = new NPC();
 	
 	public String getPrompt(){
 		return prompt;
@@ -58,6 +61,8 @@ public class Command {
 		commands.add("save");
 		commands.add("load");
 		commands.add("help");
+		commands.add("equip");
+		commands.add("unequip");
 	}
 	
 	public Stack<String> getPrevious(){
@@ -90,7 +95,9 @@ public class Command {
 			
 		}
 		else if (commands.contains(first) == true && prompt == "attack") {
-			
+			if (room.containsNPC(second) == true) {
+				attackModel.attack(player, room.getNPC(second), true);
+			}
 		}
 	}
 }
