@@ -1,6 +1,5 @@
 package edu.ycp.cs320.tbagproj.model;
 
-import java.util.ArrayList;
 
 // model class for Player and NPC
 public class Actor {
@@ -9,7 +8,7 @@ public class Actor {
 	private double totalDamage;
 	private double defence;
 	private Inventory inventory;
-	private ArrayList<Item> equipment;
+	private Inventory equipment;
 	
 	public Actor() {
 		
@@ -18,7 +17,7 @@ public class Actor {
 	public Actor(String name) {
 		this.name = name;
 		inventory = new Inventory();
-		equipment = new ArrayList<>();
+		equipment = new Inventory();
 		totalDamage = 1.0;
 		defence = 0.0;
 	}
@@ -43,27 +42,41 @@ public class Actor {
 		return defence;
 	}
 	
-	public void equipItem(Item item) {
-		equipment.add(item);
-		if (item.getDamage() > 0) {
-			totalDamage += item.getDamage();
+	public void equipItem(String item) {
+		Item tempItem = inventory.getItem(item);
+		equipment.addItem(tempItem);
+		if (tempItem.getDamage() > 0) {
+			totalDamage += tempItem.getDamage();
 		}
-		if (item.getArmour() > 0) {
-			defence += item.getArmour();
+		if (tempItem.getArmour() > 0) {
+			defence += tempItem.getArmour();
 		}
+		inventory.removeItem(item);
 	}
 	
-	public void unequipItem(Item item) {
-		equipment.remove(item);
-		if (item.getDamage() > 0) {
-			totalDamage -= item.getDamage();
+	public void unequipItem(String item) {
+		Item temp = equipment.getItem(item);
+		equipment.removeItem(item);
+		if (temp.getDamage() > 0) {
+			totalDamage -= temp.getDamage();
 		}
-		if (item.getArmour() > 0) {
-			defence -= item.getArmour();
+		if (temp.getArmour() > 0) {
+			defence -= temp.getArmour();
 		}
+		inventory.addItem(temp);
 	}
 	
-	public ArrayList<Item> getEquipment() {
+	public Inventory getEquipment() {
 		return equipment;
 	}
+	
+	public Inventory getInventory() {
+		return inventory;
+	}
+	
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
+	
+	
 }

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.controller.TempGameController;
+import edu.ycp.cs320.tbagproj.controller.GameController;
 import edu.ycp.cs320.tbagproj.model.Actor;
 
 public class GuessingGameServlet extends HttpServlet {
@@ -35,7 +35,7 @@ public class GuessingGameServlet extends HttpServlet {
 
 		// create GuessingGame controller - controller does not persist between requests
 		// must recreate it each time a Post comes in
-		TempGameController controller = new TempGameController();
+		GameController controller = new GameController();
 		
 		// assign model reference to controller so that controller can access model
 		//controller.setModel(model);

@@ -7,9 +7,19 @@ public class Game {
 	private boolean close = false;
 	private Command enter;
 	private String key;
+	private Player player;
+	private Room currentRoom;
+	private Map fullMap;
+	private Attack attackModel = new Attack();
+	private NPC npcModel = new NPC();
+	private Inventory inventoryModel = new Inventory();
 	
 	public void exitGame() {
 			close = true;
+	}
+	
+	public boolean getExitGame() {
+		return close;
 	}
 	
 	public void newGame() {
@@ -65,7 +75,50 @@ public class Game {
 	}
 	
 	public void runGame(String prompt) {
+		HashMap<String, Room> Rooms = new HashMap<>();
 		enter.setPrompt(prompt);
+		int result = enter.processPrompt(player, currentRoom);
+		switch (result) {
+			case 1:
+				Rooms = currentRoom.getConnections();
+				currentRoom = Rooms.get("north");
+				break;
+			case 2:
+				Rooms = currentRoom.getConnections();
+				currentRoom = Rooms.get("east");
+				break;
+			case 3:
+				Rooms = currentRoom.getConnections();
+				currentRoom = Rooms.get("south");
+				break;
+			case 4:
+				Rooms = currentRoom.getConnections();
+				currentRoom = Rooms.get("west");
+				break;
+			case 5:
+				attackModel.attack(player, currentRoom.getNPC(enter.getSecond()), true);
+				break;
+			case 6:
+				player.getInventory().addItem(currentRoom.getInventory().getItem(enter.getSecond()));
+				currentRoom.getInventory().removeItem(enter.getSecond());
+				break;
+			case 7:
+				player.equipItem(enter.getSecond());
+				break;
+			case 8:
+				player.unequipItem(enter.getSecond());
+				break;
+			case 9:
+				ArrayList<String> tempList = enter.getCommands();
+				for (int i = 0; i < tempList.size(); i++) {
+					System.out.println(tempList.get(i));
+				}
+				break;
+			default:
+				System.out.println("Invalid command");
+				
+				
+		}
 	}
 
 }
