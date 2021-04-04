@@ -25,11 +25,7 @@ public class Command {
 		for (int x = 0; x < prompt.length(); x++) {
 			if (prompt.charAt(x) == ' ') {
 				for (int y = x + 1; y < prompt.length(); y++) {
-					if (prompt.charAt(y) == ' ') {
-						y = prompt.length();
-					}else {
 						second += prompt.charAt(y);
-					}
 				}
 				x = prompt.length();
 			}else {
@@ -121,6 +117,11 @@ public class Command {
 				return 0;
 			}else if (first == "help") {
 				return 9;
+			}else if (first == "use") {
+				if (player.getInventory().containsItem(second) == true && player.getInventory().getItem(second).getIsUsable() == true) {
+					return 10;
+				}
+				return 0;
 			}
 		}
 		return 0;

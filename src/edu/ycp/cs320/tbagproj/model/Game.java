@@ -43,6 +43,7 @@ public class Game {
 		tempInventory = tempRoom.getInventory();
 		item.setName("Fur Armor");
 		item.setArmour(1.0);
+		item.setIsUsable(false);
 		tempRoom.getInventory().addItem(item);
 		item.setName("Wooden Sword");
 		item.setArmour(0);
@@ -53,6 +54,7 @@ public class Game {
 		item.setName("Healing Potion");
 		item.setDamage(0);
 		item.setHealing(25.0);
+		item.setIsUsable(true);
 		tempRoom.getInventory().addItem(item);
 		room.setConnections("west", tempRoom);
 		
@@ -114,6 +116,10 @@ public class Game {
 				for (int i = 0; i < tempList.size(); i++) {
 					System.out.println(tempList.get(i));
 				}
+				break;
+			case 10:
+				player.setHealth(player.getInventory().getItem(enter.getSecond()).getHealing());
+				player.getInventory().removeItem(enter.getSecond());
 				break;
 			default:
 				System.out.println("Invalid command");

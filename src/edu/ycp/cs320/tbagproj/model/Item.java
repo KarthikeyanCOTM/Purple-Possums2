@@ -5,16 +5,18 @@ public class Item {
 	private double damage;
 	private double armour;
 	private double healing;
+	private boolean isUsable;
 	
 	public Item() {
 		
 	}
 	
-	public Item(String name, double damage, double armour, double healing) {
+	public Item(String name, double damage, double armour, double healing, boolean isUsable) {
 		this.name = name;
 		this.damage = damage;
 		this.armour = armour;
 		this.healing = healing;
+		this.isUsable = isUsable;
 	}
 	
 	public String getName() {
@@ -47,5 +49,13 @@ public class Item {
 	
 	public void setHealing(double healing) {
 		this.healing = healing;
+	}
+	
+	public boolean getIsUsable() {
+		return isUsable;
+	}
+	
+	public void setIsUsable(boolean isUsable) {
+		this.isUsable = isUsable;
 	}
 }
