@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.model.*;
+import edu.ycp.cs320.tbagproj.model.Game;
+import edu.ycp.cs320.tbagproj.controller.*;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +34,16 @@ public class GameServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		System.out.println("Game Servlet: doPost");
+		
+		Game model = new Game();
+		
+		GameController controller = new GameController();
+		
+		controller.setModel(model);
+		
 		command = req.getParameter("command");
+		
+		message = controller.gameRun(command);
 
 		req.setAttribute("message", message);
 		// Forward to view to render the result HTML document

@@ -33,6 +33,7 @@ public class Game {
 		//foyar creation
 		map.createRoom(null, "Foyar", null, Rooms);
 		room = map.findRoom("Foyar");
+		currentRoom = room;
 		room.setDescription("A large room that has two pillars that reach up to the ceiling. There are some paintings on the walls with a door to the north, and one two the west.");
 		
 		//closet creation
@@ -77,7 +78,7 @@ public class Game {
 		
 	}
 	
-	public void runGame(String prompt) {
+	public String runGame(String prompt) {
 		HashMap<String, Room> Rooms = new HashMap<>();
 		enter.setPrompt(prompt);
 		int result = enter.processPrompt(player, currentRoom);
@@ -85,47 +86,50 @@ public class Game {
 			case 1:
 				Rooms = currentRoom.getConnections();
 				currentRoom = Rooms.get("north");
-				break;
+				return currentRoom.getDescription();
 			case 2:
 				Rooms = currentRoom.getConnections();
 				currentRoom = Rooms.get("east");
-				break;
+				return currentRoom.getDescription();
 			case 3:
 				Rooms = currentRoom.getConnections();
 				currentRoom = Rooms.get("south");
-				break;
+				return currentRoom.getDescription();
 			case 4:
 				Rooms = currentRoom.getConnections();
 				currentRoom = Rooms.get("west");
-				break;
+				return currentRoom.getDescription();
 			case 5:
 				attackModel.attack(player, currentRoom.getNPC(enter.getSecond()), true);
 				break;
 			case 6:
+				return currentRoom.getDescription();
+			case 7:
 				player.getInventory().addItem(currentRoom.getInventory().getItem(enter.getSecond()));
 				currentRoom.getInventory().removeItem(enter.getSecond());
 				break;
-			case 7:
+			case 8:
 				player.equipItem(enter.getSecond());
 				break;
-			case 8:
+			case 9:
 				player.unequipItem(enter.getSecond());
 				break;
-			case 9:
+			case 10:
 				ArrayList<String> tempList = enter.getCommands();
 				for (int i = 0; i < tempList.size(); i++) {
 					System.out.println(tempList.get(i));
 				}
 				break;
-			case 10:
+			case 11:
 				player.setHealth(player.getInventory().getItem(enter.getSecond()).getHealing());
 				player.getInventory().removeItem(enter.getSecond());
 				break;
 			default:
-				System.out.println("Invalid command");
+				return "Invalid command";
 				
 				
 		}
+		return "Command could not be processed";
 	}
 
 }

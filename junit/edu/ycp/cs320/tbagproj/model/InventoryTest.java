@@ -15,7 +15,7 @@ public class InventoryTest {
 	@Before
 	public void setUp() {
 		model = new Inventory();
-		item = new Item("sword", 0, 0);
+		item = new Item("sword", 0.0, 0.0, 0.0, false);
 	}
 	
 	@Test

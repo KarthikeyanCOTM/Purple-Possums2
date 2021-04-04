@@ -9,19 +9,16 @@ public class GameController {
 	Command command;
 	String prompt;
 	Room room;
-	Player player;
-	Game game = new Game();
+	Player player = null;
+	Game game = null;
 	boolean end = false;
 	
-	public void main() {
-		prompt = keyboard.nextLine();
+	public void setModel(Game game) {
+		this.game = game;
 		command.setCommands();
-		command.setPrompt(prompt);
-		command.processPrompt(player, room);
-		end = game.getExitGame();
-		while(end = false) {
-			prompt = keyboard.nextLine();
-			game.runGame(prompt);
-		}
+	}
+	
+	public String gameRun(String prompt) {
+		return game.runGame(prompt);
 	}
 }

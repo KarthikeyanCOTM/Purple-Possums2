@@ -12,7 +12,7 @@ public class ItemTest {
 	
 	@Before
 	public void setUp() {
-		model = new Item("Name", 5, 5);
+		model = new Item();
 	}
 
 	@Test

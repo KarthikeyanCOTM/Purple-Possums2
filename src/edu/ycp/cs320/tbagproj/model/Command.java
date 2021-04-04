@@ -96,30 +96,31 @@ public class Command {
 				return 0;
 			}else if (first == "new") {
 				gameModel.newGame();
+				return 6;
 			}else if (first == "load") {
 			
 			}else if (first == "save") {
 			
 			}else if (first == "get") {
 				if (room.getInventory().containsItem(second) == true) {
-					return 6;
+					return 7;
 				}
 				return 0;
 			}else if (first == "equip") {
 				if (player.getInventory().containsItem(second) == true) {
-					return 7;
+					return 8;
 				}
 				return 0;
 			}else if (first == "unequip") {
 				if (player.getEquipment().containsItem(second) == true) {
-					return 8;
+					return 9;
 				}
 				return 0;
 			}else if (first == "help") {
-				return 9;
+				return 10;
 			}else if (first == "use") {
 				if (player.getInventory().containsItem(second) == true && player.getInventory().getItem(second).getIsUsable() == true) {
-					return 10;
+					return 11;
 				}
 				return 0;
 			}
