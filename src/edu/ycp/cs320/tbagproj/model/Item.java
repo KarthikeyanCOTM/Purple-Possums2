@@ -4,15 +4,17 @@ public class Item {
 	private String name;
 	private double damage;
 	private double armour;
+	private double healing;
 	
 	public Item() {
 		
 	}
 	
-	public Item(String name, double damage, double armour) {
+	public Item(String name, double damage, double armour, double healing) {
 		this.name = name;
 		this.damage = damage;
 		this.armour = armour;
+		this.healing = healing;
 	}
 	
 	public String getName() {
@@ -37,5 +39,13 @@ public class Item {
 	
 	public void setArmour(double armour) {
 		this.armour = armour;
+	}
+	
+	public double getHealing() {
+		return healing;
+	}
+	
+	public void setHealing(double healing) {
+		this.healing = healing;
 	}
 }

@@ -43,14 +43,17 @@ public class Game {
 		tempInventory = tempRoom.getInventory();
 		item.setName("Fur Armor");
 		item.setArmour(1.0);
-		tempInventory.addItem(item);
+		tempRoom.getInventory().addItem(item);
 		item.setName("Wooden Sword");
 		item.setArmour(0);
 		item.setDamage(3.0);
-		tempInventory.addItem(item);
+		tempRoom.getInventory().addItem(item);
 		item.setName("Wooden Staff");
-		tempInventory.addItem(item);
-		tempRoom.setInventory(tempInventory);
+		tempRoom.getInventory().addItem(item);
+		item.setName("Healing Potion");
+		item.setDamage(0);
+		item.setHealing(25.0);
+		tempRoom.getInventory().addItem(item);
 		room.setConnections("west", tempRoom);
 		
 		//main hall creation
@@ -59,9 +62,7 @@ public class Game {
 		map.createRoom(null, "Main Hall", null, Rooms);
 		tempRoom = map.findRoom("Main Hall");
 		tempRoom.setDescription("A grand corridor filled with painting, sculptures, and tapastries. It has a door to the north, south, east, and west.");
-		tempInventory = tempRoom.getInventory();
-		tempInventory.addGold(5);
-		tempRoom.setInventory(tempInventory);
+		tempRoom.getInventory().addGold(5);
 		room.setConnections("north", tempRoom);
 		room = tempRoom;
 	}
