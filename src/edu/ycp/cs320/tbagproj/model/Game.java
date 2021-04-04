@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Game {
 	private boolean close = false;
-	private Command enter;
+	private Command enter = new Command();
 	private String key;
 	private Player player;
 	private Room currentRoom;
@@ -23,6 +23,7 @@ public class Game {
 	}
 	
 	public void newGame() {
+		player = new Player("Player");
 		HashMap<String, Room> Rooms = new HashMap<>();
 		Map map = new Map();
 		Room room = new Room();
@@ -32,8 +33,6 @@ public class Game {
 		
 		//foyar creation
 		map.createRoom(null, "Foyar", null, Rooms);
-		room = map.findRoom("Foyar");
-		currentRoom = room;
 		room.setDescription("A large room that has two pillars that reach up to the ceiling. There are some paintings on the walls with a door to the north, and one two the west.");
 		
 		//closet creation
@@ -41,22 +40,23 @@ public class Game {
 		map.createRoom(null, "Closet", null, Rooms);
 		tempRoom = map.findRoom("Closet");
 		tempRoom.setDescription("A walk in closet that has various coats, boots, and scarves along with a large open trunk. There is a door to the east");
-		tempInventory = tempRoom.getInventory();
 		item.setName("Fur Armor");
 		item.setArmour(1.0);
 		item.setIsUsable(false);
-		tempRoom.getInventory().addItem(item);
+		tempInventory.addItem(item);
 		item.setName("Wooden Sword");
 		item.setArmour(0);
 		item.setDamage(3.0);
-		tempRoom.getInventory().addItem(item);
+		tempInventory.addItem(item);
 		item.setName("Wooden Staff");
-		tempRoom.getInventory().addItem(item);
+		tempInventory.addItem(item);
 		item.setName("Healing Potion");
 		item.setDamage(0);
 		item.setHealing(25.0);
 		item.setIsUsable(true);
-		tempRoom.getInventory().addItem(item);
+		tempInventory.addItem(item);
+		tempRoom.setInventory(tempInventory);
+		map.updateRoom("Closet", tempRoom);
 		room.setConnections("west", tempRoom);
 		
 		//main hall creation
@@ -65,9 +65,17 @@ public class Game {
 		map.createRoom(null, "Main Hall", null, Rooms);
 		tempRoom = map.findRoom("Main Hall");
 		tempRoom.setDescription("A grand corridor filled with painting, sculptures, and tapastries. It has a door to the north, south, east, and west.");
-		tempRoom.getInventory().addGold(5);
+		tempInventory.clearInventory();
+		tempInventory.addGold(5);
+		tempRoom.setInventory(tempInventory);
+		map.updateRoom("MainHall", tempRoom);
 		room.setConnections("north", tempRoom);
+		map.updateRoom("Foyar", room);
 		room = tempRoom;
+		
+		//creates full map and sets starting room
+		fullMap = map;
+		currentRoom = map.findRoom("Foyar");
 	}
 	
 	public void saveGame() {
@@ -79,30 +87,34 @@ public class Game {
 	}
 	
 	public String runGame(String prompt) {
-		HashMap<String, Room> Rooms = new HashMap<>();
+		HashMap<String, Room> tempRoomsMap = new HashMap<String, Room>();
+		enter.setCommands();
 		enter.setPrompt(prompt);
 		int result = enter.processPrompt(player, currentRoom);
 		switch (result) {
+			case 0:
+				return "invalid command";
 			case 1:
-				Rooms = currentRoom.getConnections();
-				currentRoom = Rooms.get("north");
+				tempRoomsMap = currentRoom.getConnections();
+				currentRoom = tempRoomsMap.get("north");
 				return currentRoom.getDescription();
 			case 2:
-				Rooms = currentRoom.getConnections();
-				currentRoom = Rooms.get("east");
+				tempRoomsMap = currentRoom.getConnections();
+				currentRoom = tempRoomsMap.get("east");
 				return currentRoom.getDescription();
 			case 3:
-				Rooms = currentRoom.getConnections();
-				currentRoom = Rooms.get("south");
+				tempRoomsMap = currentRoom.getConnections();
+				currentRoom = tempRoomsMap.get("south");
 				return currentRoom.getDescription();
 			case 4:
-				Rooms = currentRoom.getConnections();
-				currentRoom = Rooms.get("west");
+				tempRoomsMap = currentRoom.getConnections();
+				currentRoom = tempRoomsMap.get("west");
 				return currentRoom.getDescription();
 			case 5:
 				attackModel.attack(player, currentRoom.getNPC(enter.getSecond()), true);
-				break;
+				return "hit";
 			case 6:
+				newGame();
 				return currentRoom.getDescription();
 			case 7:
 				player.getInventory().addItem(currentRoom.getInventory().getItem(enter.getSecond()));
@@ -116,17 +128,17 @@ public class Game {
 				break;
 			case 10:
 				ArrayList<String> tempList = enter.getCommands();
+				String temp = "";
 				for (int i = 0; i < tempList.size(); i++) {
-					System.out.println(tempList.get(i));
+					temp += tempList.get(i) + "\n";
 				}
-				break;
+				return temp;
 			case 11:
 				player.setHealth(player.getInventory().getItem(enter.getSecond()).getHealing());
 				player.getInventory().removeItem(enter.getSecond());
 				break;
-			default:
-				return "Invalid command";
-				
+			case 12:
+				return "Load Successful";
 				
 		}
 		return "Command could not be processed";

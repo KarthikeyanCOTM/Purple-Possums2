@@ -21,14 +21,23 @@ public class TestRoom {
 		model = new Room();
 		items = new Inventory();
 		NPCList = new ArrayList<NPC>();
+		tempMap = new HashMap<String, Room>();
 		secondRoom = new Room(items, "secondRoom", NPCList, tempMap);
+		tempMap = new HashMap<String, Room>();
 		tempMap.put("room", secondRoom);
 	}
 	
 	@Test
-	public void testSetConnections() {
-		//model.setConnections("room", secondRoom);
-		//assertTrue(model.isConnected(secondRoom) == true);
+	public void testGetInventory() {
+		model.setInventory(items);
+		assertTrue(model.getInventory() == items);
+	}
+	
+	@Test
+	public void testGetConnections() {
+		model.setConnections("room", secondRoom);
+		HashMap<String, Room> temp = model.getConnections();
+		assertTrue(temp.get("room") == tempMap.get("room"));
 	}
 
 }

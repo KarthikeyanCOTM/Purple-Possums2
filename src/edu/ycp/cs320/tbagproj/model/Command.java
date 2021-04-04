@@ -5,13 +5,12 @@ import java.util.*;
 
 public class Command {
 	private String prompt;
-	private Stack<String> previous;
-	private ArrayList<String> commands;
+	private Stack<String> previous = new Stack<String>();
+	private ArrayList<String> commandsList = new ArrayList<String>();
 	private String first;
 	private String second;
 	private Attack attackModel = new Attack();
 	private NPC npcModel = new NPC();
-	private Game gameModel = new Game();
 	private Inventory inventoryModel = new Inventory();
 	
 	public String getPrompt(){
@@ -44,23 +43,23 @@ public class Command {
 	}
 	
 	public ArrayList<String> getCommands(){
-		return commands;
+		return commandsList;
 	}
 	
 	public void setCommands() {
-		commands.add("north");
-		commands.add("east");
-		commands.add("south");
-		commands.add("west");
-		commands.add("attack");
-		commands.add("get");
-		commands.add("use");
-		commands.add("new");
-		commands.add("save");
-		commands.add("load");
-		commands.add("help");
-		commands.add("equip");
-		commands.add("unequip");
+		commandsList.add("north");
+		commandsList.add("east");
+		commandsList.add("south");
+		commandsList.add("west");
+		commandsList.add("attack");
+		commandsList.add("get");
+		commandsList.add("use");
+		commandsList.add("new");
+		commandsList.add("save");
+		commandsList.add("load");
+		commandsList.add("help");
+		commandsList.add("equip");
+		commandsList.add("unequip");
 	}
 	
 	public Stack<String> getPrevious(){
@@ -80,49 +79,49 @@ public class Command {
 	}
 	
 	public int processPrompt(Player player, Room room) {
-		if (commands.contains(first) == true) {
-			if (prompt == "north") {
-				return 1;
-			}else if (first == "east") {
-				return 2;
-			}else if (first == "south") {
-				return 3;
-			}else if (first == "west") {
-				return 4;
-			}else if (first == "attack") {
-				if (room.containsNPC(second) == true) {
-					return 5;
-				}
-				return 0;
-			}else if (first == "new") {
-				gameModel.newGame();
-				return 6;
-			}else if (first == "load") {
-			
-			}else if (first == "save") {
-			
-			}else if (first == "get") {
-				if (room.getInventory().containsItem(second) == true) {
-					return 7;
-				}
-				return 0;
-			}else if (first == "equip") {
-				if (player.getInventory().containsItem(second) == true) {
-					return 8;
-				}
-				return 0;
-			}else if (first == "unequip") {
-				if (player.getEquipment().containsItem(second) == true) {
-					return 9;
-				}
-				return 0;
-			}else if (first == "help") {
-				return 10;
-			}else if (first == "use") {
-				if (player.getInventory().containsItem(second) == true && player.getInventory().getItem(second).getIsUsable() == true) {
-					return 11;
-				}
-				return 0;
+		if (commandsList.contains(first) == true) {
+			switch (first) {
+				case "north":
+					return 1;
+				case "east":
+					return 2;
+				case "south":
+					return 3;
+				case "west":
+					return 4;
+				case "attack":
+					if (room.containsNPC(second) == true) {
+						return 5;
+					}
+					return 0;
+				case "new":
+					return 6;
+				case "load":
+					return 12;
+				case "save":
+					break;
+				case "get":
+					if (room.getInventory().containsItem(second) == true) {
+						return 7;
+					}
+					return 0;
+				case "equip":
+					if (player.getInventory().containsItem(second) == true) {
+						return 8;
+					}
+					return 0;
+				case "unequip":
+					if (player.getEquipment().containsItem(second) == true) {
+						return 9;
+					}
+					return 0;
+				case "help":
+					return 10;
+				case "use":
+					if (player.getInventory().containsItem(second) == true && player.getInventory().getItem(second).getIsUsable() == true) {
+						return 11;
+					}
+					return 0;
 			}
 		}
 		return 0;

@@ -11,7 +11,8 @@ public class Actor {
 	private Inventory equipment;
 	
 	public Actor() {
-		
+		inventory = new Inventory();
+		equipment = new Inventory();
 	}
 	
 	public Actor(String name) {

@@ -5,29 +5,31 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Room {
-	private Inventory items;
+	private Inventory inventory;
 	private ArrayList<NPC> NPCList;
 	private HashMap<String, Room> connections;
 	private String name;
 	private String description;
 	
 	public Room() {
-		
+		inventory = new Inventory();
+		NPCList = new ArrayList<NPC>();
+		connections = new HashMap<String, Room>();
 	}
 	
-	public Room(Inventory items, String name, ArrayList<NPC> NPCList, HashMap<String, Room> connections) {
-		this.items = items;
+	public Room(Inventory inventory, String name, ArrayList<NPC> NPCList, HashMap<String, Room> connections) {
+		this.inventory = inventory;
 		this.name = name;
 		this.NPCList = NPCList;
 		this.connections = connections;
 	}
 	
 	public Inventory getInventory(){
-		return items;
+		return inventory;
 	}
 	
-	public void setInventory(Inventory items) {
-		this.items = items;
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
 	}
 	
 	public String getName() {

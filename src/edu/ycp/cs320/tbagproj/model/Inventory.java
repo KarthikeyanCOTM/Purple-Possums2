@@ -16,6 +16,11 @@ public class Inventory {
 		this.gold = gold;
 	}
 	
+	public void clearInventory() {
+		itemArrayList.clear();
+		gold = 0;
+	}
+	
 	public int getGold() {
 		return gold;
 	}
@@ -25,11 +30,9 @@ public class Inventory {
 	}
 	
 	public Item getItem(String item) {
-		if (itemArrayList.contains(item) == true) {
-			for (int i = 0; i < itemArrayList.size(); i++) {
-				if (itemArrayList.get(i).getName() == item) {
-					return itemArrayList.get(i);
-				}
+		for (int i = 0; i < itemArrayList.size(); i++) {
+			if (itemArrayList.get(i).getName() == item) {
+				return itemArrayList.get(i);
 			}
 		}
 		return null;
