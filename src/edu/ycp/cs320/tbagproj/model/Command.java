@@ -11,14 +11,14 @@ public class Command {
 	private String second;
 	private Attack attackModel = new Attack();
 	private NPC npcModel = new NPC();
-	private Game game = new Game();
+	private Game gameModel = new Game();
+	private Inventory inventoryModel = new Inventory();
 	
 	public String getPrompt(){
 		return prompt;
 	}
 	
 	public void setPrompt(String input) {
-		//Scanner keyboard = new Scanner(System.in);
 		prompt = input;
 		first = "";
 		second = "";
@@ -83,25 +83,46 @@ public class Command {
 		previous.add(prompt);
 	}
 	
-	public void processPrompt(Player player, Room room) {
-		if (commands.contains(first) == true && prompt == "north") {
+	public int processPrompt(Player player, Room room) {
+		if (commands.contains(first) == true) {
+			if (prompt == "north") {
+				return 1;
+			}else if (first == "east") {
+				return 2;
+			}else if (first == "south") {
+				return 3;
+			}else if (first == "west") {
+				return 4;
+			}else if (first == "attack") {
+				if (room.containsNPC(second) == true) {
+					return 5;
+				}
+				return 0;
+			}else if (first == "new") {
+				gameModel.newGame();
+			}else if (first == "load") {
 			
-		}else if (commands.contains(first) == true && first == "east") {
+			}else if (first == "save") {
 			
-		}else if (commands.contains(first) == true && first == "south") {
-			
-		}else if (commands.contains(first) == true && first == "west") {
-			
-		}else if (commands.contains(first) == true && first == "attack") {
-			if (room.containsNPC(second) == true) {
-				attackModel.attack(player, room.getNPC(second), true);
+			}else if (first == "get") {
+				if (room.getInventory().containsItem(second) == true) {
+					return 6;
+				}
+				return 0;
+			}else if (first == "equip") {
+				if (player.getInventory().containsItem(second) == true) {
+					return 7;
+				}
+				return 0;
+			}else if (first == "unequip") {
+				if (player.getEquipment().containsItem(second) == true) {
+					return 8;
+				}
+				return 0;
+			}else if (first == "help") {
+				return 9;
 			}
-		}else if (commands.contains(first) == true && first == "new") {
-			game.newGame();
-		}else if (commands.contains(first) ==  true && first == "load") {
-			
-		}else if (commands.contains(first) == true && first == "save") {
-			
 		}
+		return 0;
 	}
 }

@@ -24,10 +24,10 @@ public class Inventory {
 		this.gold += gold;
 	}
 	
-	public Object getItem(Item item) {
+	public Item getItem(String item) {
 		if (itemArrayList.contains(item) == true) {
 			for (int i = 0; i < itemArrayList.size(); i++) {
-				if (itemArrayList.get(i) == item) {
+				if (itemArrayList.get(i).getName() == item) {
 					return itemArrayList.get(i);
 				}
 			}
@@ -39,7 +39,24 @@ public class Inventory {
 		itemArrayList.add(item);
 	}
 	
+	public void removeItem(String name) {
+		for (int i = 0; i < itemArrayList.size(); i++) {
+			if (itemArrayList.get(i).getName() == name) {
+				itemArrayList.remove(i);
+			}
+		}
+	}
+	
 	public int getNumItems() {
 		return itemArrayList.size();
+	}
+	
+	public boolean containsItem(String name) {
+		for (int i = 0; i < itemArrayList.size(); i++) {
+			if (itemArrayList.get(i).getName() == name) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

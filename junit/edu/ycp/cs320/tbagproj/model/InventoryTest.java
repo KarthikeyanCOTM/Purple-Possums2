@@ -27,6 +27,7 @@ public class InventoryTest {
 	@Test
 	public void testGetItem() {
 		model.addItem(item);
-		assertEquals(item, model.getItem(item));
+		String temp = item.getName();
+		assertEquals(item, model.getItem(temp));
 	}
 }

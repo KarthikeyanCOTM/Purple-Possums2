@@ -38,6 +38,14 @@ public class Room {
 		this.name = name;
 	}
 	
+	public void setDescription(String descrip) {
+		description = descrip;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
 	public ArrayList<NPC> getNPCs(){
 		return NPCList;
 	}

@@ -5,6 +5,10 @@ public class Item {
 	private double damage;
 	private double armour;
 	
+	public Item() {
+		
+	}
+	
 	public Item(String name, double damage, double armour) {
 		this.name = name;
 		this.damage = damage;
