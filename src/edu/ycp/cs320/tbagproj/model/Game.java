@@ -113,7 +113,7 @@ public class Game {
 				player.getInventory().addNewItem(tempItem.getName(), tempItem.getDamage(), tempItem.getArmour(), tempItem.getHealing(), tempItem.getIsUsable());
 				currentRoom.getInventory().removeItem(enter.getSecond());
 				currentRoom.setContents();
-				break;
+				return "You picked up the " + enter.getSecond();
 			case 8:
 				player.equipItem(enter.getSecond());
 				break;

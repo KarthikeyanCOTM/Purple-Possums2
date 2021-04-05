@@ -54,7 +54,7 @@ public class Room {
 			for (int i = 0; i < inventory.getNumItems(); i++) {
 				contents += inventory.getItemList().get(i).getName() + ", ";
 			}
-			contents += inventory.getGold();
+			contents += inventory.getGold() + " gold.";
 		}else {
 			contents += "nothing";
 		}

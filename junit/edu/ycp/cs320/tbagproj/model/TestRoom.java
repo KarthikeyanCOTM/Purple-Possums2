@@ -39,5 +39,18 @@ public class TestRoom {
 		HashMap<String, Room> temp = model.getConnections();
 		assertTrue(temp.get("room") == tempMap.get("room"));
 	}
+	
+	@Test
+	public void testContents() {
+		items.addGold(5);
+		model.setInventory(items);
+		model.setContents();
+		String temp = model.getContents();
+		assertEquals(temp, "The room has 5 gold.");
+		model.getInventory().addGold(-5);
+		model.updateContents();
+		temp = model.getContents();
+		assertEquals(temp, "The room has nothing");
+	}
 
 }
