@@ -10,6 +10,7 @@ public class Room {
 	private HashMap<String, Room> connections;
 	private String name;
 	private String description;
+	private String contents = "The room has ";
 	
 	public Room() {
 		inventory = new Inventory();
@@ -41,11 +42,31 @@ public class Room {
 	}
 	
 	public void setDescription(String descrip) {
-		description = descrip;
+		description = descrip + "\n";
 	}
 	
 	public String getDescription() {
 		return description;
+	}
+	
+	public void setContents() {
+		if (inventory.getItemList().isEmpty() == false || inventory.getGold() != 0) {
+			for (int i = 0; i < inventory.getNumItems(); i++) {
+				contents += inventory.getItemList().get(i).getName() + ", ";
+			}
+			contents += inventory.getGold();
+		}else {
+			contents += "nothing";
+		}
+	}
+	
+	public String getContents() {
+		return contents;
+	}
+	
+	public void updateContents() {
+		contents = "The room has ";
+		setContents();
 	}
 	
 	public ArrayList<NPC> getNPCs(){

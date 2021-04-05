@@ -26,8 +26,18 @@ public class InventoryTest {
 	
 	@Test
 	public void testGetItem() {
-		model.addItem(item);
+		model.addNewItem(item.getName(), item.getDamage(), item.getArmour(), item.getHealing(), item.getIsUsable());
 		String temp = item.getName();
-		assertEquals(item, model.getItem(temp));
+		assertEquals(item.getName(), model.getItem(temp).getName());
+	}
+	
+	@Test
+	public void testContainsItem() {
+		String temp = item.getName();
+		model.addNewItem(item.getName(), item.getDamage(), item.getArmour(), item.getHealing(), item.getIsUsable());
+		model.addNewItem("healing potion", item.getDamage(), item.getArmour(), item.getHealing(), item.getIsUsable());
+		String temp2 = "healing potion";
+		assertEquals(model.containsItem(temp), true);
+		assertEquals(model.containsItem(temp2), true);
 	}
 }

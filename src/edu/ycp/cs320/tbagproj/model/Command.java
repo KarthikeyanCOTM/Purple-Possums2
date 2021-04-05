@@ -101,7 +101,8 @@ public class Command {
 				case "save":
 					break;
 				case "get":
-					if (room.getInventory().containsItem(second) == true) {
+					Inventory tempInventory = room.getInventory();
+					if (tempInventory.containsItem(second) == true) {
 						return 7;
 					}
 					return 0;

@@ -18,6 +18,7 @@ public class GameServlet extends HttpServlet {
 	
 	private String command = null;
 	private String message = null;
+	private Game model = new Game();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -34,8 +35,6 @@ public class GameServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		System.out.println("Game Servlet: doPost");
-		
-		Game model = new Game();
 		
 		GameController controller = new GameController();
 		

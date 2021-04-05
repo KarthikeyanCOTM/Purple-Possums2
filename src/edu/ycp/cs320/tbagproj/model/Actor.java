@@ -45,7 +45,7 @@ public class Actor {
 	
 	public void equipItem(String item) {
 		Item tempItem = inventory.getItem(item);
-		equipment.addItem(tempItem);
+		equipment.addNewItem(tempItem.getName(), tempItem.getDamage(), tempItem.getArmour(), tempItem.getHealing(), tempItem.getIsUsable());
 		if (tempItem.getDamage() > 0) {
 			totalDamage += tempItem.getDamage();
 		}
@@ -64,7 +64,7 @@ public class Actor {
 		if (temp.getArmour() > 0) {
 			defence -= temp.getArmour();
 		}
-		inventory.addItem(temp);
+		inventory.addNewItem(temp.getName(), temp.getDamage(), temp.getArmour(), temp.getHealing(), temp.getIsUsable());
 	}
 	
 	public Inventory getEquipment() {

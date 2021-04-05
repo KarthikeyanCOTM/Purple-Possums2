@@ -38,8 +38,9 @@ public class Inventory {
 		return null;
 	}
 	
-	public void addItem(Item item) {
-		itemArrayList.add(item);
+	public void addNewItem(String name, double damage, double armour, double healing, boolean isUsable) {
+		Item temp = new Item(name, damage, armour, healing, isUsable);
+		itemArrayList.add(temp);
 	}
 	
 	public void removeItem(String name) {
@@ -61,5 +62,9 @@ public class Inventory {
 			}
 		}
 		return false;
+	}
+	
+	public ArrayList<Item> getItemList() {
+		return itemArrayList;
 	}
 }
