@@ -44,7 +44,7 @@ public class TestRoom {
 	public void testContents() {
 		items.addGold(5);
 		model.setInventory(items);
-		model.setContents();
+		model.updateContents();
 		String temp = model.getContents();
 		assertEquals(temp, "The room has 5 gold.");
 		model.getInventory().addGold(-5);

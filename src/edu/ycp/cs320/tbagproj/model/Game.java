@@ -25,13 +25,13 @@ public class Game {
 	public void newGame() {
 		player = new Player("Player");
 		Map map = new Map();
-		ArrayList<NPC> tempNPCList = new ArrayList<NPC>();
 		NPC cultist = new NPC("cultist");
+		cultist.setHealth(-75.0);
 		
 		//foyer creation
 		Room foyer = new Room(null, "Foyer", null, null);
 		foyer.setDescription("A large room that has two pillars that reach up to the ceiling. There are some paintings on the walls with a door to the north, and one too the west.");
-		foyer.setContents();
+		foyer.updateContents();
 		
 		//closet creation
 		HashMap<String, Room> closetConnections = new HashMap<>();
@@ -49,13 +49,14 @@ public class Game {
 		//main hall creation
 		HashMap<String, Room> mainHallConnections = new HashMap<>();
 		mainHallConnections.put("south", foyer);
-		tempNPCList.add(cultist);
+		ArrayList<NPC> mainHallNPCList = new ArrayList<NPC>();
+		mainHallNPCList.add(cultist);
 		Inventory mainHallInventory = new Inventory();
 		mainHallInventory.addGold(5);
-		Room mainHall = new Room(mainHallInventory, "Main Hall", tempNPCList, mainHallConnections);
+		Room mainHall = new Room(mainHallInventory, "Main Hall", mainHallNPCList, mainHallConnections);
 		mainHall.setDescription("A grand corridor filled with painting, sculptures, and tapastries. It has a door to the north, south, east, and west.");
-		closet.setContents();
-		mainHall.setContents();
+		closet.updateContents();
+		mainHall.updateContents();
 		foyer.setConnections("north", mainHall);
 		map.addRoom("Foyer", foyer);
 		map.addRoom("Main Hall", mainHall);
@@ -99,10 +100,13 @@ public class Game {
 				return currentRoom.getDescription() + currentRoom.getContents();
 			case 5:
 				double totalDamageTaken = 0;
-				currentRoom.getNPC(enter.getSecond()).setHealth(attackModel.attack(player, currentRoom.getNPC(enter.getSecond()), true) * -1);
-				if (currentRoom.getNPC(enter.getSecond()).getCurHealth() <= 0) {
+				NPC currentNPC = currentRoom.getNPC(enter.getSecond());
+				currentNPC.setHealth(attackModel.attack(player, currentNPC, true) * -1);
+				if (currentNPC.getCurHealth() <= 0) {
 					currentRoom.deleteNPC(enter.getSecond());
-					currentRoom.setContents();
+					currentRoom.updateContents();
+				}else {
+					currentRoom.updateNPC(enter.getSecond(), currentNPC);
 				}
 				if (currentRoom.getNPCs() != null) {
 					for (int i = 0; i < currentRoom.getNPCs().size(); i++) {
@@ -115,7 +119,6 @@ public class Game {
 				return "You hit for " + player.getTotalDamage() + ". You took " + totalDamageTaken + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 6:
 				newGame();
-				System.out.print(currentRoom.getConnections().get("west").getInventory().getItem("healing potion").getName());
 				return currentRoom.getDescription() + currentRoom.getContents();
 			case 7:
 				Item tempItem = currentRoom.getInventory().getItem(enter.getSecond());
@@ -126,7 +129,7 @@ public class Game {
 				player.getInventory().addGold(tempGold);
 				currentRoom.getInventory().removeItem(enter.getSecond());
 				currentRoom.getInventory().addGold(tempGold * -1);
-				currentRoom.setContents();
+				currentRoom.updateContents();
 				return "You picked up the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 8:
 				player.equipItem(enter.getSecond());

@@ -31,7 +31,7 @@ public class Inventory {
 	
 	public Item getItem(String item) {
 		for (int i = 0; i < itemArrayList.size(); i++) {
-			if (itemArrayList.get(i).getName() == item) {
+			if (itemArrayList.get(i).getName().equals(item)) {
 				return itemArrayList.get(i);
 			}
 		}
@@ -45,7 +45,7 @@ public class Inventory {
 	
 	public void removeItem(String name) {
 		for (int i = 0; i < itemArrayList.size(); i++) {
-			if (itemArrayList.get(i).getName() == name) {
+			if (itemArrayList.get(i).getName().equals(name)) {
 				itemArrayList.remove(i);
 			}
 		}

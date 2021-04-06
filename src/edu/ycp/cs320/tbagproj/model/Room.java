@@ -53,7 +53,7 @@ public class Room {
 		return description;
 	}
 	
-	public void setContents() {
+	private void setContents() {
 		if (inventory != null && inventory.getItemList().isEmpty() == false) {
 			for (int i = 0; i < inventory.getNumItems(); i++) {
 				contents += inventory.getItemList().get(i).getName() + ", ";
@@ -87,7 +87,7 @@ public class Room {
 	
 	public NPC getNPC(String name) {
 		for (int x = 0; x < NPCList.size(); x++) {
-			if (NPCList.get(x).getName() == name) {
+			if (NPCList.get(x).getName().equals(name)) {
 				return NPCList.get(x);
 			} 
 		}
@@ -96,6 +96,14 @@ public class Room {
 	
 	public void setNPCs(ArrayList<NPC> NPCList){
 		this.NPCList = NPCList;
+	}
+	
+	public void updateNPC(String name, NPC npc) {
+		for (int x = 0; x < NPCList.size(); x++) {
+			if (NPCList.get(x).getName() == name) {
+				NPCList.set(x, npc);
+			} 
+		}
 	}
 	
 	public void addNPCs(ArrayList<NPC> NPCList) {
