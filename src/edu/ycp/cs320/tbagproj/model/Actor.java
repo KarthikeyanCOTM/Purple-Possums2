@@ -13,6 +13,8 @@ public class Actor {
 	public Actor() {
 		inventory = new Inventory();
 		equipment = new Inventory();
+		totalDamage = 1.0;
+		defence = 0.0;
 	}
 	
 	public Actor(String name) {
@@ -25,6 +27,10 @@ public class Actor {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public double getCurHealth() {

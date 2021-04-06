@@ -20,6 +20,9 @@ public class Map {
 		rooms.put(name, room);
 	}
 	
+	public void addRoom(String key, Room room) {
+		rooms.put(key, room);
+	}
 	
 	public Room findRoom(String name) {
 		return rooms.get(name);

@@ -50,7 +50,28 @@ public class TestRoom {
 		model.getInventory().addGold(-5);
 		model.updateContents();
 		temp = model.getContents();
-		assertEquals(temp, "The room has nothing");
+		assertEquals(temp, "The room has nothing.");
+		NPC tempNPC = new NPC("human");
+		NPCList.add(tempNPC);
+		model.setNPCs(NPCList);
+		model.updateContents();
+		temp = model.getContents();
+		assertEquals(temp, "The room has nothing.\nThere is a human");
 	}
 
+	@Test
+	public void testGetNPC() {
+		NPC tempNPC = new NPC("human");
+		NPCList.add(tempNPC);
+		model.setNPCs(NPCList);
+		assertEquals(model.getNPC("human"), tempNPC);
+	}
+	
+	@Test
+	public void testContainsNPC() {
+		NPC tempNPC = new NPC("human");
+		NPCList.add(tempNPC);
+		model.setNPCs(NPCList);
+		assertEquals (model.containsNPC("human"), true);
+	}
 }

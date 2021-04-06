@@ -57,7 +57,7 @@ public class Inventory {
 	
 	public boolean containsItem(String name) {
 		for (int i = 0; i < itemArrayList.size(); i++) {
-			if (itemArrayList.get(i).getName() == name) {
+			if (itemArrayList.get(i).getName().equals(name)) {
 				return true;
 			}
 		}

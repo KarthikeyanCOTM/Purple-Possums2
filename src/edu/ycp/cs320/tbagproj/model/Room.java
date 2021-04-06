@@ -9,7 +9,7 @@ public class Room {
 	private ArrayList<NPC> NPCList;
 	private HashMap<String, Room> connections;
 	private String name;
-	private String description;
+	private String description = " ";
 	private String contents = "The room has ";
 	
 	public Room() {
@@ -22,7 +22,11 @@ public class Room {
 		this.inventory = inventory;
 		this.name = name;
 		this.NPCList = NPCList;
-		this.connections = connections;
+		if (connections == null) {
+			this.connections = new HashMap<String, Room>();
+		}else {
+			this.connections = connections;
+		}
 	}
 	
 	public Inventory getInventory(){
@@ -50,13 +54,21 @@ public class Room {
 	}
 	
 	public void setContents() {
-		if (inventory.getItemList().isEmpty() == false || inventory.getGold() != 0) {
+		if (inventory != null && inventory.getItemList().isEmpty() == false) {
 			for (int i = 0; i < inventory.getNumItems(); i++) {
 				contents += inventory.getItemList().get(i).getName() + ", ";
 			}
 			contents += inventory.getGold() + " gold.";
+		}else if (inventory != null && inventory.getGold() != 0) {
+			contents += inventory.getGold() + " gold.";
 		}else {
-			contents += "nothing";
+			contents += "nothing.";
+		}
+		if (NPCList != null && NPCList.isEmpty() == false) {
+			contents += "\nThere is a ";
+			for (int i = 0; i < NPCList.size(); i++) {
+				contents += NPCList.get(i).getName();
+			}
 		}
 	}
 	
@@ -94,9 +106,18 @@ public class Room {
 		this.NPCList.removeAll(NPCList);
 	}
 	
+	public void deleteNPC(String name) {
+		for (int i = 0; i < NPCList.size(); i++) {
+			if (NPCList.get(i).getName().equals(name)) {
+				NPCList.remove(i);
+				i = NPCList.size();
+			}
+		}
+	}
+	
 	public boolean containsNPC(String name) {
 		for (int x = 0; x < NPCList.size(); x++) {
-			if (NPCList.get(x).getName() == name) {
+			if (NPCList.get(x).getName().equals(name)) {
 				return true;
 			}
 		}

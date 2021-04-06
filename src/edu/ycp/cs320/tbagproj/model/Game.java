@@ -24,50 +24,45 @@ public class Game {
 	
 	public void newGame() {
 		player = new Player("Player");
-		HashMap<String, Room> Rooms = new HashMap<>();
 		Map map = new Map();
-		Room room = new Room();
-		Room tempRoom = new Room();
-		Item item = new Item();
-		Inventory tempInventory = new Inventory();
+		ArrayList<NPC> tempNPCList = new ArrayList<NPC>();
+		NPC cultist = new NPC("cultist");
 		
-		//foyar creation
-		map.createRoom(null, "Foyar", null, Rooms);
-		room.setDescription("A large room that has two pillars that reach up to the ceiling. There are some paintings on the walls with a door to the north, and one too the west.");
-		room.setContents();
+		//foyer creation
+		Room foyer = new Room(null, "Foyer", null, null);
+		foyer.setDescription("A large room that has two pillars that reach up to the ceiling. There are some paintings on the walls with a door to the north, and one too the west.");
+		foyer.setContents();
 		
 		//closet creation
-		Rooms.put("east", room);
-		map.createRoom(null, "Closet", null, Rooms);
-		tempRoom = map.findRoom("Closet");
-		tempRoom.setDescription("A walk in closet that has various coats, boots, and scarves along with a large open trunk. There is a door to the east.");
-		tempInventory.addNewItem("fur armor", 0, 1, 0, false);
-		tempInventory.addNewItem("wooden sword", 3, 0, 0, false);
-		tempInventory.addNewItem("wooden staff", 3, 0, 0, false);
-		tempInventory.addNewItem("healing potion", 0, 0, 25, true);
-		tempRoom.setInventory(tempInventory);
-		tempRoom.setContents();
-		map.updateRoom("Closet", tempRoom);
-		room.setConnections("west", tempRoom);
+		HashMap<String, Room> closetConnections = new HashMap<>();
+		closetConnections.put("east", foyer);
+		Inventory closetInventory = new Inventory();
+		closetInventory.addNewItem("fur armor", 0, 1, 0, false);
+		closetInventory.addNewItem("wooden sword", 3, 0, 0, false);
+		closetInventory.addNewItem("wooden staff", 3, 0, 0, false);
+		closetInventory.addNewItem("healing potion", 0, 0, 25, true);
+		Room closet = new Room(closetInventory, "Closet", null, closetConnections);
+		closet.setDescription("A walk in closet that has various coats, boots, and scarves along with a large open trunk. There is a door to the east.");
+		map.addRoom("Closet", closet);
+		foyer.setConnections("west", closet);
 		
 		//main hall creation
-		Rooms.clear();
-		Rooms.put("south", room);
-		map.createRoom(null, "Main Hall", null, Rooms);
-		tempRoom = map.findRoom("Main Hall");
-		tempRoom.setDescription("A grand corridor filled with painting, sculptures, and tapastries. It has a door to the north, south, east, and west.");
-		tempInventory.clearInventory();
-		tempInventory.addGold(5);
-		tempRoom.setInventory(tempInventory);
-		tempRoom.setContents();
-		map.updateRoom("MainHall", tempRoom);
-		room.setConnections("north", tempRoom);
-		map.updateRoom("Foyar", room);
-		room = tempRoom;
+		HashMap<String, Room> mainHallConnections = new HashMap<>();
+		mainHallConnections.put("south", foyer);
+		tempNPCList.add(cultist);
+		Inventory mainHallInventory = new Inventory();
+		mainHallInventory.addGold(5);
+		Room mainHall = new Room(mainHallInventory, "Main Hall", tempNPCList, mainHallConnections);
+		mainHall.setDescription("A grand corridor filled with painting, sculptures, and tapastries. It has a door to the north, south, east, and west.");
+		closet.setContents();
+		mainHall.setContents();
+		foyer.setConnections("north", mainHall);
+		map.addRoom("Foyer", foyer);
+		map.addRoom("Main Hall", mainHall);
 		
 		//creates full map and sets starting room
 		fullMap = map;
-		currentRoom = map.findRoom("Foyar");
+		currentRoom = fullMap.findRoom("Foyer");
 	}
 	
 	public void saveGame() {
@@ -103,34 +98,54 @@ public class Game {
 				currentRoom = tempRoomsMap.get("west");
 				return currentRoom.getDescription() + currentRoom.getContents();
 			case 5:
-				attackModel.attack(player, currentRoom.getNPC(enter.getSecond()), true);
-				return "hit";
+				double totalDamageTaken = 0;
+				currentRoom.getNPC(enter.getSecond()).setHealth(attackModel.attack(player, currentRoom.getNPC(enter.getSecond()), true) * -1);
+				if (currentRoom.getNPC(enter.getSecond()).getCurHealth() <= 0) {
+					currentRoom.deleteNPC(enter.getSecond());
+					currentRoom.setContents();
+				}
+				if (currentRoom.getNPCs() != null) {
+					for (int i = 0; i < currentRoom.getNPCs().size(); i++) {
+						String tempNPCName = currentRoom.getNPCs().get(i).getName();
+						player.setHealth(attackModel.attack(player, currentRoom.getNPC(tempNPCName), false) * -1);
+						totalDamageTaken += attackModel.attack(player, currentRoom.getNPC(tempNPCName), false) * -1;
+					}
+					totalDamageTaken *= -1;
+				}
+				return "You hit for " + player.getTotalDamage() + ". You took " + totalDamageTaken + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 6:
 				newGame();
+				System.out.print(currentRoom.getConnections().get("west").getInventory().getItem("healing potion").getName());
 				return currentRoom.getDescription() + currentRoom.getContents();
 			case 7:
 				Item tempItem = currentRoom.getInventory().getItem(enter.getSecond());
-				player.getInventory().addNewItem(tempItem.getName(), tempItem.getDamage(), tempItem.getArmour(), tempItem.getHealing(), tempItem.getIsUsable());
+				int tempGold = currentRoom.getInventory().getGold();
+				if (tempItem != null) {
+					player.getInventory().addNewItem(tempItem.getName(), tempItem.getDamage(), tempItem.getArmour(), tempItem.getHealing(), tempItem.getIsUsable());
+				}
+				player.getInventory().addGold(tempGold);
 				currentRoom.getInventory().removeItem(enter.getSecond());
+				currentRoom.getInventory().addGold(tempGold * -1);
 				currentRoom.setContents();
-				return "You picked up the " + enter.getSecond();
+				return "You picked up the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 8:
 				player.equipItem(enter.getSecond());
-				break;
+				return "You equipped the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 9:
 				player.unequipItem(enter.getSecond());
-				break;
+				return "You unequipped the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 10:
 				ArrayList<String> tempList = enter.getCommands();
 				String tempString = "";
 				for (int i = 0; i < tempList.size(); i++) {
-					tempString += tempList.get(i) + "\n";
+					tempString += tempList.get(i) + ",\n";
 				}
 				return tempString;
 			case 11:
-				player.setHealth(player.getInventory().getItem(enter.getSecond()).getHealing());
+				double tempHealing = player.getInventory().getItem(enter.getSecond()).getHealing();
+				player.setHealth(tempHealing);
 				player.getInventory().removeItem(enter.getSecond());
-				break;
+				return "You healed for " + tempHealing + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 12:
 				return "Load Successful";
 				

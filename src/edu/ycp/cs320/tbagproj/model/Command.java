@@ -102,7 +102,7 @@ public class Command {
 					break;
 				case "get":
 					Inventory tempInventory = room.getInventory();
-					if (tempInventory.containsItem(second) == true) {
+					if (tempInventory.containsItem(second) == true || (second.equals("gold") && tempInventory.getGold() > 0)) {
 						return 7;
 					}
 					return 0;
