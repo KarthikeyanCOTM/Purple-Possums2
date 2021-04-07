@@ -13,7 +13,7 @@ public class GameController {
 	}
 	
 	public String gameRun(String prompt) {
-		command.setCommands();
+		//command.setCommands();
 		return game.runGame(prompt);
 	}
 }

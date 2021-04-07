@@ -14,6 +14,10 @@ public class Game {
 	private NPC npcModel = new NPC();
 	private Inventory inventoryModel = new Inventory();
 	
+	public Game(){
+		enter.setCommands();
+	}
+	
 	public void exitGame() {
 			close = true;
 	}
@@ -76,7 +80,7 @@ public class Game {
 	
 	public String runGame(String prompt) {
 		HashMap<String, Room> tempRoomsMap = new HashMap<String, Room>();
-		enter.setCommands();
+		//enter.setCommands();
 		enter.setPrompt(prompt);
 		int result = enter.processPrompt(player, currentRoom);
 		switch (result) {
