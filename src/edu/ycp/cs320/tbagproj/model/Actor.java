@@ -5,24 +5,20 @@ package edu.ycp.cs320.tbagproj.model;
 public class Actor {
 	private String name;
 	private double health = 100.0;
-	private double totalDamage;
-	private double defence;
+	private double totalDamage = 1.0;
+	private double defence = 0.0;
 	private Inventory inventory;
 	private Inventory equipment;
 	
 	public Actor() {
 		inventory = new Inventory();
 		equipment = new Inventory();
-		totalDamage = 1.0;
-		defence = 0.0;
 	}
 	
 	public Actor(String name) {
 		this.name = name;
 		inventory = new Inventory();
 		equipment = new Inventory();
-		totalDamage = 1.0;
-		defence = 0.0;
 	}
 	
 	public String getName() {

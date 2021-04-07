@@ -11,14 +11,12 @@ public class Game {
 	private Room currentRoom;
 	private Map fullMap;
 	private Attack attackModel = new Attack();
-	private NPC npcModel = new NPC();
-	private Inventory inventoryModel = new Inventory();
 	
 	public Game(){
 		enter.setCommands();
 	}
 	
-	public void exitGame() {
+	private void exitGame() {
 			close = true;
 	}
 	
@@ -26,7 +24,7 @@ public class Game {
 		return close;
 	}
 	
-	public void newGame() {
+	private void newGame() {
 		player = new Player("Player");
 		Map map = new Map();
 		NPC cultist = new NPC("cultist");
@@ -85,14 +83,15 @@ public class Game {
 		currentRoom = fullMap.findRoom("Foyer");
 	}
 	
-	public void saveGame() {
+	private void saveGame() {
 		
 	}
 	
-	public void loadGame() {
+	private void loadGame() {
 		
 	}
 	
+	//receives command from user and runs the game
 	public String runGame(String prompt) {
 		HashMap<String, Room> tempRoomsMap = new HashMap<String, Room>();
 		//enter.setCommands();

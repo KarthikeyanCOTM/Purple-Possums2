@@ -17,6 +17,7 @@ public class Command {
 		return prompt;
 	}
 	
+	//Takes user command and breaks in into two pieces
 	public void setPrompt(String input) {
 		prompt = input;
 		first = "";
@@ -46,6 +47,7 @@ public class Command {
 		return commandsList;
 	}
 	
+	//sets all usable commands
 	public void setCommands() {
 		commandsList.add("north");
 		commandsList.add("east");
@@ -78,6 +80,7 @@ public class Command {
 		previous.add(prompt);
 	}
 	
+	//process the first and second part of the command
 	public int processPrompt(Player player, Room room) {
 		if (commandsList.contains(first) == true) {
 			switch (first) {

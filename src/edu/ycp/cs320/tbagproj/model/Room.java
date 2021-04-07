@@ -53,6 +53,7 @@ public class Room {
 		return description;
 	}
 	
+	//Sets the description of the items and npc's in the room
 	private void setContents() {
 		if (inventory != null && inventory.getItemList().isEmpty() == false) {
 			for (int i = 0; i < inventory.getNumItems(); i++) {
