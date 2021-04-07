@@ -5,7 +5,7 @@ import edu.ycp.cs320.tbagproj.model.*;
 public class GameController {
 	Command command = new Command();
 	String prompt;
-	Game game;
+	Game game = new Game();
 	boolean end = false;
 	
 	public void setModel(Game game) {
