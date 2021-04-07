@@ -31,10 +31,13 @@ public class Game {
 		Map map = new Map();
 		NPC cultist = new NPC("cultist");
 		cultist.setHealth(-75.0);
+		NPC ghost = new NPC("ghost");
+		ghost.setHealth(2.0);
 		
 		//foyer creation
 		Room foyer = new Room(null, "Foyer", null, null);
 		foyer.setDescription("A large room that has two pillars that reach up to the ceiling. There are some paintings on the walls with a door to the north, and one too the west.");
+		map.addRoom("Foyer", foyer);
 		foyer.updateContents();
 		
 		//closet creation
@@ -62,8 +65,20 @@ public class Game {
 		closet.updateContents();
 		mainHall.updateContents();
 		foyer.setConnections("north", mainHall);
-		map.addRoom("Foyer", foyer);
 		map.addRoom("Main Hall", mainHall);
+		
+		//West Hallway Creation
+		HashMap<String, Room> westHallwayConnections = new HashMap<>();
+		westHallwayConnections.put("east", mainHall);
+		ArrayList<NPC> westHallwayNPCList = new ArrayList<NPC>();
+		westHallwayNPCList.add(ghost);
+		Inventory westHallwayInv = new Inventory();
+		westHallwayInv.addNewItem("Sword", 2.0, 0.0, 0.0, true);
+		Room westHallway = new Room(westHallwayInv, "West Hallway", westHallwayNPCList, westHallwayConnections);
+		westHallway.setDescription("A hallway with a mirror at the end. It has a door to the north and south.");
+		westHallway.updateContents();
+		mainHall.setConnections("west", westHallway);
+		map.addRoom("West Hallway", westHallway);
 		
 		//creates full map and sets starting room
 		fullMap = map;
