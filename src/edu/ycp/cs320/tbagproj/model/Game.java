@@ -2,6 +2,7 @@ package edu.ycp.cs320.tbagproj.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ListIterator;
 
 public class Game {
 	private boolean close = false;
@@ -134,6 +135,9 @@ public class Game {
 					}
 					totalDamageTaken *= -1;
 				}
+				if (totalDamageTaken == 0 ) {
+					return "You hit for " + player.getTotalDamage() + ". Your armor blocked all damage." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
+				}
 				return "You hit for " + player.getTotalDamage() + ". You took " + totalDamageTaken + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 6:
 				newGame();
@@ -169,7 +173,22 @@ public class Game {
 				return "You healed for " + tempHealing + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 12:
 				return "Load Successful";
+			case 13:
+				if(player.getInventory().getItemList().isEmpty())
+					return "Your inventory is empty.";
+				else {
+				String items = "";
+				ListIterator<Item> iter = player.getInventory().getItemList().listIterator();
 				
+				
+				while (iter.hasNext()) {
+					if(!iter.hasPrevious())
+						items += " " + iter.next().getName();
+					else
+						items += ", " + iter.next().getName();
+				}
+				return "Your inventory has" + items;
+			}
 		}
 		return "Command could not be processed";
 	}
