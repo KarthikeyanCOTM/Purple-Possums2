@@ -103,20 +103,36 @@ public class Game {
 				return "invalid command";
 			case 1:
 				tempRoomsMap = currentRoom.getConnections();
-				currentRoom = tempRoomsMap.get("north");
-				return currentRoom.getDescription() + currentRoom.getContents();
+				if (tempRoomsMap.containsKey("north")){
+					currentRoom = tempRoomsMap.get("north");
+					return currentRoom.getDescription() + currentRoom.getContents();
+				}
+				else
+					return "You cannot go that way.";
 			case 2:
 				tempRoomsMap = currentRoom.getConnections();
-				currentRoom = tempRoomsMap.get("east");
-				return currentRoom.getDescription() + currentRoom.getContents();
+				if (tempRoomsMap.containsKey("east")){
+					currentRoom = tempRoomsMap.get("east");
+					return currentRoom.getDescription() + currentRoom.getContents();
+				}
+				else
+					return "You cannot go that way.";
 			case 3:
 				tempRoomsMap = currentRoom.getConnections();
-				currentRoom = tempRoomsMap.get("south");
-				return currentRoom.getDescription() + currentRoom.getContents();
+				if (tempRoomsMap.containsKey("south")){
+					currentRoom = tempRoomsMap.get("south");
+					return currentRoom.getDescription() + currentRoom.getContents();
+				}
+				else
+					return "You cannot go that way.";
 			case 4:
 				tempRoomsMap = currentRoom.getConnections();
-				currentRoom = tempRoomsMap.get("west");
-				return currentRoom.getDescription() + currentRoom.getContents();
+				if (tempRoomsMap.containsKey("west")){
+					currentRoom = tempRoomsMap.get("west");
+					return currentRoom.getDescription() + currentRoom.getContents();
+				}
+				else
+					return "You cannot go that way.";
 			case 5:
 				double totalDamageTaken = 0;
 				NPC currentNPC = currentRoom.getNPC(enter.getSecond());
