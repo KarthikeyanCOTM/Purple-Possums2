@@ -80,6 +80,4 @@ public class Actor {
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
 	}
-	
-	
 }

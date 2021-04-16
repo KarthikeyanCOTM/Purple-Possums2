@@ -29,7 +29,7 @@ public class Game {
 		player = new Player("Player");
 		Map map = new Map();
 		NPC cultist = new NPC("cultist");
-		cultist.setHealth(-75.0);
+		cultist.setHealth(-85.0);
 		NPC ghost = new NPC("ghost");
 		ghost.setHealth(2.0);
 		
@@ -64,7 +64,6 @@ public class Game {
 		closet.updateContents();
 		mainHall.updateContents();
 		foyer.setConnections("north", mainHall);
-		map.addRoom("Main Hall", mainHall);
 		
 		//West Hallway Creation
 		HashMap<String, Room> westHallwayConnections = new HashMap<>();
@@ -72,12 +71,13 @@ public class Game {
 		ArrayList<NPC> westHallwayNPCList = new ArrayList<NPC>();
 		westHallwayNPCList.add(ghost);
 		Inventory westHallwayInv = new Inventory();
-		westHallwayInv.addNewItem("Sword", 2.0, 0.0, 0.0, true);
+		westHallwayInv.addNewItem("Sword", 5.0, 0.0, 0.0, true);
 		Room westHallway = new Room(westHallwayInv, "West Hallway", westHallwayNPCList, westHallwayConnections);
 		westHallway.setDescription("A hallway with a mirror at the end. It has a door to the north and south.");
 		westHallway.updateContents();
 		mainHall.setConnections("west", westHallway);
 		map.addRoom("West Hallway", westHallway);
+		map.addRoom("Main Hall", mainHall);
 		
 		//creates full map and sets starting room
 		fullMap = map;
