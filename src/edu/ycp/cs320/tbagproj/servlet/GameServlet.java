@@ -18,6 +18,8 @@ public class GameServlet extends HttpServlet {
 	
 	private String command = null;
 	private String message = null;
+	private String previous = "";
+	private double health = 0;
 	private Game model = new Game();
 
 	@Override
@@ -42,9 +44,15 @@ public class GameServlet extends HttpServlet {
 		
 		command = req.getParameter("command");
 		
+		if (message != null)
+			previous += message + "\n";
 		message = controller.gameRun(command);
+		
+		health = controller.getModel().getPlayer().getCurHealth();
 
 		req.setAttribute("message", message);
+		req.setAttribute("health", health);
+		req.setAttribute("previous", previous);
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/GameView.jsp").forward(req, resp);
 	}

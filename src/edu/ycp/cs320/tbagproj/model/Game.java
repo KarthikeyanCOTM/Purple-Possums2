@@ -25,6 +25,10 @@ public class Game {
 		return close;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 	private void newGame() {
 		player = new Player("Player");
 		Map map = new Map();

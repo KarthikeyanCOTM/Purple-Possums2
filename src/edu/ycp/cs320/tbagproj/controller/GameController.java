@@ -12,6 +12,10 @@ public class GameController {
 		this.game = game;
 	}
 	
+	public Game getModel() {
+		return game;
+	}
+	
 	public String gameRun(String prompt) {
 		//command.setCommands();
 		return game.runGame(prompt);
