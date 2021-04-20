@@ -37,12 +37,24 @@ public class Actor {
 		this.health += health;
 	}
 	
+	public void setNewHealth(double health) {
+		this.health = health;
+	}
+	
 	public double getTotalDamage() {
 		return totalDamage;
 	}
 	
+	public void setTotalDamage(double totalDamage) {
+		this.totalDamage = totalDamage;
+	}
+	
 	public double getDefence() {
 		return defence;
+	}
+	
+	public void setDefence(double defense) {
+		this.defence = defense;
 	}
 	
 	public void equipItem(String item) {
@@ -71,6 +83,10 @@ public class Actor {
 	
 	public Inventory getEquipment() {
 		return equipment;
+	}
+	
+	public void setEquipment(Inventory equipment) {
+		this.equipment = equipment;
 	}
 	
 	public Inventory getInventory() {

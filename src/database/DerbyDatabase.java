@@ -13,6 +13,8 @@ import edu.ycp.cs320.tbagproj.model.*;
 
 public class DerbyDatabase implements IDatabase {
 	
+	private static final int MAX_ATTEMPTS = 10;
+	
 	private interface Transaction<ResultType> {
 		public ResultType execute(Connection conn) throws SQLException;
 	}
@@ -23,6 +25,49 @@ public class DerbyDatabase implements IDatabase {
 		} catch (SQLException e) {
 			throw new PersistenceException("Transaction failed", e);
 		}
+	}
+	
+	public<ResultType> ResultType doExecuteTransaction(Transaction<ResultType> txn) throws SQLException {
+		Connection conn = connect();
+		
+		try {
+			int numAttempts = 0;
+			boolean success = false;
+			ResultType result = null;
+			
+			while (!success && numAttempts < MAX_ATTEMPTS) {
+				try {
+					result = txn.execute(conn);
+					conn.commit();
+					success = true;
+				} catch (SQLException e) {
+					if (e.getSQLState() != null && e.getSQLState().equals("41000")) {
+						// Deadlock: retry (unless max retry count has been reached)
+						numAttempts++;
+					} else {
+						// Some other kind of SQLException
+						throw e;
+					}
+				}
+			}
+			
+			if (!success) {
+				throw new SQLException("Transaction failed (too many retries)");
+			}
+			
+			// Success!
+			return result;
+		} finally {
+			DBUtil.closeQuietly(conn);
+		}
+	}
+	
+	private Connection connect() throws SQLException {
+		Connection conn = DriverManager.getConnection("jdbc:derby:C:/CS320-2019-LibraryExample-DB/library.db;create=true");
+		
+		conn.setAutoCommit(false);
+		
+		return conn;
 	}
 	
 	public String saveGame(String key, Player player, Map map) {
