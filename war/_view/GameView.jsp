@@ -7,21 +7,21 @@
 		<title>CS320 TextBasedAdventureGame</title>
 	</head>
 	
-	<body>
+	<body style="background-color: black; color: white;">
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
 	
 		<form action="${pageContext.servletContext.contextPath}/gameView" method="post">
 			
-					<div style="position: absolute; right: 0px; width: 240px; float: left; padding:10px;">
+					<div style="position: absolute; right: 200px; width: 240px; float: left; padding:10px;">
 					<span class="label">Player HP: </span>
 					<span class="health">${health}</span>
 					</div>
 				
 			<table>
 				<tr>
-				<div style="width:240px; height:150px; overflow:scroll; padding:5px;">
+				<div style="width:280px; height:200px; overflow:auto; padding:5px;">
 				<span class="previous">${previous}</span>
 				</div>
 				
@@ -35,7 +35,7 @@
        				<td><input type="text" name="command" size="20" value="${command}" /></td>
 			    </tr>
 			</table>
-			<input type="Submit" name="submitaction" value="Enter Command">
+			<input type="Submit" name="submitaction" value="Enter Command" size="50">
 		</form>
 	</body>
 </html>

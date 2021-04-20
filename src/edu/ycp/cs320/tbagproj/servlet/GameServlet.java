@@ -4,6 +4,9 @@ http://localhost:8081/tbagproj/gameView
 package edu.ycp.cs320.tbagproj.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,8 +47,11 @@ public class GameServlet extends HttpServlet {
 		
 		command = req.getParameter("command");
 		
-		if (message != null)
-			previous += message + "\n";
+		if (message != null) {
+			previous += message + " \n";
+			previous = nl2br(previous);
+			
+		}
 		message = controller.gameRun(command);
 		
 		health = controller.getModel().getPlayer().getCurHealth();
@@ -56,6 +62,18 @@ public class GameServlet extends HttpServlet {
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/GameView.jsp").forward(req, resp);
 	}
+	
+	//https://codingexplained.com/coding/java/replace-newline-characters-java-jstl
+	public static String nl2br(String input) {
+        Scanner scanner = new Scanner(input);
+        List lines = new ArrayList<>();
+
+        do {
+            lines.add(scanner.nextLine());
+        } while (scanner.hasNextLine());
+
+        return String.join("<br />", lines);
+    }
 
 
 }
