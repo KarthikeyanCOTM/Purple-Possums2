@@ -67,4 +67,8 @@ public class Inventory {
 	public ArrayList<Item> getItemList() {
 		return itemArrayList;
 	}
+	
+	public void setItems(ArrayList<Item> list) {
+		itemArrayList = list;
+	}
 }
