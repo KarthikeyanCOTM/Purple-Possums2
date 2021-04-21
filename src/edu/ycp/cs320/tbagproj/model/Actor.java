@@ -11,6 +11,7 @@ public class Actor {
 	private Inventory equipment;
 	private int inventory_ID = 0;
 	private int equipment_ID = 0;
+	private int room_ID;
 	
 	public Actor() {
 		inventory = new Inventory();
@@ -113,5 +114,13 @@ public class Actor {
 	
 	public int getEquipment_ID() {
 		return equipment_ID;
+	}
+	
+	public void setRoom_ID(int r) {
+		room_ID = r;
+	}
+	
+	public int getRoom_ID() {
+		return room_ID;
 	}
 }

@@ -41,7 +41,7 @@ public class InitialData {
 				}
 				room.setDescription(i.next());
 				room.setRoom_ID(roomID);
-				room.setGame_ID(i.next());
+				room.setGame_ID(Integer.parseInt(i.next()));
 				roomMap.put(roomID, room);
 			}
 			getConnections(roomMap);
@@ -74,6 +74,7 @@ public class InitialData {
 				
 				inven.setItems(itemList);
 				inven.addGold(Integer.parseInt(i.next()));
+				inven.setOwner(i.next());
 				inventoryMap.put(inventoryID, inven);
 			}
 			return inventoryMap;
@@ -104,6 +105,7 @@ public class InitialData {
 				
 				equip.setItems(itemList);
 				equip.addGold(Integer.parseInt(i.next()));
+				equip.setOwner(i.next());
 				equipmentMap.put(equipmentID, equip);
 			}
 			return equipmentMap;
@@ -280,6 +282,7 @@ public class InitialData {
 		ReadCSV readPlayers = new ReadCSV("players.csv");
 		HashMap<Integer, Inventory> inventoryMap = getInventorys();
 		HashMap<Integer, Inventory> equipmentMap = getEquipments();
+		List<Room> roomList = getRooms();
 		try {
 			Integer playerID = 0;
 			String temp;
@@ -307,6 +310,8 @@ public class InitialData {
 					player.setEquipment_ID(Integer.parseInt(temp));
 				}
 				player.setGame_ID(Integer.parseInt(i.next()));
+				player.setRoom_ID(Integer.parseInt(i.next()));
+				player.setRoomName(roomList.get(player.getRoom_ID()).getName());
 			}
 			return player;
 		}finally {

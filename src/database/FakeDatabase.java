@@ -42,13 +42,13 @@ public class FakeDatabase implements IDatabase {
 		}
 	}
 	
-	public String saveGame(String key, Player player, Map map) {
+	public String saveGame(String key, Player player, List list) {
 		
 		return null;
 	}
 
 	
-	public String loadGame(String key) {
+	public String loadGame(String key, Game game) {
 		
 		return null;
 	}

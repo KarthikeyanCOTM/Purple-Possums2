@@ -103,7 +103,7 @@ public class Command {
 				case "load":
 					return 12;
 				case "save":
-					break;
+					return 14;
 				case "get":
 					Inventory tempInventory = room.getInventory();
 					if (tempInventory.containsItem(second) == true || (second.equals("gold") && tempInventory.getGold() > 0)) {

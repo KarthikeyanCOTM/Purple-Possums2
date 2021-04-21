@@ -3,6 +3,9 @@ package edu.ycp.cs320.tbagproj.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.List;
+
+import database.DerbyDatabase;
 
 public class Game {
 	private boolean close = false;
@@ -12,6 +15,7 @@ public class Game {
 	private Room currentRoom;
 	private Map fullMap;
 	private Attack attackModel = new Attack();
+	private DerbyDatabase db = new DerbyDatabase();
 	
 	public Game(){
 		enter.setCommands();
@@ -88,8 +92,11 @@ public class Game {
 		currentRoom = fullMap.findRoom("Foyer");
 	}
 	
-	private void saveGame() {
-		
+	private String saveGame(String key) {
+		List<Room> roomList = new ArrayList<Room>();
+		roomList.add(fullMap.getRooms().get("Main Hall"));
+		roomList.add(fullMap.getRooms().get("Closet"));
+		return db.saveGame(key, player, roomList);
 	}
 	
 	private void loadGame() {
@@ -208,7 +215,9 @@ public class Game {
 						items += ", " + iter.next().getName();
 				}
 				return "Your inventory has" + items;
-			}
+				}
+			case 14:
+				return saveGame(enter.getSecond());
 		}
 		return "Command could not be processed";
 	}
