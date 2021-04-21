@@ -11,6 +11,8 @@ public class Room {
 	private String name;
 	private String description = " ";
 	private String contents = "The room has ";
+	private int inventory_ID = 0;
+	private int room_ID;
 	
 	public Room() {
 		inventory = new Inventory();
@@ -145,5 +147,21 @@ public class Room {
 		if (connections.containsValue(other))
 			return true;
 		return false;
+	}
+	
+	public void setInventory_ID(int i) {
+		inventory_ID = i;
+	}
+	
+	public int getInventory_ID() {
+		return inventory_ID;
+	}
+	
+	public void setRoom_ID(int r) {
+		room_ID = r;
+	}
+	
+	public int getRoom_ID() {
+		return room_ID;
 	}
 }

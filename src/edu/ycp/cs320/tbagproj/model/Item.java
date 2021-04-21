@@ -6,6 +6,8 @@ public class Item {
 	private double armour;
 	private double healing;
 	private boolean isUsable;
+	private int inventory_ID;
+	private int equipment_ID;
 	
 	public Item() {
 		
@@ -57,5 +59,21 @@ public class Item {
 	
 	public void setIsUsable(boolean isUsable) {
 		this.isUsable = isUsable;
+	}
+	
+	public void setInventory_ID(int i) {
+		inventory_ID = i;
+	}
+	
+	public int getInvetory_ID() {
+		return inventory_ID;
+	}
+	
+	public void setEquipment_ID(int e) {
+		equipment_ID = e;
+	}
+	
+	public int getEquipment_ID() {
+		return equipment_ID;
 	}
 }

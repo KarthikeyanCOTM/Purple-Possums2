@@ -39,6 +39,7 @@ public class InitialData {
 					room.setNPCs(npcList);
 				}
 				room.setDescription(i.next());
+				room.setRoom_ID(roomID);
 				roomMap.put(roomID, room);
 			}
 			System.out.print("Rooms loaded");
@@ -71,7 +72,6 @@ public class InitialData {
 				itemList = getItems(false, inventoryID);
 				
 				inven.setItems(itemList);
-				i.next();
 				inven.addGold(Integer.parseInt(i.next()));
 				inventoryMap.put(inventoryID, inven);
 			}
@@ -151,6 +151,45 @@ public class InitialData {
 		}
 	}
 	
+	public static ArrayList<Item> getAllItems(boolean isInven) throws IOException {
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		ReadCSV readItem = new ReadCSV("item.csv");
+		try {
+			Integer itemID = 0;
+			while (true) {
+				List<String> tuple = readItem.next();
+				int inven;
+				int equip;
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Item item = new Item();
+				
+				Integer.parseInt(i.next());
+				
+				item.setName(i.next());
+				item.setDamage(Integer.parseInt(i.next()));
+				item.setArmour(Integer.parseInt(i.next()));
+				item.setHealing(Integer.parseInt(i.next()));
+				item.setIsUsable(Boolean.parseBoolean(i.next()));
+				String temp = i.next();
+				if (temp == null && isInven == false) {
+					equip = Integer.parseInt(i.next());
+					item.setEquipment_ID(equip);
+					itemList.add(item);
+				}else {
+					inven = Integer.parseInt(temp);
+					item.setInventory_ID(inven);
+					itemList.add(item);
+				}
+			}
+			return itemList;
+		}finally {
+			readItem.close();
+		}
+	}
+	
 	public static ArrayList<NPC> getNPCs(int roomID) throws IOException {
 		ArrayList<NPC> npcList = new ArrayList<NPC>();
 		ReadCSV readNPC = new ReadCSV("npcs.csv");
@@ -191,6 +230,46 @@ public class InitialData {
 		}
 	}
 	
+	public static ArrayList<NPC> getAllNPCs() throws IOException {
+		ArrayList<NPC> npcList = new ArrayList<NPC>();
+		ReadCSV readNPC = new ReadCSV("npcs.csv");
+		HashMap<Integer, Inventory> inventoryMap = getInventorys();
+		HashMap<Integer, Inventory> equipmentMap = getEquipments();
+		try {
+			Integer npcID = 0;
+			String temp;
+			while (true) {
+				List<String> tuple = readNPC.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				NPC npc = new NPC();
+				
+				Integer.parseInt(i.next());
+				
+				npc.setName(i.next());
+				npc.setNewHealth(Double.parseDouble(i.next()));
+				npc.setDefence(Double.parseDouble(i.next()));
+				npc.setTotalDamage(Double.parseDouble(i.next()));
+				temp = i.next();
+				if (temp != null) {
+					npc.setInventory(inventoryMap.get(Integer.parseInt(temp)));
+					npc.setInventory_ID(Integer.parseInt(temp));
+				}
+				temp = i.next();
+				if (temp != null) {
+					npc.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
+					npc.setEquipment_ID(Integer.parseInt(temp));
+				}
+				npcList.add(npc);
+			}
+			return npcList;
+		}finally {
+			readNPC.close();
+		}
+	}
+
 	public static Player getPlayer() throws IOException {
 		Player player = new Player();
 		ReadCSV readPlayers = new ReadCSV("players.csv");
@@ -215,10 +294,12 @@ public class InitialData {
 				temp = i.next();
 				if (temp != null) {
 					player.setInventory(inventoryMap.get(Integer.parseInt(temp)));
+					player.setInventory_ID(Integer.parseInt(temp));
 				}
 				temp = i.next();
 				if (temp != null) {
 					player.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
+					player.setEquipment_ID(Integer.parseInt(temp));
 				}
 			}
 			return player;
@@ -272,4 +353,28 @@ public class InitialData {
 			readConnections.close();
 		}
 	}
+
+	public static ArrayList<String> getGames() throws IOException {
+		ArrayList<String> games = new ArrayList<String>();
+		ReadCSV readGames = new ReadCSV("games.csv");
+		try {
+			Integer gameID;
+			String name;
+			while (true) {
+				List<String> tuple = readGames.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				
+				gameID = Integer.parseInt(i.next());
+				name = i.next();
+				games.add(name);
+			}
+			return games;
+		}finally {
+			readGames.close();
+		}
+	}
+	
 }

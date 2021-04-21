@@ -9,6 +9,8 @@ public class Actor {
 	private double defence = 0.0;
 	private Inventory inventory;
 	private Inventory equipment;
+	private int inventory_ID = 0;
+	private int equipment_ID = 0;
 	
 	public Actor() {
 		inventory = new Inventory();
@@ -95,5 +97,21 @@ public class Actor {
 	
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
+	}
+	
+	public void setInventory_ID(int i) {
+		inventory_ID = i;
+	}
+	
+	public int getInventory_ID() {
+		return inventory_ID;
+	}
+	
+	public void setEquipment_ID(int e) {
+		equipment_ID = e;
+	}
+	
+	public int getEquipment_ID() {
+		return equipment_ID;
 	}
 }
