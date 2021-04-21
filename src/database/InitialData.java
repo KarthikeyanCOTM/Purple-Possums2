@@ -27,6 +27,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				Room room = new Room();
 				
+				i.next();
 				roomID = Integer.parseInt(i.next());
 				npcList = getNPCs(roomID);
 				
@@ -40,9 +41,9 @@ public class InitialData {
 				}
 				room.setDescription(i.next());
 				room.setRoom_ID(roomID);
+				room.setGame_ID(i.next());
 				roomMap.put(roomID, room);
 			}
-			System.out.print("Rooms loaded");
 			getConnections(roomMap);
 			for (int x = 0; x < roomMap.size(); x++) {
 				roomList.add(roomMap.get(x));
@@ -89,18 +90,19 @@ public class InitialData {
 			ArrayList<Item> itemList = new ArrayList<Item>();
 			while (true) {
 				List<String> tuple = readEquip.next();
+				String temp;
 				if (tuple == null) {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
 				Inventory equip = new Inventory();
 				
-				equipmentID = Integer.parseInt(i.next());
+				temp = i.next();
+				equipmentID = Integer.parseInt(temp);
 				
 				itemList = getItems(false, equipmentID);
 				
 				equip.setItems(itemList);
-				i.next();
 				equip.addGold(Integer.parseInt(i.next()));
 				equipmentMap.put(equipmentID, equip);
 			}
@@ -174,13 +176,15 @@ public class InitialData {
 				item.setHealing(Integer.parseInt(i.next()));
 				item.setIsUsable(Boolean.parseBoolean(i.next()));
 				String temp = i.next();
-				if (temp == null && isInven == false) {
+				if (temp == "0" && isInven == false) {
 					equip = Integer.parseInt(i.next());
+					item.setInventory_ID(0);
 					item.setEquipment_ID(equip);
 					itemList.add(item);
 				}else {
 					inven = Integer.parseInt(temp);
 					item.setInventory_ID(inven);
+					item.setEquipment_ID(0);
 					itemList.add(item);
 				}
 			}
@@ -262,6 +266,7 @@ public class InitialData {
 					npc.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
 					npc.setEquipment_ID(Integer.parseInt(temp));
 				}
+				npc.setRoom_ID(Integer.parseInt(i.next()));
 				npcList.add(npc);
 			}
 			return npcList;
@@ -301,6 +306,7 @@ public class InitialData {
 					player.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
 					player.setEquipment_ID(Integer.parseInt(temp));
 				}
+				player.setGame_ID(Integer.parseInt(i.next()));
 			}
 			return player;
 		}finally {

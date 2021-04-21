@@ -117,7 +117,7 @@ public class DerbyDatabase implements IDatabase {
 					equipmentStmt = conn.prepareStatement(
 							"create table equipment (" +
 									"	equipment_id integer primary key " +
-									"		generated always as identity (start with 1, increment by 1), " +
+									"		generated always as identity (start with 0, increment by 1), " +
 									"	gold integer" +
 									")"
 					);
@@ -148,8 +148,8 @@ public class DerbyDatabase implements IDatabase {
 									"		generated always as identity (start with 0, increment by 1), " +
 									"	name varchar(40)," +
 									"	inventory_id integer references inventory, " +
-									"	description varchar(100)," +
-									"	game_id integer constraint game_id references games" +
+									"	description varchar(400)," +
+									"	game_key varchar(40)" +
 									")"
 					);
 					roomStmt.executeUpdate();
@@ -183,6 +183,7 @@ public class DerbyDatabase implements IDatabase {
 									"	damage double," +
 									"	inventory_id integer references inventory, " +
 									"	equipment_id integer references equipment, " +
+									"	isalive boolean," +
 									"	room_id integer references rooms" +
 									")"
 					);
@@ -254,7 +255,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					insertInventory = conn.prepareStatement("insert into inventory (gold) values (?)");
-					for (int i = 0; i < inventoryMap.size(); i++) {
+					for (int i = 1; i < inventoryMap.size(); i++) {
 						insertInventory.setInt(1, inventoryMap.get(i).getGold());
 						insertInventory.addBatch();
 					}
@@ -263,7 +264,7 @@ public class DerbyDatabase implements IDatabase {
 					System.out.println("Inventory table populated");
 					
 					insertEquipment = conn.prepareStatement("insert into equipment (gold) values(?)");
-					for (int i = 0; i < equipmentMap.size(); i++) {
+					for (int i = 1; i < equipmentMap.size(); i++) {
 						insertEquipment.setInt(1, equipmentMap.get(i).getGold());
 						insertEquipment.addBatch();
 					}
@@ -271,18 +272,15 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("Equipment table populated");
 					
-					insertItem = conn.prepareStatement("insert into item (name, damage, armor, healing, isUsable, inventory_id, equipment_id) vaues (?, ?, ?, ?, ?, ?, ?)");
+					/*insertItem = conn.prepareStatement("insert into item (name, damage, armor, healing, isUsable, inventory_id, equipment_id) values (?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemInventoryList) {
 						insertItem.setString(1, item.getName());
 						insertItem.setDouble(2, item.getDamage());
 						insertItem.setDouble(3, item.getArmour());
 						insertItem.setDouble(4, item.getHealing());
 						insertItem.setBoolean(5, item.getIsUsable());
-						if (item.getInvetory_ID() != 0) {
-							insertItem.setInt(6, item.getInvetory_ID());
-						}else {
-							insertItem.setInt(7, item.getEquipment_ID());
-						}
+						insertItem.setInt(6, item.getInvetory_ID());
+						insertItem.setInt(7, 0);
 						insertItem.addBatch();
 					}
 					for (Item item : itemEquipmentList) {
@@ -291,18 +289,15 @@ public class DerbyDatabase implements IDatabase {
 						insertItem.setDouble(3, item.getArmour());
 						insertItem.setDouble(4, item.getHealing());
 						insertItem.setBoolean(5, item.getIsUsable());
-						if (item.getInvetory_ID() != 0) {
-							insertItem.setInt(6, item.getInvetory_ID());
-						}else {
-							insertItem.setInt(7, item.getEquipment_ID());
-						}
+						insertItem.setInt(6, 0);
+						insertItem.setInt(7, item.getEquipment_ID());
 						insertItem.addBatch();
 					}
 					insertItem.executeBatch();
 					
-					System.out.println("Item table populated");
+					System.out.println("Item table populated");*/
 					
-					insertRooms = conn.prepareStatement("insert into rooms (name, inventory_id, description) values (?, ?, ?)");
+					insertRooms = conn.prepareStatement("insert into rooms (name, inventory_id, description, game_key) values (?, ?, ?, ?)");
 					for (Room room : roomList) {
 						insertRooms.setString(1, room.getName());
 						insertRooms.setInt(2, room.getInventory_ID());
@@ -314,24 +309,28 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("Rooms table populated");
 					
-					insertPlayer = conn.prepareStatement("insert into players (name, health, armor, damage, inventroy_id, equipment_id) values (?, ?, ?, ?, ?, ?)");
+					/*insertPlayer = conn.prepareStatement("insert into players (name, health, armor, damage, inventory_id, equipment_id, game_id) values (?, ?, ?, ?, ?, ?, ?)");
 					insertPlayer.setString(1, player.getName());
 					insertPlayer.setDouble(2, player.getCurHealth());
 					insertPlayer.setDouble(3, player.getDefence());
 					insertPlayer.setDouble(4, player.getTotalDamage());
 					if (player.getInventory_ID() != 0) {
 						insertPlayer.setInt(5, player.getInventory_ID());
+					}else {
+						insertPlayer.setInt(5, 0);
 					}
 					if (player.getEquipment_ID() != 0) {
 						insertPlayer.setInt(6, player.getEquipment_ID());
+					}else {
+						insertPlayer.setInt(6, 0);
 					}
-					insertPlayer.setString(7, "initial");
+					insertPlayer.setInt(7, 0);
 					insertPlayer.addBatch();
 					insertPlayer.executeBatch();
 					
 					System.out.println("Players table populated");
 					
-					insertNPCs = conn.prepareStatement("insert into npcs (name, health, armor, damage, inventory_id, equipment_id, isAlive) values (?, ?, ?, ?, ?, ?, ?)");
+					insertNPCs = conn.prepareStatement("insert into npcs (name, health, armor, damage, inventory_id, equipment_id, isalive, room_id) values (?, ?, ?, ?, ?, ?, ?, ?)");
 					for (NPC npc : npcList) {
 						insertNPCs.setString(1, npc.getName());
 						insertNPCs.setDouble(2, npc.getCurHealth());
@@ -339,18 +338,23 @@ public class DerbyDatabase implements IDatabase {
 						insertNPCs.setDouble(4, npc.getTotalDamage());
 						if (npc.getInventory_ID() != 0) {
 							insertNPCs.setInt(5, npc.getInventory_ID());
+						}else {
+							insertNPCs.setInt(5, 0);
 						}
 						if (npc.getEquipment_ID() != 0) {
 							insertNPCs.setInt(6, npc.getEquipment_ID());
+						}else {
+							insertNPCs.setInt(6, 0);
 						}
 						insertNPCs.setBoolean(7, npc.getIsNPCAlive());
+						insertNPCs.setInt(8, npc.getRoom_ID());
 						insertNPCs.addBatch();
 					}
 					insertNPCs.executeBatch();
 					
-					System.out.println("NPCs table populated");
+					System.out.println("NPCs table populated");*/
 					
-					insertConnections = conn.prepareStatement("insert into connections (room_id, room_id, direction_id) values (?, ?, ?)");
+					/*insertConnections = conn.prepareStatement("insert into connections (room_id, room_id, direction_id) values (?, ?, ?)");
 					int x = 0;
 					while (x < roomList.size()) {
 						HashMap<String, Room> connections = roomList.get(x).getConnections();
@@ -383,7 +387,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertConnections.executeBatch();
 					
-					System.out.println("Connections table populated");
+					System.out.println("Connections table populated");*/
 					
 					insertGames = conn.prepareStatement("insert into games (game_key) values (?)");
 					for (int i = 0; i < games.size(); i++) {
@@ -391,6 +395,8 @@ public class DerbyDatabase implements IDatabase {
 						insertGames.addBatch();
 					}
 					insertGames.executeBatch();
+					
+					System.out.println("Games table populated");
 					
 					return true;
 				}finally {
@@ -409,7 +415,7 @@ public class DerbyDatabase implements IDatabase {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
-		//db.createTables();
+		db.createTables();
 		
 		System.out.println("Loading initial data...");
 		db.loadInitialData();

@@ -13,6 +13,7 @@ public class Room {
 	private String contents = "The room has ";
 	private int inventory_ID = 0;
 	private int room_ID;
+	private String game_ID;
 	
 	public Room() {
 		inventory = new Inventory();
@@ -163,5 +164,13 @@ public class Room {
 	
 	public int getRoom_ID() {
 		return room_ID;
+	}
+	
+	public void setGame_ID(String g) {
+		game_ID = g;
+	}
+	
+	public String getGame_ID() {
+		return game_ID;
 	}
 }
