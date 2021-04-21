@@ -6,6 +6,7 @@ public class Item {
 	private double armour;
 	private double healing;
 	private boolean isUsable;
+	private int item_ID;
 	private int inventory_ID;
 	private int equipment_ID;
 	
@@ -19,6 +20,7 @@ public class Item {
 		this.armour = armour;
 		this.healing = healing;
 		this.isUsable = isUsable;
+		this.inventory_ID = 0;
 	}
 	
 	public String getName() {
@@ -65,7 +67,7 @@ public class Item {
 		inventory_ID = i;
 	}
 	
-	public int getInvetory_ID() {
+	public int getInventory_ID() {
 		return inventory_ID;
 	}
 	
@@ -75,5 +77,13 @@ public class Item {
 	
 	public int getEquipment_ID() {
 		return equipment_ID;
+	}
+	
+	public int getItem_ID() {
+		return item_ID;
+	}
+	
+	public void setItem_ID(int item_ID) {
+		this.item_ID = item_ID;
 	}
 }

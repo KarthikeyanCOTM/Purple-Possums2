@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+
 import edu.ycp.cs320.tbagproj.model.*;
 
 public class DerbyDatabase implements IDatabase {
@@ -75,7 +76,36 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	public String loadGame(String key) {
+		/*executeTransaction(new Transaction<String>() {
+		public String execute(Connection conn) throws SQLException {
+	
+		ResultSet resultSet1 = null;
+		PreparedStatement gameStmt = null;
+		try {
+			gameStmt = conn.prepareStatement(
+				"select game_id from games " +
+				" where game_key = ?"
+			);
+			gameStmt.setString(1, key);
+			
+			resultSet1 = gameStmt.executeQuery();
+		
+		} finally {
+			DBUtil.closeQuietly(gameStmt);
+			
+		}
+		return key;
+		};
+		});*/
 		return "Game loaded successfully";
+	}
+	
+	private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
+		room.setNPCs((ArrayList<NPC>) resultSet.getArray(3));
+		room.setName(resultSet.getString(1));
+		room.setInventory((Inventory) resultSet.getObject(2));
+		room.setDescription(resultSet.getString(4));
+		//room.setConnections(resultSet.getString(5), null);
 	}
 	
 	public void createTables() {
@@ -279,7 +309,7 @@ public class DerbyDatabase implements IDatabase {
 						insertItem.setDouble(3, item.getArmour());
 						insertItem.setDouble(4, item.getHealing());
 						insertItem.setBoolean(5, item.getIsUsable());
-						insertItem.setInt(6, item.getInvetory_ID());
+						//insertItem.setInt(6, item.getInventory_ID());
 						insertItem.setInt(7, 0);
 						insertItem.addBatch();
 					}
@@ -324,7 +354,7 @@ public class DerbyDatabase implements IDatabase {
 					}else {
 						insertPlayer.setInt(6, 0);
 					}
-					insertPlayer.setInt(7, 0);
+					//insertPlayer.setInt(7, 0);
 					insertPlayer.addBatch();
 					insertPlayer.executeBatch();
 					
@@ -354,7 +384,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("NPCs table populated");
 					
-					/*insertConnections = conn.prepareStatement("insert into connections (room_id, room_id, direction_id) values (?, ?, ?)");
+					insertConnections = conn.prepareStatement("insert into connections (room_id, room_id, direction_id) values (?, ?, ?)");
 					int x = 0;
 					while (x < roomList.size()) {
 						HashMap<String, Room> connections = roomList.get(x).getConnections();
@@ -387,7 +417,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertConnections.executeBatch();
 					
-					System.out.println("Connections table populated");*/
+					System.out.println("Connections table populated");
 					
 					insertGames = conn.prepareStatement("insert into games (game_key) values (?)");
 					for (int i = 0; i < games.size(); i++) {
@@ -415,6 +445,7 @@ public class DerbyDatabase implements IDatabase {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
+		
 		db.createTables();
 		
 		System.out.println("Loading initial data...");

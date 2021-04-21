@@ -128,7 +128,7 @@ public class InitialData {
 				Item item = new Item();
 				
 				Integer.parseInt(i.next());
-				
+				item.setItem_ID(itemID++);
 				item.setName(i.next());
 				item.setDamage(Integer.parseInt(i.next()));
 				item.setArmour(Integer.parseInt(i.next()));
