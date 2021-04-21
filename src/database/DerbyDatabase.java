@@ -272,7 +272,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("Equipment table populated");
 					
-					/*insertItem = conn.prepareStatement("insert into item (name, damage, armor, healing, isUsable, inventory_id, equipment_id) values (?, ?, ?, ?, ?, ?, ?)");
+					insertItem = conn.prepareStatement("insert into item (name, damage, armor, healing, isUsable, inventory_id, equipment_id) values (?, ?, ?, ?, ?, ?, ?)");
 					for (Item item : itemInventoryList) {
 						insertItem.setString(1, item.getName());
 						insertItem.setDouble(2, item.getDamage());
@@ -295,7 +295,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertItem.executeBatch();
 					
-					System.out.println("Item table populated");*/
+					System.out.println("Item table populated");
 					
 					insertRooms = conn.prepareStatement("insert into rooms (name, inventory_id, description, game_key) values (?, ?, ?, ?)");
 					for (Room room : roomList) {
@@ -309,7 +309,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("Rooms table populated");
 					
-					/*insertPlayer = conn.prepareStatement("insert into players (name, health, armor, damage, inventory_id, equipment_id, game_id) values (?, ?, ?, ?, ?, ?, ?)");
+					insertPlayer = conn.prepareStatement("insert into players (name, health, armor, damage, inventory_id, equipment_id, game_id) values (?, ?, ?, ?, ?, ?, ?)");
 					insertPlayer.setString(1, player.getName());
 					insertPlayer.setDouble(2, player.getCurHealth());
 					insertPlayer.setDouble(3, player.getDefence());
@@ -352,7 +352,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertNPCs.executeBatch();
 					
-					System.out.println("NPCs table populated");*/
+					System.out.println("NPCs table populated");
 					
 					/*insertConnections = conn.prepareStatement("insert into connections (room_id, room_id, direction_id) values (?, ?, ?)");
 					int x = 0;

@@ -48,7 +48,7 @@ public class GameServlet extends HttpServlet {
 		command = req.getParameter("command");
 		
 		if (message != null) {
-			previous += message + " \n";
+			previous += message + "  \n";
 			previous = nl2br(previous);
 			
 		}

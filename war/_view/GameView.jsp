@@ -21,7 +21,7 @@
 				
 			<table>
 				<tr>
-				<div style="width:280px; height:200px; overflow:auto; padding:5px;">
+				<div style="width:350px; height:200px; overflow:auto; padding:5px;">
 				<span class="previous">${previous}</span>
 				</div>
 				
