@@ -6,14 +6,14 @@ import java.util.List;
 
 public class Room {
 	private Inventory inventory;
-	private ArrayList<NPC> NPCList;
+	private ArrayList<NPC> NPCList = null;
 	private HashMap<String, Room> connections;
 	private String name;
 	private String description = " ";
 	private String contents = "The room has ";
 	private int inventory_ID = 0;
 	private int room_ID;
-	private String game_ID;
+	private int game_ID;
 	
 	public Room() {
 		inventory = new Inventory();
@@ -166,11 +166,11 @@ public class Room {
 		return room_ID;
 	}
 	
-	public void setGame_ID(String g) {
+	public void setGame_ID(int g) {
 		game_ID = g;
 	}
 	
-	public String getGame_ID() {
+	public int getGame_ID() {
 		return game_ID;
 	}
 }

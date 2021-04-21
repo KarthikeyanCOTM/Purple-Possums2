@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Inventory {
 	private ArrayList<Item> itemArrayList;
 	private int gold;
+	private String owner;
 	
 	public  Inventory() {
 		itemArrayList = new ArrayList<Item>();
@@ -70,5 +71,13 @@ public class Inventory {
 	
 	public void setItems(ArrayList<Item> list) {
 		itemArrayList = list;
+	}
+	
+	public void setOwner(String o) {
+		owner = o;
+	}
+	
+	public String getOwner() {
+		return owner;
 	}
 }
