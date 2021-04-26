@@ -7,6 +7,7 @@ public class Inventory {
 	private int gold;
 	private String owner;
 	private int roomKey;
+	private int inventory_ID;
 	
 	public  Inventory() {
 		itemArrayList = new ArrayList<Item>();
@@ -87,5 +88,13 @@ public class Inventory {
 	}
 	public void setRoomKey(int roomKey) {
 		this.roomKey = roomKey;
+	}
+	
+	public void setInventory_ID(int i) {
+		inventory_ID = i;
+	}
+	
+	public int getInventory_ID() {
+		return inventory_ID;
 	}
 }

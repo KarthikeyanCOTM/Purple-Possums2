@@ -71,6 +71,101 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
+	public String updateGame(String key, Player player, List<Room> list) {
+		return executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement itemStmt = null;
+				PreparedStatement npcStmt = null;
+				PreparedStatement inventoryStmt = null;
+				PreparedStatement playerStmt = null;
+		
+				ArrayList<Item> itemList = new ArrayList<Item>();
+				ArrayList<NPC> npcList = new ArrayList<NPC>();
+				ArrayList<Inventory> inventoryList = new ArrayList<Inventory>();
+		
+				//gets all items and npcs
+				try {
+					itemList.addAll(player.getInventory().getItemList());
+				
+					for (int i = 0; i < list.size(); i++) {
+						itemList.addAll(list.get(i).getInventory().getItemList());
+						npcList.addAll(list.get(i).getNPCs());
+					}
+					for (int i = 0; i < npcList.size(); i++) {
+						itemList.addAll(npcList.get(i).getInventory().getItemList());
+					}
+					//gets item's name where hasMoved = true
+					ArrayList<Item> itemUpdateList = new ArrayList<Item>();
+					for (int i = 0; i < itemList.size(); i++) {
+						if (itemList.get(i).getHasMoved() == true) {
+							itemUpdateList.add(itemList.get(i));
+						}
+					}
+		
+					itemStmt = conn.prepareStatement(
+						"update item set inventory_id = ?, equipment_id = ? where item_id = ?"
+					);
+					for (int i = 0; i < itemUpdateList.size(); i++) {
+						itemStmt.setInt(1, itemUpdateList.get(i).getInventory_ID());
+						itemStmt.setInt(2, itemUpdateList.get(i).getEquipment_ID());
+						itemStmt.setInt(3, itemUpdateList.get(i).getItem_ID());
+						itemStmt.addBatch();
+					}
+					itemStmt.executeBatch();
+					System.out.println("item table updated");
+					
+					for (int i = 0; i < list.size(); i++) {
+						inventoryList.add(list.get(i).getInventory());
+					}
+		
+					inventoryStmt = conn.prepareStatement(
+						"update inventory set gold = ? where inventory_id = ?"
+					);
+					for (int i = 0; i < inventoryList.size(); i++) {
+						inventoryStmt.setInt(1, inventoryList.get(i).getGold());
+						inventoryStmt.setInt(2, inventoryList.get(i).getInventory_ID());
+						inventoryStmt.addBatch();
+					}
+					inventoryStmt.executeBatch();
+					System.out.println("inventory table updated");
+		
+					playerStmt = conn.prepareStatement(
+						"update players set health = ?, armor = ?, damage = ?, room_id = ? where player_id = ?"
+					);
+					playerStmt.setDouble(1, player.getCurHealth());
+					playerStmt.setDouble(2, player.getDefence());
+					playerStmt.setDouble(3, player.getTotalDamage());
+					playerStmt.setInt(4, player.getRoom_ID());
+					playerStmt.setInt(5, player.getPlayer_ID());
+		
+					playerStmt.executeUpdate();
+					System.out.println("player table updated");
+		
+					npcStmt = conn.prepareStatement(
+						"update npcs set health = ?, armor = ?, damage = ?, isalive = ? where npc_id = ?"
+					);
+					for (int i = 0; i < npcList.size(); i++) {
+						npcStmt.setDouble(1, npcList.get(i).getCurHealth());
+						npcStmt.setDouble(2, npcList.get(i).getDefence());
+						npcStmt.setDouble(3, npcList.get(i).getTotalDamage());
+						npcStmt.setBoolean(4, npcList.get(i).getIsNPCAlive());
+						npcStmt.setInt(5, npcList.get(i).getNPC_ID());
+						npcStmt.addBatch();
+					}
+					npcStmt.executeBatch();
+					System.out.println("npc table updated");
+				
+					return "update complete";
+				}finally {
+					DBUtil.closeQuietly(itemStmt);
+					DBUtil.closeQuietly(npcStmt);
+					DBUtil.closeQuietly(inventoryStmt);
+					DBUtil.closeQuietly(playerStmt);
+				}
+			}
+		});
+	}
+	
 	public String saveGame(String key, Player player, List<Room> list) {
 		return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
@@ -116,6 +211,9 @@ public class DerbyDatabase implements IDatabase {
 				Integer closetInventory_ID = 0;
 				Integer npcInventory_ID = 0;
 				Integer npcEquipment_ID = 0;
+				ArrayList<Item> itemList = new ArrayList<Item>();
+				ArrayList<NPC> npcList = new ArrayList<NPC>();
+				ArrayList<Inventory> inventoryList = new ArrayList<Inventory>();
 				
 				try {
 					gameStmt = conn.prepareStatement(
@@ -127,13 +225,84 @@ public class DerbyDatabase implements IDatabase {
 					resultSet1 = gameStmt.executeQuery();
 					
 					if (resultSet1.next()) {
-						game_ID = resultSet1.getInt(1);
+						
+						//gets all items and npcs
+						itemList.addAll(player.getInventory().getItemList());
+						for (int i = 0; i < list.size(); i++) {
+							itemList.addAll(list.get(i).getInventory().getItemList());
+							npcList.addAll(list.get(i).getNPCs());
+						}
+						for (int i = 0; i < npcList.size(); i++) {
+							itemList.addAll(npcList.get(i).getInventory().getItemList());
+						}
+						//gets item's name where hasMoved = true
+						ArrayList<Item> itemUpdateList = new ArrayList<Item>();
+						for (int i = 0; i < itemList.size(); i++) {
+							if (itemList.get(i).getHasMoved() == true) {
+								itemUpdateList.add(itemList.get(i));
+							}
+						}
+						
+						itemStmt = conn.prepareStatement(
+							"update item set inventory_id = ?, equipment_id = ? where item_id = ?"
+						);
+						for (int i = 0; i < itemUpdateList.size(); i++) {
+							itemStmt.setInt(1, itemUpdateList.get(i).getInventory_ID());
+							itemStmt.setInt(2, itemUpdateList.get(i).getEquipment_ID());
+							itemStmt.setInt(3, itemUpdateList.get(i).getItem_ID());
+							itemStmt.addBatch();
+						}
+						itemStmt.executeBatch();
+						System.out.println("item table updated");
+						
+						for (int i = 0; i < list.size(); i++) {
+							inventoryList.add(list.get(i).getInventory());
+						}
+						
+						inventoryStmt = conn.prepareStatement(
+							"update inventory set gold = ? where inventory_id = ?"
+						);
+						for (int i = 0; i < inventoryList.size(); i++) {
+							inventoryStmt.setInt(1, inventoryList.get(i).getGold());
+							inventoryStmt.setInt(2, inventoryList.get(i).getInventory_ID());
+							inventoryStmt.addBatch();
+						}
+						inventoryStmt.executeBatch();
+						System.out.println("inventory table updated");
+						
+						playerStmt = conn.prepareStatement(
+							"update players set health = ?, armor = ?, damage = ?, room_id = ? where player_id = ?"
+						);
+						playerStmt.setDouble(1, player.getCurHealth());
+						playerStmt.setDouble(2, player.getDefence());
+						playerStmt.setDouble(3, player.getTotalDamage());
+						playerStmt.setInt(4, player.getRoom_ID());
+						playerStmt.setInt(5, player.getPlayer_ID());
+						
+						playerStmt.executeUpdate();
+						System.out.println("player table updated");
+						
+						npcStmt = conn.prepareStatement(
+							"update npcs set health = ?, armor = ?, damage = ?, isalive = ? where npc_id = ?"
+						);
+						for (int i = 0; i < npcList.size(); i++) {
+							npcStmt.setDouble(1, npcList.get(i).getCurHealth());
+							npcStmt.setDouble(2, npcList.get(i).getDefence());
+							npcStmt.setDouble(3, npcList.get(i).getTotalDamage());
+							npcStmt.setBoolean(4, npcList.get(i).getIsNPCAlive());
+							npcStmt.setInt(5, npcList.get(i).getNPC_ID());
+							npcStmt.addBatch();
+						}
+						npcStmt.executeBatch();
+						System.out.println("npc table updated");
+						
 					}else {
 						gameStmt2 = conn.prepareStatement(
 							"insert into games (game_key) " +
 							" values(?) "
 						);
 						gameStmt2.setString(1, key);
+						System.out.println("games table updated");
 						
 						gameStmt2.executeUpdate();
 						System.out.println("Games table updated");
@@ -415,30 +584,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-
 	public String loadGame(String key, Game game) {
-		/*executeTransaction(new Transaction<String>() {
-		public String execute(Connection conn) throws SQLException {
-	
-		ResultSet resultSet1 = null;
-		PreparedStatement gameStmt = null;
-		try {
-			gameStmt = conn.prepareStatement(
-				"select game_id from games " +
-				" where game_key = ?"
-			);
-			gameStmt.setString(1, key);
-			
-			resultSet1 = gameStmt.executeQuery();
-		
-		} finally {
-			DBUtil.closeQuietly(gameStmt);
-			
-		}
-		return key;
-		};
-		});*/
-		return "Load Successful";
+		return "Game loaded successfully";
 	}
 	
 	private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
@@ -533,7 +680,7 @@ public class DerbyDatabase implements IDatabase {
 									"	healing integer," +
 									"	isUsable boolean," +
 									"	inventory_id integer," +
-									"	equipment_id integer constraint equipment_id references equipment" +
+									"	equipment_id integer" +
 									")"
 					);
 					itemStmt.executeUpdate();
@@ -545,7 +692,7 @@ public class DerbyDatabase implements IDatabase {
 									"	room_id integer primary key " +
 									"		generated always as identity (start with 0, increment by 1), " +
 									"	name varchar(40)," +
-									"	inventory_id integer references inventory, " +
+									"	inventory_id integer, " +
 									"	description varchar(400)," +
 									"	game_key integer" +
 									")"
@@ -562,8 +709,8 @@ public class DerbyDatabase implements IDatabase {
 									"	health double," +
 									"	armor double," +
 									"	damage double," +
-									"	inventory_id integer references inventory, " +
-									"	equipment_id integer references equipment, " +
+									"	inventory_id integer, " +
+									"	equipment_id integer, " +
 									"	game_id integer," +
 									"	room_id integer" +
 									")"
@@ -580,8 +727,8 @@ public class DerbyDatabase implements IDatabase {
 									"	health double," +
 									"	armor double," +
 									"	damage double," +
-									"	inventory_id integer references inventory, " +
-									"	equipment_id integer references equipment, " +
+									"	inventory_id integer, " +
+									"	equipment_id integer, " +
 									"	isalive boolean," +
 									"	room_id integer" +
 									")"
@@ -594,8 +741,8 @@ public class DerbyDatabase implements IDatabase {
 							"create table connections (" +
 									"	connection_id integer primary key " +
 									"		generated always as identity (start with 0, increment by 1), " +
-									"	room_id integer references rooms, " +
-									"	room_id2 integer constraint room_id references rooms, " +
+									"	room_id integer, " +
+									"	room_id2 integer, " +
 									"	direction_id integer" +
 									")"
 					);
@@ -680,7 +827,7 @@ public class DerbyDatabase implements IDatabase {
 						insertItem.setDouble(3, item.getArmour());
 						insertItem.setDouble(4, item.getHealing());
 						insertItem.setBoolean(5, item.getIsUsable());
-						//insertItem.setInt(6, item.getInventory_ID());
+						insertItem.setInt(6, item.getInventory_ID());
 						insertItem.setInt(7, 0);
 						insertItem.addBatch();
 					}
@@ -791,8 +938,6 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("Connections table populated");
 					
-					System.out.println("Connections table populated");
-					
 					insertGames = conn.prepareStatement("insert into games (game_key) values (?)");
 					for (int i = 0; i < games.size(); i++) {
 						insertGames.setString(1, games.get(i));
@@ -817,14 +962,13 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		//System.out.println("Creating tables...");
+		System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
-		//db.createTables();
+		db.createTables();
 		
 		System.out.println("Loading initial data...");
 		db.loadInitialData();
 		
 		System.out.println("Library DB successfully initialized!");
-		db.saveGame("test", InitialData.getPlayer(), InitialData.getRooms());
 	}
 }

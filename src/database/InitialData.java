@@ -75,6 +75,7 @@ public class InitialData {
 				inven.setItems(itemList);
 				inven.addGold(Integer.parseInt(i.next()));
 				inven.setOwner(i.next());
+				inven.setInventory_ID(inventoryID);
 				inventoryMap.put(inventoryID, inven);
 			}
 			return inventoryMap;
@@ -130,7 +131,7 @@ public class InitialData {
 				Item item = new Item();
 				
 				Integer.parseInt(i.next());
-				item.setItem_ID(itemID++);
+				
 				item.setName(i.next());
 				item.setDamage(Integer.parseInt(i.next()));
 				item.setArmour(Integer.parseInt(i.next()));
@@ -170,8 +171,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				Item item = new Item();
 				
-				Integer.parseInt(i.next());
-				
+				item.setItem_ID(Integer.parseInt(i.next()));
 				item.setName(i.next());
 				item.setDamage(Integer.parseInt(i.next()));
 				item.setArmour(Integer.parseInt(i.next()));
@@ -212,7 +212,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				NPC npc = new NPC();
 				
-				Integer.parseInt(i.next());
+				npc.setNPC_ID(Integer.parseInt(i.next()));
 				
 				npc.setName(i.next());
 				npc.setNewHealth(Double.parseDouble(i.next()));
@@ -252,7 +252,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				NPC npc = new NPC();
 				
-				Integer.parseInt(i.next());
+				npc.setNPC_ID(Integer.parseInt(i.next()));
 				
 				npc.setName(i.next());
 				npc.setNewHealth(Double.parseDouble(i.next()));
@@ -293,7 +293,7 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();
 				
-				Integer.parseInt(i.next());
+				player.setPlayer_ID(Integer.parseInt(i.next()));
 				
 				player.setName(i.next());
 				player.setNewHealth(Double.parseDouble(i.next()));

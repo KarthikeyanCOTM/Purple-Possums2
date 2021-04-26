@@ -106,7 +106,10 @@ public class Game {
 	//receives command from user and runs the game
 	public String runGame(String prompt) {
 		HashMap<String, Room> tempRoomsMap = new HashMap<String, Room>();
-		//enter.setCommands();
+		List<Room> roomList = new ArrayList<Room>();
+		roomList.add(fullMap.getRooms().get("Main Hall"));
+		roomList.add(fullMap.getRooms().get("Closet"));
+		enter.setCommands();
 		enter.setPrompt(prompt);
 		int result = enter.processPrompt(player, currentRoom);
 		switch (result) {
@@ -116,34 +119,46 @@ public class Game {
 				tempRoomsMap = currentRoom.getConnections();
 				if (tempRoomsMap.containsKey("north")){
 					currentRoom = tempRoomsMap.get("north");
+					db.updateGame("temp", player, roomList);
 					return currentRoom.getDescription() + currentRoom.getContents();
 				}
-				else
+				else {
+					db.updateGame("temp", player, roomList);
 					return "You cannot go that way.";
+				}
 			case 2:
 				tempRoomsMap = currentRoom.getConnections();
 				if (tempRoomsMap.containsKey("east")){
 					currentRoom = tempRoomsMap.get("east");
+					db.updateGame("temp", player, roomList);
 					return currentRoom.getDescription() + currentRoom.getContents();
 				}
-				else
+				else {
+					db.updateGame("temp", player, roomList);
 					return "You cannot go that way.";
+				}
 			case 3:
 				tempRoomsMap = currentRoom.getConnections();
 				if (tempRoomsMap.containsKey("south")){
 					currentRoom = tempRoomsMap.get("south");
+					db.updateGame("temp", player, roomList);
 					return currentRoom.getDescription() + currentRoom.getContents();
 				}
-				else
+				else {
+					db.updateGame("temp", player, roomList);
 					return "You cannot go that way.";
+				}
 			case 4:
 				tempRoomsMap = currentRoom.getConnections();
 				if (tempRoomsMap.containsKey("west")){
 					currentRoom = tempRoomsMap.get("west");
+					db.updateGame("temp", player, roomList);
 					return currentRoom.getDescription() + currentRoom.getContents();
 				}
-				else
+				else {
+					db.updateGame("temp", player, roomList);
 					return "You cannot go that way.";
+				}
 			case 5:
 				double totalDamageTaken = 0;
 				NPC currentNPC = currentRoom.getNPC(enter.getSecond());
@@ -165,6 +180,7 @@ public class Game {
 				if (totalDamageTaken == 0 ) {
 					return "You hit for " + player.getTotalDamage() + ". Your armor blocked all damage." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 				}
+				db.updateGame("temp", player, roomList);
 				return "You hit for " + player.getTotalDamage() + ". You took " + totalDamageTaken + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 6:
 				newGame();
@@ -179,12 +195,15 @@ public class Game {
 				currentRoom.getInventory().removeItem(enter.getSecond());
 				currentRoom.getInventory().addGold(tempGold * -1);
 				currentRoom.updateContents();
+				db.updateGame("temp", player, roomList);
 				return "You picked up the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 8:
 				player.equipItem(enter.getSecond());
+				db.updateGame("temp", player, roomList);
 				return "You equipped the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 9:
 				player.unequipItem(enter.getSecond());
+				db.updateGame("temp", player, roomList);
 				return "You unequipped the " + enter.getSecond() + ".\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 10:
 				ArrayList<String> tempList = enter.getCommands();
@@ -192,17 +211,21 @@ public class Game {
 				for (int i = 0; i < tempList.size(); i++) {
 					tempString += tempList.get(i) + ",\n";
 				}
+				db.updateGame("temp", player, roomList);
 				return tempString;
 			case 11:
 				double tempHealing = player.getInventory().getItem(enter.getSecond()).getHealing();
 				player.setHealth(tempHealing);
 				player.getInventory().removeItem(enter.getSecond());
+				db.updateGame("temp", player, roomList);
 				return "You healed for " + tempHealing + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 12:
 				return "Load Successful";
 			case 13:
-				if(player.getInventory().getItemList().isEmpty())
+				if(player.getInventory().getItemList().isEmpty()) {
+					db.updateGame("temp", player, roomList);
 					return "Your inventory is empty.";
+				}
 				else {
 				String items = "";
 				ListIterator<Item> iter = player.getInventory().getItemList().listIterator();
@@ -214,6 +237,7 @@ public class Game {
 					else
 						items += ", " + iter.next().getName();
 				}
+				db.updateGame("temp", player, roomList);
 				return "Your inventory has" + items;
 				}
 			case 14:

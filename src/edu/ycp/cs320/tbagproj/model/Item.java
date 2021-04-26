@@ -6,12 +6,15 @@ public class Item {
 	private double armour;
 	private double healing;
 	private boolean isUsable;
-	private int item_ID;
 	private int inventory_ID;
 	private int equipment_ID;
+	private int item_ID;
+	private boolean hasMoved;
 	
 	public Item() {
-		
+		inventory_ID = 0;
+		equipment_ID = 0;
+		hasMoved = false;
 	}
 	
 	public Item(String name, double damage, double armour, double healing, boolean isUsable) {
@@ -20,7 +23,9 @@ public class Item {
 		this.armour = armour;
 		this.healing = healing;
 		this.isUsable = isUsable;
-		this.inventory_ID = 0;
+		inventory_ID = 0;
+		equipment_ID = 0;
+		hasMoved = false;
 	}
 	
 	public String getName() {
@@ -64,7 +69,12 @@ public class Item {
 	}
 	
 	public void setInventory_ID(int i) {
-		inventory_ID = i;
+		if (inventory_ID == 0 && equipment_ID == 0) {
+			inventory_ID = i;
+		}else {
+			inventory_ID = i;
+			hasMoved = true;
+		}
 	}
 	
 	public int getInventory_ID() {
@@ -72,18 +82,27 @@ public class Item {
 	}
 	
 	public void setEquipment_ID(int e) {
-		equipment_ID = e;
+		if (inventory_ID == 0 && equipment_ID == 0) {
+			equipment_ID = e;
+		}else {
+			equipment_ID = e;
+			hasMoved = true;
+		}
 	}
 	
 	public int getEquipment_ID() {
 		return equipment_ID;
 	}
 	
-	public int getItem_ID() {
-		return item_ID;
+	public boolean getHasMoved() {
+		return hasMoved;
 	}
 	
-	public void setItem_ID(int item_ID) {
-		this.item_ID = item_ID;
+	public void setItem_ID(int i) {
+		item_ID = i;
+	}
+	
+	public int getItem_ID() {
+		return item_ID;
 	}
 }
