@@ -3,15 +3,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee">
-
-  <!-- Servlets -->
-  
-  <!-- AJAX servlets. -->
-
-  <!-- Servlet mappings -->
-  
-  <!--  AJAX servlet mappings. --><!--Game Servlet--><servlet>
+         xmlns="http://java.sun.com/xml/ns/javaee"><!--Game Servlet--><servlet>
   	<servlet-name>GameServlet</servlet-name>
   	<servlet-class>edu.ycp.cs320.tbagproj.servlet.GameServlet</servlet-class>
 </servlet><!--GameServlet mappings-->

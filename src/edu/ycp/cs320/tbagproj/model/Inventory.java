@@ -6,6 +6,7 @@ public class Inventory {
 	private ArrayList<Item> itemArrayList;
 	private int gold;
 	private String owner;
+	private int roomKey;
 	
 	public  Inventory() {
 		itemArrayList = new ArrayList<Item>();
@@ -79,5 +80,12 @@ public class Inventory {
 	
 	public String getOwner() {
 		return owner;
+	}
+	
+	public int getRoomKey() {
+		return roomKey;
+	}
+	public void setRoomKey(int roomKey) {
+		this.roomKey = roomKey;
 	}
 }

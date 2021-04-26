@@ -2,6 +2,7 @@ package database;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
  
@@ -9,19 +10,20 @@ import edu.ycp.cs320.tbagproj.model.*;
 
 public class FakeDatabase implements IDatabase {
 	private List<Game> gameList;
-	private List<Inventory> inventoryList;
+	private HashMap<Integer, Inventory> inventoryList;
 	private List<Item> itemList;
-	private List<Inventory> equipmentList;
+	private HashMap<Integer, Inventory> equipmentList;
 	private List<NPC> npcList;
 	private List<Player> playerList;
 	private List<Room> roomList;
 	private List<String> connectionList;
+	private String storedKey;
 	
 	public FakeDatabase() {
 		gameList = new ArrayList<Game>();
-		inventoryList = new ArrayList<Inventory>();
+		inventoryList = new HashMap<Integer, Inventory>();
 		itemList = new ArrayList<Item>();
-		equipmentList = new ArrayList<Inventory>();
+		equipmentList = new HashMap<Integer, Inventory>();
 		npcList = new ArrayList<NPC>();
 		playerList = new ArrayList<Player>();
 		roomList = new ArrayList<Room>();
@@ -36,7 +38,8 @@ public class FakeDatabase implements IDatabase {
 	public void readInitialData() {
 		try {
 			itemList.addAll(InitialData.getItems(false, 0));
-			//inventoryList.addAll(InitialData.getInventorys());
+			inventoryList.putAll(InitialData.getInventorys());
+			equipmentList.putAll(InitialData.getEquipments());
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
@@ -49,7 +52,9 @@ public class FakeDatabase implements IDatabase {
 
 	
 	public String loadGame(String key, Game game) {
-		
+		if (key == storedKey) {
+			
+		}
 		return null;
 	}
 
