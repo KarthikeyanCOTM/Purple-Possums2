@@ -21,14 +21,57 @@ public class TestRoom {
 		model = new Room();
 		items = new Inventory();
 		NPCList = new ArrayList<NPC>();
+		tempMap = new HashMap<String, Room>();
 		secondRoom = new Room(items, "secondRoom", NPCList, tempMap);
+		tempMap = new HashMap<String, Room>();
 		tempMap.put("room", secondRoom);
 	}
 	
 	@Test
-	public void testSetConnections() {
-		//model.setConnections("room", secondRoom);
-		//assertTrue(model.isConnected(secondRoom) == true);
+	public void testGetInventory() {
+		model.setInventory(items);
+		assertTrue(model.getInventory() == items);
+	}
+	
+	@Test
+	public void testGetConnections() {
+		model.setConnections("room", secondRoom);
+		HashMap<String, Room> temp = model.getConnections();
+		assertTrue(temp.get("room") == tempMap.get("room"));
+	}
+	
+	@Test
+	public void testContents() {
+		items.addGold(5);
+		model.setInventory(items);
+		model.updateContents();
+		String temp = model.getContents();
+		assertEquals(temp, "The room has 5 gold.");
+		model.getInventory().addGold(-5);
+		model.updateContents();
+		temp = model.getContents();
+		assertEquals(temp, "The room has nothing.");
+		NPC tempNPC = new NPC("human");
+		NPCList.add(tempNPC);
+		model.setNPCs(NPCList);
+		model.updateContents();
+		temp = model.getContents();
+		assertEquals(temp, "The room has nothing.\nThere is a human");
 	}
 
+	@Test
+	public void testGetNPC() {
+		NPC tempNPC = new NPC("human");
+		NPCList.add(tempNPC);
+		model.setNPCs(NPCList);
+		assertEquals(model.getNPC("human"), tempNPC);
+	}
+	
+	@Test
+	public void testContainsNPC() {
+		NPC tempNPC = new NPC("human");
+		NPCList.add(tempNPC);
+		model.setNPCs(NPCList);
+		assertEquals (model.containsNPC("human"), true);
+	}
 }

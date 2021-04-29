@@ -3,17 +3,26 @@ package edu.ycp.cs320.tbagproj.model;
 import java.util.ArrayList;
 
 public class Inventory {
-	private ArrayList<Object> itemArrayList;
+	private ArrayList<Item> itemArrayList;
 	private int gold;
+	private String owner;
+	private int roomKey;
+	private int inventory_ID;
+	private int equipment_ID;
 	
 	public  Inventory() {
-		itemArrayList = new ArrayList<Object>();
+		itemArrayList = new ArrayList<Item>();
 		gold = 0;
 	}
 	
 	public Inventory(ArrayList items, int gold) {
-		itemArrayList = new ArrayList<Object>(items);
+		itemArrayList = new ArrayList<Item>(items);
 		this.gold = gold;
+	}
+	
+	public void clearInventory() {
+		itemArrayList.clear();
+		gold = 0;
 	}
 	
 	public int getGold() {
@@ -24,18 +33,77 @@ public class Inventory {
 		this.gold += gold;
 	}
 	
-	public Object getItem(Object item) {
-		if (itemArrayList.contains(item) == true) {
-			for (int i = 0; i < itemArrayList.size(); i++) {
-				if (itemArrayList.get(i) == item) {
-					return itemArrayList.get(i);
-				}
+	public Item getItem(String item) {
+		for (int i = 0; i < itemArrayList.size(); i++) {
+			if (itemArrayList.get(i).getName().equals(item)) {
+				return itemArrayList.get(i);
 			}
 		}
 		return null;
 	}
 	
-	public void addItem(Object item) {
-		itemArrayList.add(item);
+	public void addNewItem(String name, double damage, double armour, double healing, boolean isUsable) {
+		Item temp = new Item(name, damage, armour, healing, isUsable);
+		itemArrayList.add(temp);
+	}
+	
+	public void removeItem(String name) {
+		for (int i = 0; i < itemArrayList.size(); i++) {
+			if (itemArrayList.get(i).getName().equals(name)) {
+				itemArrayList.remove(i);
+			}
+		}
+	}
+	
+	public int getNumItems() {
+		return itemArrayList.size();
+	}
+	
+	public boolean containsItem(String name) {
+		for (int i = 0; i < itemArrayList.size(); i++) {
+			if (itemArrayList.get(i).getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<Item> getItemList() {
+		return itemArrayList;
+	}
+	
+	public void setItems(ArrayList<Item> list) {
+		itemArrayList = list;
+	}
+	
+	public void setOwner(String o) {
+		owner = o;
+	}
+	
+	public String getOwner() {
+		return owner;
+	}
+	
+	public int getRoomKey() {
+		return roomKey;
+	}
+	public void setRoomKey(int roomKey) {
+		this.roomKey = roomKey;
+	}
+	
+	public void setInventory_ID(int i) {
+		inventory_ID = i;
+	}
+	
+	public int getInventory_ID() {
+		return inventory_ID;
+	}
+	
+	public void setEquipment_ID(int e) {
+		equipment_ID = e;
+	}
+	
+	public int getEquipment_ID() {
+		return equipment_ID;
 	}
 }

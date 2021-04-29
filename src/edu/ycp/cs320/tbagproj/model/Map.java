@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.Map.*;
 
 public class Map {
-	private HashMap<String, Room> rooms;
+	private HashMap<String, Room> rooms = new HashMap<String, Room>();
 
 	public HashMap<String, Room> getRooms(){
 		return rooms;
@@ -20,6 +20,9 @@ public class Map {
 		rooms.put(name, room);
 	}
 	
+	public void addRoom(String key, Room room) {
+		rooms.put(key, room);
+	}
 	
 	public Room findRoom(String name) {
 		return rooms.get(name);
@@ -27,5 +30,9 @@ public class Map {
 	
 	public Set<Entry<String, Room>> getSet() {
 		return rooms.entrySet();
+	}
+	
+	public void updateRoom(String key, Room room) {
+		rooms.replace(key, room);
 	}
 }

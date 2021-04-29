@@ -1,16 +1,29 @@
+/*URL
+http://localhost:8081/tbagproj/gameView
+*/
 package edu.ycp.cs320.tbagproj.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.tbagproj.controller.GameController;
+import edu.ycp.cs320.tbagproj.model.Game;
+import edu.ycp.cs320.tbagproj.controller.*;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private String command = null;
+	private String message = null;
+	private String previous = "";
+	private double health = 0;
+	private Game model = new Game();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -28,58 +41,39 @@ public class GameServlet extends HttpServlet {
 		
 		System.out.println("Game Servlet: doPost");
 		
-
-		// holds the error message text, if there is any
-		String errorMessage = null;
-
-		// result of calculation goes here
-		Double result = null;
+		GameController controller = new GameController();
 		
-		// decode POSTed form parameters and dispatch to controller
-		try {
-			Double first = getDoubleFromParameter(req.getParameter("first"));
-			Double second = getDoubleFromParameter(req.getParameter("second"));
-
-			// check for errors in the form data before using is in a calculation
-			if (first == null || second == null) {
-				errorMessage = "Please specify two numbers";
-			}
-			// otherwise, data is good, do the calculation
-			// must create the controller each time, since it doesn't persist between POSTs
-			// the view does not alter data, only controller methods should be used for that
-			// thus, always call a controller method to operate on the data
-			else {
-				GameController controller = new GameController();
-				//result = controller.add(first, second);
-			}
-		} catch (NumberFormatException e) {
-			errorMessage = "Invalid double";
+		controller.setModel(model);
+		
+		command = req.getParameter("command");
+		
+		if (message != null) {
+			previous += message + "  \n";
+			previous = nl2br(previous);
+			
 		}
+		message = controller.gameRun(command);
 		
-		// Add parameters as request attributes
-		// this creates attributes named "first" and "second for the response, and grabs the
-		// values that were originally assigned to the request attributes, also named "first" and "second"
-		// they don't have to be named the same, but in this case, since we are passing them back
-		// and forth, it's a good idea
-		req.setAttribute("first", req.getParameter("first"));
-		req.setAttribute("second", req.getParameter("second"));
-		
-		// add result objects as attributes
-		// this adds the errorMessage text and the result to the response
-		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("result", result);
-		
+		health = controller.getModel().getPlayer().getCurHealth();
+
+		req.setAttribute("message", message);
+		req.setAttribute("health", health);
+		req.setAttribute("previous", previous);
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/GameView.jsp").forward(req, resp);
 	}
+	
+	//https://codingexplained.com/coding/java/replace-newline-characters-java-jstl
+	public static String nl2br(String input) {
+        Scanner scanner = new Scanner(input);
+        List lines = new ArrayList<>();
 
-	// gets double from the request with attribute named s
-	private Double getDoubleFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return Double.parseDouble(s);
-		}
-	}
+        do {
+            lines.add(scanner.nextLine());
+        } while (scanner.hasNextLine());
+
+        return String.join("<br />", lines);
+    }
+
 
 }
