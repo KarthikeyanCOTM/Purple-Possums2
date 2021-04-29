@@ -586,39 +586,115 @@ public class DerbyDatabase implements IDatabase {
 	
 	//Load begin
 
-		public String loadGame(String key, Game game) {
-			/*executeTransaction(new Transaction<String>() {
+		public String loadGame(String key, Game game, List<Room> roomList) {
+			return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 		
-			ResultSet resultSet1 = null;
 			PreparedStatement gameStmt = null;
+			PreparedStatement roomStmt = null;
+			PreparedStatement inventoryStmt = null;
+			PreparedStatement inventoryStmt2 = null;
+			PreparedStatement equipStmt = null;
+			PreparedStatement equipStmt2 = null;
+			PreparedStatement itemStmt = null;
+			PreparedStatement connStmt = null;
+			
+			ResultSet resultSet1 = null;
+			ResultSet resultSet2 = null;
+			ResultSet resultSet3 = null;
+			
+			
 			try {
 				gameStmt = conn.prepareStatement(
 					"select game_id from games " +
 					" where game_key = ?"
 				);
 				gameStmt.setString(1, key);
-				
 				resultSet1 = gameStmt.executeQuery();
-			
+				int gameID = resultSet1.getInt(0);
+				
+				loadPlayer(game.getPlayer(), resultSet1);
+				inventoryStmt = conn.prepareStatement("select * from inventory"
+						+ "where inventory_id = ?"
+						);
+				inventoryStmt.setInt(1, game.getPlayer().getInventory_ID());
+				resultSet1 = inventoryStmt.executeQuery();
+				loadInventory(game.getPlayer().getInventory(), resultSet1);
+				equipStmt2 = conn.prepareStatement("select * from equipment where equipment_id = ?");
+				equipStmt2.setInt(1, game.getPlayer().getEquipment_ID());
+				resultSet1 = equipStmt2.executeQuery();
+				loadEquipment(game.getPlayer().getEquipment(), resultSet1);
+				
+				roomStmt = conn.prepareStatement("select * from rooms"
+						);
+				resultSet1 = roomStmt.executeQuery();
+				for (int i = 0; i < roomList.size(); i++) {
+					loadRoom(roomList.get(i), resultSet1);
+				}
+				
+				for (int i = 0; i < roomList.size(); i++) {
+					inventoryStmt2 = conn.prepareStatement("select * from inventory"
+						+ "where inventory_id = ?");
+					inventoryStmt2.setInt(1, roomList.get(i).getInventory_ID());
+					resultSet1 = inventoryStmt2.executeQuery();
+					loadInventory(roomList.get(i).getInventory(), resultSet1);
+				}
+				
+				for (int i = 0; i < roomList.size(); i++) {
+					equipStmt = conn.prepareStatement("select * from inventory"
+						+ "where inventory_id = ?");
+					equipStmt.setInt(1, roomList.get(i).getInventory_ID());
+					resultSet1 = inventoryStmt.executeQuery();
+					loadEquipment(roomList.get(i).getInventory(), resultSet1);
+				}
+				
+				Item loadedItem = new Item();
+				
+				for (int i = 0; i < 4; i++) {
+					itemStmt = conn.prepareStatement("select * from items"
+							+ "where inventory_id = ?");
+					itemStmt.setInt(1, i);
+					resultSet2 = itemStmt.executeQuery();
+					loadItem(loadedItem, resultSet2);
+				}
+				
+				for (int i = 0; i < roomList.size(); i++) {
+					connStmt = conn.prepareStatement("select * from connections"
+							+ "where room_id = ?");
+					connStmt.setInt(1, roomList.get(i).getRoom_ID());
+					resultSet3 = connStmt.executeQuery();
+					loadConnections(roomList.get(i), resultSet3);
+				}
+				
+				
 			} finally {
 				DBUtil.closeQuietly(gameStmt);
-				
+				DBUtil.closeQuietly(roomStmt);
+				DBUtil.closeQuietly(inventoryStmt);
+				DBUtil.closeQuietly(inventoryStmt2);
+				DBUtil.closeQuietly(equipStmt);
+				DBUtil.closeQuietly(equipStmt2);
+				DBUtil.closeQuietly(itemStmt);
+				DBUtil.closeQuietly(connStmt);
+				DBUtil.closeQuietly(resultSet1);
+				DBUtil.closeQuietly(resultSet2);
+				DBUtil.closeQuietly(resultSet3);
 			}
 			return key;
 			};
-			});*/
-			return "Load Successful";
+			
+			});
+			
 		}
 		
-		private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
+		private void loadRoom(Room room, ResultSet resultSet) throws SQLException {
 			room.setName(resultSet.getString(1));
-			room.setInventory((Inventory) resultSet.getObject(2));
+			room.setInventory_ID(resultSet.getInt(2));
 			room.setDescription(resultSet.getString(3));
 			room.setGame_ID(resultSet.getInt(4));
 		}
 		
-		private void loadPlayer(Player player, ResultSet resultSet, int index) throws SQLException{
+		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{
 			player.setName(resultSet.getString(1));
 			player.setHealth(resultSet.getDouble(2));
 			player.setDefence(resultSet.getDouble(3));
@@ -629,17 +705,17 @@ public class DerbyDatabase implements IDatabase {
 			player.setRoom_ID(resultSet.getInt(8));
 		}
 		
-		private void loadInventory(Inventory inventory, ResultSet resultSet, int index) throws SQLException{
+		private void loadInventory(Inventory inventory, ResultSet resultSet) throws SQLException{
 			inventory.addGold(resultSet.getInt(1));
 			inventory.setOwner(resultSet.getString(2));
 		}
 		
-		private void loadEquipment(Inventory equipment, ResultSet resultSet, int index) throws SQLException{
+		private void loadEquipment(Inventory equipment, ResultSet resultSet) throws SQLException{
 			equipment.addGold(resultSet.getInt(1));
 			equipment.setOwner(resultSet.getString(2));
 		}
 		
-		private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException{
+		private void loadItem(Item item, ResultSet resultSet) throws SQLException{
 			item.setName(resultSet.getString(1));
 			item.setDamage(resultSet.getDouble(2));
 			item.setArmour(resultSet.getDouble(3));
@@ -649,7 +725,7 @@ public class DerbyDatabase implements IDatabase {
 			item.setEquipment_ID(resultSet.getInt(7));
 		}
 		
-		private void loadConnections(Room room, ResultSet resultSet, int index) throws SQLException{
+		private void loadConnections(Room room, ResultSet resultSet) throws SQLException{
 			room.setRoom_ID(resultSet.getInt(1));
 			int connectID = resultSet.getInt(2);
 			int dir = resultSet.getInt(3);
@@ -661,8 +737,8 @@ public class DerbyDatabase implements IDatabase {
 				room.setConnectionsID("south", connectID);
 			else if (dir == Room.WEST)
 				room.setConnectionsID("west", connectID);
-			
 		}
+		
 		
 		//load end
 	

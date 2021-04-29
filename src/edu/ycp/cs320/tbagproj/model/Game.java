@@ -99,8 +99,10 @@ public class Game {
 		return db.saveGame(key, player, roomList);
 	}
 	
-	private void loadGame() {
-		
+	private void loadGame(String key) {
+		List<Room> roomList = new ArrayList<Room>();
+		roomList.addAll(fullMap.getRooms().values());
+		db.saveGame(key, player, roomList);
 	}
 	
 	//receives command from user and runs the game
@@ -220,6 +222,7 @@ public class Game {
 				db.updateGame("temp", player, roomList);
 				return "You healed for " + tempHealing + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 12:
+				loadGame(enter.getSecond());
 				return "Load Successful";
 			case 13:
 				if(player.getInventory().getItemList().isEmpty()) {
