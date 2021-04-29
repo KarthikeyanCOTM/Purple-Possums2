@@ -4,6 +4,7 @@ public class Player extends Actor {
 
 	private int game_ID;
 	private String roomName;
+	private int player_ID;
 	
 	public Player(String name) {
 		super(name);
@@ -27,5 +28,13 @@ public class Player extends Actor {
 	
 	public String getRoomName() {
 		return roomName;
+	}
+	
+	public void setPlayer_ID(int p) {
+		player_ID = p;
+	}
+	
+	public int getPlayer_ID() {
+		return player_ID;
 	}
 }
