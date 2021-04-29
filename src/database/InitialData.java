@@ -10,6 +10,8 @@ import edu.ycp.cs320.tbagproj.model.*;
 
 public class InitialData {
 	
+	private static final int VOID = 0;
+	
 	public static List<Room> getRooms() throws IOException {
 		List<Room> roomList = new ArrayList<Room>();
 		HashMap<Integer, Room> roomMap = new HashMap<Integer, Room>();
@@ -33,9 +35,8 @@ public class InitialData {
 				
 				room.setName(i.next());
 				temp = i.next();
-				if (temp != null) {
-					room.setInventory(inventoryMap.get(Integer.parseInt(temp)));
-				}
+				room.setInventory(inventoryMap.get(Integer.parseInt(temp)));
+				room.setInventory_ID(Integer.parseInt(temp));
 				if (npcList != null) {
 					room.setNPCs(npcList);
 				}
@@ -140,11 +141,15 @@ public class InitialData {
 				String temp = i.next();
 				if (temp == null && isInven == false) {
 					equip = Integer.parseInt(i.next());
+					item.setEquipment_ID(equip);
+					item.setInventory_ID(VOID);
 					if (equip == id) {
 						itemList.add(item);
 					}
 				}else {
 					inven = Integer.parseInt(temp);
+					item.setInventory_ID(inven);
+					item.setEquipment_ID(VOID);
 					if (inven == id) {
 						itemList.add(item);
 					}
@@ -178,15 +183,15 @@ public class InitialData {
 				item.setHealing(Integer.parseInt(i.next()));
 				item.setIsUsable(Boolean.parseBoolean(i.next()));
 				String temp = i.next();
-				if (temp == "0" && isInven == false) {
+				if (temp == "0") {
 					equip = Integer.parseInt(i.next());
-					item.setInventory_ID(0);
+					item.setInventory_ID(VOID);
 					item.setEquipment_ID(equip);
 					itemList.add(item);
 				}else {
 					inven = Integer.parseInt(temp);
 					item.setInventory_ID(inven);
-					item.setEquipment_ID(0);
+					item.setEquipment_ID(VOID);
 					itemList.add(item);
 				}
 			}
@@ -219,14 +224,14 @@ public class InitialData {
 				npc.setDefence(Double.parseDouble(i.next()));
 				npc.setTotalDamage(Double.parseDouble(i.next()));
 				temp = i.next();
-				if (temp != null) {
-					npc.setInventory(inventoryMap.get(Integer.parseInt(temp)));
-				}
+				npc.setInventory(inventoryMap.get(Integer.parseInt(temp)));
+				npc.setInventory_ID(Integer.parseInt(temp));
 				temp = i.next();
-				if (temp != null) {
-					npc.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
-				}
+				npc.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
+				npc.setEquipment_ID(Integer.parseInt(temp));
+				npc.setIsNPCAlive(Boolean.parseBoolean(i.next()));
 				if (roomID == Integer.parseInt(i.next())) {
+					npc.setRoom_ID(roomID);
 					npcList.add(npc);
 				}
 			}
@@ -259,15 +264,12 @@ public class InitialData {
 				npc.setDefence(Double.parseDouble(i.next()));
 				npc.setTotalDamage(Double.parseDouble(i.next()));
 				temp = i.next();
-				if (temp != null) {
-					npc.setInventory(inventoryMap.get(Integer.parseInt(temp)));
-					npc.setInventory_ID(Integer.parseInt(temp));
-				}
+				npc.setInventory(inventoryMap.get(Integer.parseInt(temp)));
+				npc.setInventory_ID(Integer.parseInt(temp));
 				temp = i.next();
-				if (temp != null) {
-					npc.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
-					npc.setEquipment_ID(Integer.parseInt(temp));
-				}
+				npc.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
+				npc.setEquipment_ID(Integer.parseInt(temp));
+				npc.setIsNPCAlive(Boolean.parseBoolean(i.next()));
 				npc.setRoom_ID(Integer.parseInt(i.next()));
 				npcList.add(npc);
 			}
@@ -300,15 +302,11 @@ public class InitialData {
 				player.setDefence(Double.parseDouble(i.next()));
 				player.setTotalDamage(Double.parseDouble(i.next()));
 				temp = i.next();
-				if (temp != null) {
-					player.setInventory(inventoryMap.get(Integer.parseInt(temp)));
-					player.setInventory_ID(Integer.parseInt(temp));
-				}
+				player.setInventory(inventoryMap.get(Integer.parseInt(temp)));
+				player.setInventory_ID(Integer.parseInt(temp));
 				temp = i.next();
-				if (temp != null) {
-					player.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
-					player.setEquipment_ID(Integer.parseInt(temp));
-				}
+				player.setEquipment(equipmentMap.get(Integer.parseInt(temp)));
+				player.setEquipment_ID(Integer.parseInt(temp));
 				player.setGame_ID(Integer.parseInt(i.next()));
 				player.setRoom_ID(Integer.parseInt(i.next()));
 				player.setRoomName(roomList.get(player.getRoom_ID()).getName());

@@ -92,7 +92,11 @@ public class Room {
 	}
 	
 	public ArrayList<NPC> getNPCs(){
-		return NPCList;
+		if (NPCList != null && NPCList.isEmpty() == false) {
+			return NPCList;
+		}else {
+			return null;
+		}
 	}
 	
 	public NPC getNPC(String name) {

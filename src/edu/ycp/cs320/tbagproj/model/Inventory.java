@@ -8,6 +8,7 @@ public class Inventory {
 	private String owner;
 	private int roomKey;
 	private int inventory_ID;
+	private int equipment_ID;
 	
 	public  Inventory() {
 		itemArrayList = new ArrayList<Item>();
@@ -96,5 +97,13 @@ public class Inventory {
 	
 	public int getInventory_ID() {
 		return inventory_ID;
+	}
+	
+	public void setEquipment_ID(int e) {
+		equipment_ID = e;
+	}
+	
+	public int getEquipment_ID() {
+		return equipment_ID;
 	}
 }

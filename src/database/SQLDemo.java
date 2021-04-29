@@ -40,7 +40,7 @@ public class SQLDemo {
 		Connection conn = null;
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
+			conn = DriverManager.getConnection("jdbc:derby:C:/Purple-Possums-Library-DB/library.db;create=true");
 			conn.setAutoCommit(true);
 	
 			queryLoop(conn);
@@ -223,15 +223,33 @@ public class SQLDemo {
 // DJH2: What really needs to be done is that the column names should be read from the CSV file,
 // DJH2: and then substituted into the 'insert' statement
 // DJH2-3-12-17: Added 'published' as an attribute of books table
-// DJH2-3-12-17: changed attributes to 'lastname' and 'firstname' for authors table
+// DJH2-3-12-17: changed attributes to 'lastname' and 'firstname' for authors table   
 				System.out.println("Importing data for table: <" + tableName + ">");
-				if (tableName.toLowerCase().equals("books"))
+				if (tableName.toLowerCase().equals("games"))
 				{
-					buf.append("insert into " + tableName + " (author_id, title, isbn, published) values (");
+					buf.append("insert into " + tableName + " (game_id, game_key) values (");
 				}
-				else if (tableName.toLowerCase().equals("authors"))
+				else if (tableName.toLowerCase().equals("rooms"))
 				{
-					buf.append("insert into " + tableName + " (lastname, firstname) values (");
+					buf.append("insert into " + tableName + " (room_id, name, inventory_id, description, game_key) values (");
+				}
+				else if (tableName.toLowerCase().equalsIgnoreCase("players")) {
+					buf.append("insert into " + tableName + " (player_id, name, health, armor, damage, inventory_id, equipment_id, game_key) values(");
+				}
+				else if (tableName.toLowerCase().equalsIgnoreCase("npcs")) {
+					buf.append("insert into " + tableName + " (npc_id, name, health, armor, damage, inventory_id, equipment_id, ) values(");
+				}
+				else if (tableName.toLowerCase().equalsIgnoreCase("inventory")) {
+					buf.append("insert into " + tableName + " (inventory_id, gold, owner) values(");
+				}
+				else if (tableName.toLowerCase().equalsIgnoreCase("equipment")) {
+					buf.append("insert into " + tableName + " (equipment_id, gold, owner) values(");
+				}
+				else if (tableName.toLowerCase().equalsIgnoreCase("connections")) {
+					buf.append("insert into " + tableName + " (connection_id, room_id, room2_id, direction_id) values(");
+				}
+				else if (tableName.toLowerCase().equalsIgnoreCase("item")) {
+					buf.append("insert into " + tableName + " (item_id, name, damage, armor, healing, isusable, inventory_id, equipment_id) values(");
 				}
 // DJH2: this is the original code - it will not import into a table with an auto-incrementing primary key
 // DJH2: The primary key values must be manually determined and included in the CSV file.

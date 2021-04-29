@@ -62,6 +62,8 @@ public class Actor {
 	
 	public void equipItem(String item) {
 		Item tempItem = inventory.getItem(item);
+		tempItem.setInventory_ID(0);
+		tempItem.setEquipment_ID(getEquipment_ID());
 		equipment.addNewItem(tempItem.getName(), tempItem.getDamage(), tempItem.getArmour(), tempItem.getHealing(), tempItem.getIsUsable());
 		if (tempItem.getDamage() > 0) {
 			totalDamage += tempItem.getDamage();
@@ -74,6 +76,8 @@ public class Actor {
 	
 	public void unequipItem(String item) {
 		Item temp = equipment.getItem(item);
+		temp.setEquipment_ID(0);
+		temp.setInventory_ID(getInventory_ID());
 		equipment.removeItem(item);
 		if (temp.getDamage() > 0) {
 			totalDamage -= temp.getDamage();
