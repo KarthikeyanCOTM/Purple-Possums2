@@ -584,42 +584,87 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	public String loadGame(String key, Game game) {
-		return "Game loaded successfully";
-	}
-	
-	private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
-		room.setName(resultSet.getString(1));
-		room.setInventory((Inventory) resultSet.getObject(2));
-		room.setDescription(resultSet.getString(3));
-		room.setGame_ID(resultSet.getInt(4));
-	}
-	
-	private void loadPlayer(Player player, ResultSet resultSet, int index) throws SQLException{
-		player.setName(resultSet.getString(1));
-		player.setHealth(resultSet.getDouble(2));
-		player.setDefence(resultSet.getDouble(3));
-		player.setTotalDamage(resultSet.getDouble(4));
-		player.setInventory_ID(resultSet.getInt(5));
-		player.setEquipment_ID(resultSet.getInt(6));
-		player.setGame_ID(resultSet.getInt(7));
-		player.setRoom_ID(resultSet.getInt(8));
-	}
-	
-	private void loadInventory(Inventory inventory, ResultSet resultSet, int index) throws SQLException{
-		inventory.addGold(resultSet.getInt(1));
-		inventory.setOwner(resultSet.getString(2));
-	}
-	
-	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException{
-		item.setName(resultSet.getString(1));
-		item.setDamage(resultSet.getDouble(2));
-		item.setArmour(resultSet.getDouble(3));
-		item.setHealing(resultSet.getDouble(4));
-		item.setIsUsable(resultSet.getBoolean(5));
-		item.setInventory_ID(resultSet.getInt(6));
-		item.setEquipment_ID(resultSet.getInt(7));
-	}
+	//Load begin
+
+		public String loadGame(String key, Game game) {
+			/*executeTransaction(new Transaction<String>() {
+			public String execute(Connection conn) throws SQLException {
+		
+			ResultSet resultSet1 = null;
+			PreparedStatement gameStmt = null;
+			try {
+				gameStmt = conn.prepareStatement(
+					"select game_id from games " +
+					" where game_key = ?"
+				);
+				gameStmt.setString(1, key);
+				
+				resultSet1 = gameStmt.executeQuery();
+			
+			} finally {
+				DBUtil.closeQuietly(gameStmt);
+				
+			}
+			return key;
+			};
+			});*/
+			return "Load Successful";
+		}
+		
+		private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
+			room.setName(resultSet.getString(1));
+			room.setInventory((Inventory) resultSet.getObject(2));
+			room.setDescription(resultSet.getString(3));
+			room.setGame_ID(resultSet.getInt(4));
+		}
+		
+		private void loadPlayer(Player player, ResultSet resultSet, int index) throws SQLException{
+			player.setName(resultSet.getString(1));
+			player.setHealth(resultSet.getDouble(2));
+			player.setDefence(resultSet.getDouble(3));
+			player.setTotalDamage(resultSet.getDouble(4));
+			player.setInventory_ID(resultSet.getInt(5));
+			player.setEquipment_ID(resultSet.getInt(6));
+			player.setGame_ID(resultSet.getInt(7));
+			player.setRoom_ID(resultSet.getInt(8));
+		}
+		
+		private void loadInventory(Inventory inventory, ResultSet resultSet, int index) throws SQLException{
+			inventory.addGold(resultSet.getInt(1));
+			inventory.setOwner(resultSet.getString(2));
+		}
+		
+		private void loadEquipment(Inventory equipment, ResultSet resultSet, int index) throws SQLException{
+			equipment.addGold(resultSet.getInt(1));
+			equipment.setOwner(resultSet.getString(2));
+		}
+		
+		private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException{
+			item.setName(resultSet.getString(1));
+			item.setDamage(resultSet.getDouble(2));
+			item.setArmour(resultSet.getDouble(3));
+			item.setHealing(resultSet.getDouble(4));
+			item.setIsUsable(resultSet.getBoolean(5));
+			item.setInventory_ID(resultSet.getInt(6));
+			item.setEquipment_ID(resultSet.getInt(7));
+		}
+		
+		private void loadConnections(Room room, ResultSet resultSet, int index) throws SQLException{
+			room.setRoom_ID(resultSet.getInt(1));
+			int connectID = resultSet.getInt(2);
+			int dir = resultSet.getInt(3);
+			if (dir == Room.NORTH)
+				room.setConnectionsID("north", connectID);
+			else if (dir == Room.EAST)
+				room.setConnectionsID("east", connectID);
+			else if (dir == Room.SOUTH)
+				room.setConnectionsID("south", connectID);
+			else if (dir == Room.WEST)
+				room.setConnectionsID("west", connectID);
+			
+		}
+		
+		//load end
 	
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
