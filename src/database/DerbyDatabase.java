@@ -414,7 +414,8 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
+
+	//Load begin
 
 	public String loadGame(String key, Game game) {
 		/*executeTransaction(new Transaction<String>() {
@@ -464,6 +465,11 @@ public class DerbyDatabase implements IDatabase {
 		inventory.setOwner(resultSet.getString(2));
 	}
 	
+	private void loadEquipment(Inventory equipment, ResultSet resultSet, int index) throws SQLException{
+		equipment.addGold(resultSet.getInt(1));
+		equipment.setOwner(resultSet.getString(2));
+	}
+	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException{
 		item.setName(resultSet.getString(1));
 		item.setDamage(resultSet.getDouble(2));
@@ -473,6 +479,23 @@ public class DerbyDatabase implements IDatabase {
 		item.setInventory_ID(resultSet.getInt(6));
 		item.setEquipment_ID(resultSet.getInt(7));
 	}
+	
+	private void loadConnections(Room room, ResultSet resultSet, int index) throws SQLException{
+		room.setRoom_ID(resultSet.getInt(1));
+		int connectID = resultSet.getInt(2);
+		int dir = resultSet.getInt(3);
+		if (dir == Room.NORTH)
+			room.setConnectionsID("north", connectID);
+		else if (dir == Room.EAST)
+			room.setConnectionsID("east", connectID);
+		else if (dir == Room.SOUTH)
+			room.setConnectionsID("south", connectID);
+		else if (dir == Room.WEST)
+			room.setConnectionsID("west", connectID);
+		
+	}
+	
+	//load end
 	
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
@@ -791,7 +814,6 @@ public class DerbyDatabase implements IDatabase {
 					
 					System.out.println("Connections table populated");
 					
-					System.out.println("Connections table populated");
 					
 					insertGames = conn.prepareStatement("insert into games (game_key) values (?)");
 					for (int i = 0; i < games.size(); i++) {
@@ -819,7 +841,7 @@ public class DerbyDatabase implements IDatabase {
 	public static void main(String[] args) throws IOException {
 		//System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
-		//db.createTables();
+		db.createTables();
 		
 		System.out.println("Loading initial data...");
 		db.loadInitialData();

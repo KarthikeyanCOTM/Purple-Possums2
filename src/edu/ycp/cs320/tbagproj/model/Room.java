@@ -8,12 +8,18 @@ public class Room {
 	private Inventory inventory;
 	private ArrayList<NPC> NPCList = null;
 	private HashMap<String, Room> connections;
+	private HashMap<String, Integer> connectionsID;
 	private String name;
 	private String description = " ";
 	private String contents = "The room has ";
 	private int inventory_ID = 0;
 	private int room_ID;
 	private int game_ID;
+	
+	public static final int NORTH = 0;
+	public static final int EAST = 1;
+	public static final int SOUTH = 2;
+	public static final int WEST = 3;
 	
 	public Room() {
 		inventory = new Inventory();
@@ -142,6 +148,14 @@ public class Room {
 	
 	public void setConnections(String key, Room connection) {
 		connections.put(key, connection);
+	}
+	
+	public HashMap<String, Integer> getConnectionsID(){
+		return connectionsID;
+	}
+	
+	public void setConnectionsID(String key, int ID) {
+		connectionsID.put(key, ID);
 	}
 	
 	public boolean isConnected(Room other) {
