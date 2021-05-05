@@ -77,8 +77,16 @@ public class Room {
 		if (NPCList != null && NPCList.isEmpty() == false) {
 			contents += "\nThere is a ";
 			for (int i = 0; i < NPCList.size(); i++) {
-				contents += NPCList.get(i).getName();
+				if (NPCList.get(i).getIsNPCAlive() == true) {
+					contents += NPCList.get(i).getName();
+				}else {
+					contents += NPCList.get(i).getName() + " that lies dead";
+				}
+				if (i + 1 < NPCList.size()) {
+					contents += ", ";
+				}
 			}
+			contents += ".";
 		}
 	}
 	
@@ -97,6 +105,23 @@ public class Room {
 		}else {
 			return null;
 		}
+	}
+	
+	public ArrayList<NPC> getLivingNPCs() {
+		ArrayList<NPC> livingNPCs = new ArrayList<NPC>();
+		if (NPCList != null && NPCList.isEmpty() == false) {
+			for (int i = 0; i < NPCList.size(); i++) {
+				if (NPCList.get(i).getIsNPCAlive() == true) {
+					livingNPCs.add(NPCList.get(i));
+				}
+			}
+			if (livingNPCs != null && livingNPCs.isEmpty() == false) {
+				return livingNPCs;
+			}else {
+				return null;
+			}
+		}
+		return null;
 	}
 	
 	public NPC getNPC(String name) {

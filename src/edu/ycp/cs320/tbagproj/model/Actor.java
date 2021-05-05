@@ -4,7 +4,9 @@ package edu.ycp.cs320.tbagproj.model;
 // model class for Player and NPC
 public class Actor {
 	private String name;
-	private double health = 100.0;
+	private double health = 100;
+	private double maxHealth;
+	private double excessHealth;
 	private double totalDamage = 1.0;
 	private double defence = 0.0;
 	private Inventory inventory;
@@ -37,11 +39,19 @@ public class Actor {
 	}
 	
 	public void setHealth(double health) {
-		this.health += health;
+		if (this.health + health < maxHealth) {
+			this.health += health;
+			excessHealth = 0;
+		}else {
+			this.health += health;
+			excessHealth = this.health - maxHealth;
+			this.health -= excessHealth;
+		}
 	}
 	
 	public void setNewHealth(double health) {
 		this.health = health;
+		maxHealth = health;
 	}
 	
 	public double getTotalDamage() {
@@ -126,5 +136,13 @@ public class Actor {
 	
 	public int getRoom_ID() {
 		return room_ID;
+	}
+	
+	public double getMaxHealth() {
+		return maxHealth;
+	}
+	
+	public double getExcessHealth() {
+		return excessHealth;
 	}
 }
