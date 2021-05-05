@@ -567,7 +567,7 @@ public class DerbyDatabase implements IDatabase {
 	
 	//Load begin
 
-		public String loadGame(String key, Game game, List<Room> roomList) {
+		public String loadGame(String key, Player player, List<Room> roomList) {
 			return executeTransaction(new Transaction<String>() {
 			public String execute(Connection conn) throws SQLException {
 		
@@ -594,17 +594,17 @@ public class DerbyDatabase implements IDatabase {
 				resultSet1 = gameStmt.executeQuery();
 				int gameID = resultSet1.getInt(0);
 				
-				loadPlayer(game.getPlayer(), resultSet1);
+				loadPlayer(player, resultSet1);
 				inventoryStmt = conn.prepareStatement("select * from inventory"
 						+ "where inventory_id = ?"
 						);
-				inventoryStmt.setInt(1, game.getPlayer().getInventory_ID());
+				inventoryStmt.setInt(1, player.getInventory_ID());
 				resultSet1 = inventoryStmt.executeQuery();
-				loadInventory(game.getPlayer().getInventory(), resultSet1);
+				loadInventory(player.getInventory(), resultSet1);
 				equipStmt2 = conn.prepareStatement("select * from equipment where equipment_id = ?");
-				equipStmt2.setInt(1, game.getPlayer().getEquipment_ID());
+				equipStmt2.setInt(1, player.getEquipment_ID());
 				resultSet1 = equipStmt2.executeQuery();
-				loadEquipment(game.getPlayer().getEquipment(), resultSet1);
+				loadEquipment(player.getEquipment(), resultSet1);
 				
 				roomStmt = conn.prepareStatement("select * from rooms"
 						);
@@ -1043,7 +1043,7 @@ public class DerbyDatabase implements IDatabase {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
-		db.createTables();
+		//db.createTables();
 		
 		System.out.println("Loading initial data...");
 		db.loadInitialData();

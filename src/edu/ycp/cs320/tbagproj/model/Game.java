@@ -36,6 +36,7 @@ public class Game {
 	
 	private void newGame() {
 		player = new Player("Player");
+		//Map map = new Map();
 		player.setInventory_ID(4);
 		player.setEquipment_ID(1);
 		player.setPlayer_ID(2);
@@ -96,7 +97,7 @@ public class Game {
 		map.addRoom("Foyer", foyer);
 		
 		//West Hallway Creation
-		/*HashMap<String, Room> westHallwayConnections = new HashMap<>();
+		HashMap<String, Room> westHallwayConnections = new HashMap<>();
 		westHallwayConnections.put("east", mainHall);
 		ArrayList<NPC> westHallwayNPCList = new ArrayList<NPC>();
 		westHallwayNPCList.add(ghost);
@@ -106,7 +107,7 @@ public class Game {
 		westHallway.setDescription("A hallway with a mirror at the end. It has a door to the north and south.");
 		westHallway.updateContents();
 		mainHall.setConnections("west", westHallway);
-		map.addRoom("West Hallway", westHallway);*/
+		map.addRoom("West Hallway", westHallway);
 		map.addRoom("Main Hall", mainHall);
 		
 		//creates full map and sets starting room
@@ -125,7 +126,7 @@ public class Game {
 	private void loadGame(String key) {
 		List<Room> roomList = new ArrayList<Room>();
 		roomList.addAll(fullMap.getRooms().values());
-		db.saveGame(key, player, roomList);
+		//return db.loadGame(key, player, roomList);
 	}
 	
 	//receives command from user and runs the game
