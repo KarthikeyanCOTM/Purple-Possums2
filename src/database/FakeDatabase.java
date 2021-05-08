@@ -52,9 +52,15 @@ public class FakeDatabase implements IDatabase {
 
 	
 
-	public String loadGame(String key, Game game, List<Room> roomList) {
+	public String loadGame(String key, Player player, List<Room> roomList) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteGame() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

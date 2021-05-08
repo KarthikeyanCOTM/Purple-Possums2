@@ -49,6 +49,7 @@ public class Command {
 	
 	//sets all usable commands
 	public void setCommands() {
+		if(commandsList.isEmpty()) {
 		commandsList.add("north");
 		commandsList.add("east");
 		commandsList.add("south");
@@ -63,6 +64,8 @@ public class Command {
 		commandsList.add("equip");
 		commandsList.add("unequip");
 		commandsList.add("inventory");
+		commandsList.add("delete");
+		}
 	}
 	
 	public Stack<String> getPrevious(){
@@ -104,6 +107,8 @@ public class Command {
 					return 12;
 				case "save":
 					return 14;
+				case "delete":
+					return 15;
 				case "get":
 					Inventory tempInventory = room.getInventory();
 					if (tempInventory.containsItem(second) == true || (second.equals("gold") && tempInventory.getGold() > 0)) {

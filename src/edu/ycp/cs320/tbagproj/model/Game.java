@@ -125,7 +125,11 @@ public class Game {
 	private void loadGame(String key) {
 		List<Room> roomList = new ArrayList<Room>();
 		roomList.addAll(fullMap.getRooms().values());
-		db.saveGame(key, player, roomList);
+		db.loadGame(key, player, roomList);
+	}
+	
+	private void deleteTables() {
+		db.deleteGame();
 	}
 	
 	//receives command from user and runs the game
@@ -262,6 +266,8 @@ public class Game {
 				}
 			case 14:
 				return saveGame(enter.getSecond());
+			case 15:
+				deleteTables();
 		}
 		return "Command could not be processed";
 	}
