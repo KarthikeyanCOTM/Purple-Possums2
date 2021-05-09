@@ -3,7 +3,6 @@ package edu.ycp.cs320.tbagproj.controller;
 import edu.ycp.cs320.tbagproj.model.*;
 
 public class GameController {
-	Command command = new Command();
 	String prompt;
 	Game game = new Game();
 	boolean end = false;
@@ -17,7 +16,9 @@ public class GameController {
 	}
 	
 	public String gameRun(String prompt) {
-		//command.setCommands();
+		if (game.getPlayer().getCurHealth() <= 0) {
+			return "game over";
+		}
 		return game.runGame(prompt);
 	}
 }

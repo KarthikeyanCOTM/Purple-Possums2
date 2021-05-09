@@ -39,13 +39,17 @@ public class Actor {
 	}
 	
 	public void setHealth(double health) {
-		if (this.health + health < maxHealth) {
-			this.health += health;
-			excessHealth = 0;
+		if (health >= 0) {
+			if (this.health + health < maxHealth) {
+				this.health += health;
+				excessHealth = 0;
+			}else {
+				this.health += health;
+				excessHealth = this.health - maxHealth;
+				this.health -= excessHealth;
+			}
 		}else {
 			this.health += health;
-			excessHealth = this.health - maxHealth;
-			this.health -= excessHealth;
 		}
 	}
 	
