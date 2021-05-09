@@ -28,9 +28,14 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();
 				Room room = new Room();
+				int tempCount = 0;
 				
-				i.next();
+				/*if (tempCount < 3) {
+					i.next();
+					i.next();
+				}*/
 				roomID = Integer.parseInt(i.next());
+				tempCount++;
 				npcList = getNPCs(roomID);
 				
 				room.setName(i.next());

@@ -65,7 +65,9 @@ public class Command {
 		commandsList.add("unequip");
 		commandsList.add("inventory");
 		commandsList.add("delete");
+		commandsList.add("inspect");
 		}
+
 	}
 	
 	public Stack<String> getPrevious(){
@@ -108,7 +110,7 @@ public class Command {
 				case "save":
 					return 14;
 				case "delete":
-					return 15;
+					return 16;
 				case "get":
 					Inventory tempInventory = room.getInventory();
 					if (tempInventory.containsItem(second) == true || (second.equals("gold") && tempInventory.getGold() > 0)) {
@@ -134,6 +136,8 @@ public class Command {
 					return 0;
 				case "inventory" :
 						return 13;
+				case "inspect" :
+					return 15;
 			}
 		}
 		return 0;

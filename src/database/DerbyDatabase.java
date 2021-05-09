@@ -614,6 +614,7 @@ public class DerbyDatabase implements IDatabase {
 				);
 				gameStmt.setString(1, key);
 				resultSet1 = gameStmt.executeQuery();
+
 				gameID = resultSet1.getInt(1);
 				if (resultSet1.next()) {
 					
@@ -621,20 +622,25 @@ public class DerbyDatabase implements IDatabase {
 					playerStmt = conn.prepareStatement("select * from players where game_id = ?");
 					playerStmt.setInt(1, gameID);
 					resultSet4 = playerStmt.executeQuery();
-					
 					loadPlayer(player, resultSet4);
-					inventoryStmt = conn.prepareStatement("select * from inventory"
+				
+				
+				inventoryStmt = conn.prepareStatement("select * from inventory"
+
 						+ "where inventory_id = ?"
 						);
 				inventoryStmt.setInt(1, player.getInventory_ID());
 				resultSet5 = inventoryStmt.executeQuery();
 				player.setInventory(inventory);
 				loadInventory(player.getInventory(), resultSet5);
+
+				
 				equipStmt2 = conn.prepareStatement("select * from equipment where equipment_id = ?");
 				equipStmt2.setInt(1, player.getEquipment_ID());
 				resultSet6 = equipStmt2.executeQuery();
 				player.setEquipment(inventory);
 				loadEquipment(player.getEquipment(), resultSet6);
+
 				
 				//NPC
 				npcStmt = conn.prepareStatement("select * from npcs");
@@ -679,7 +685,6 @@ public class DerbyDatabase implements IDatabase {
 					loadInventory(roomList.get(i).getInventory(), resultSet9);
 						
 				}
-				
 				
 				
 				

@@ -36,6 +36,7 @@ public class Game {
 	
 	private void newGame() {
 		player = new Player("Player");
+		//Map map = new Map();
 		player.setInventory_ID(4);
 		player.setEquipment_ID(1);
 		player.setPlayer_ID(2);
@@ -96,7 +97,7 @@ public class Game {
 		map.addRoom("Foyer", foyer);
 		
 		//West Hallway Creation
-		/*HashMap<String, Room> westHallwayConnections = new HashMap<>();
+		HashMap<String, Room> westHallwayConnections = new HashMap<>();
 		westHallwayConnections.put("east", mainHall);
 		ArrayList<NPC> westHallwayNPCList = new ArrayList<NPC>();
 		westHallwayNPCList.add(ghost);
@@ -106,7 +107,7 @@ public class Game {
 		westHallway.setDescription("A hallway with a mirror at the end. It has a door to the north and south.");
 		westHallway.updateContents();
 		mainHall.setConnections("west", westHallway);
-		map.addRoom("West Hallway", westHallway);*/
+		map.addRoom("West Hallway", westHallway);
 		map.addRoom("Main Hall", mainHall);
 		
 		//creates full map and sets starting room
@@ -138,6 +139,17 @@ public class Game {
 		enter.setCommands();
 		enter.setPrompt(prompt);
 		int result = enter.processPrompt(player, currentRoom);
+		if (isLoaded == true) {
+			if (player.getEquipment().containsItem("steel helmet of healing") == true) {
+				player.setHealth(player.getEquipment().getItem("steel helmet of healing").getHealing());
+			}
+			if (currentRoom.getLivingNPCs() != null) {
+				for (int i = 0; i < currentRoom.getNPCs().size(); i++) {
+					String tempNPCName = currentRoom.getNPCs().get(i).getName();
+					player.setHealth(attackModel.attack(player, currentRoom.getNPC(tempNPCName), false) * -1);
+				}
+			}
+		}
 		switch (result) {
 			case 0:
 				return "invalid command";
@@ -183,27 +195,44 @@ public class Game {
 				}
 			case 5:
 				double totalDamageTaken = 0;
+				double totalHealed = 0;
+				double totalDamageDelt = 0;
+				String outputText;
 				NPC currentNPC = currentRoom.getNPC(enter.getSecond());
-				currentNPC.setHealth(attackModel.attack(player, currentNPC, true) * -1);
+				if (player.getEquipment().containsItem("steel sword of draining") == true) {
+					player.setHealth(attackModel.attack(player, currentNPC, true));
+					totalHealed = attackModel.attack(player, currentNPC, true);
+				}
+				totalDamageDelt = attackModel.attack(player, currentNPC, true);
+				System.out.println(currentNPC.getCurHealth());
+				currentNPC.setHealth(totalDamageDelt * -1);
+				System.out.println(currentNPC.getCurHealth());
 				if (currentNPC.getCurHealth() <= 0) {
-					currentRoom.deleteNPC(enter.getSecond());
+					currentNPC.setIsNPCAlive(false);
+					currentRoom.updateNPC(currentNPC.getName(), currentNPC);
 					currentRoom.updateContents();
 				}else {
 					currentRoom.updateNPC(enter.getSecond(), currentNPC);
 				}
-				if (currentRoom.getNPCs() != null) {
+				if (currentRoom.getLivingNPCs() != null) {
 					for (int i = 0; i < currentRoom.getNPCs().size(); i++) {
 						String tempNPCName = currentRoom.getNPCs().get(i).getName();
+						totalDamageTaken += attackModel.attack(player, currentRoom.getNPC(tempNPCName), false);
 						player.setHealth(attackModel.attack(player, currentRoom.getNPC(tempNPCName), false) * -1);
-						totalDamageTaken += attackModel.attack(player, currentRoom.getNPC(tempNPCName), false) * -1;
 					}
-					totalDamageTaken *= -1;
 				}
-				if (totalDamageTaken == 0 ) {
-					return "You hit for " + player.getTotalDamage() + ". Your armor blocked all damage." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
+				if (totalDamageTaken == 0 && totalHealed == 0) {
+					outputText = "You hit for " + totalDamageDelt + ". Your armor blocked all damage.";
+					return outputText;
+				}else if (totalHealed == 0) {
+					outputText = "You hit for " + totalDamageDelt + ". You took " + totalDamageTaken;
+					return outputText;
+				}else if (totalDamageTaken == 0) {
+					outputText = "You hit for " + totalDamageDelt + ". You healed for " + totalHealed + ". Your armor blocked all damage.";
+					return outputText;
+				}else {
+					outputText = "You hit for " + totalDamageDelt + ". You healed for " + totalHealed + ". You took " + totalDamageTaken;
 				}
-				//db.updateGame("temp", player, roomList);
-				return "You hit for " + player.getTotalDamage() + ". You took " + totalDamageTaken + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 6:
 				newGame();
 				isLoaded = true;
@@ -267,7 +296,17 @@ public class Game {
 			case 14:
 				return saveGame(enter.getSecond());
 			case 15:
+				if (player.getInventory().containsItem(enter.getSecond()) == true) {
+					tempItem = player.getInventory().getItem(enter.getSecond());
+					return enter.getSecond() + "\nDamage: " + tempItem.getDamage() + "\nArmor: " + tempItem.getArmour() + "\nHealing: " + tempItem.getHealing();
+				}else if (currentRoom.getInventory().containsItem(enter.getSecond()) == true) {
+					tempItem = currentRoom.getInventory().getItem(enter.getSecond());
+					return enter.getSecond() + "\nDamage: " + tempItem.getDamage() + "\nArmor: " + tempItem.getArmour() + "\nHealing: " + tempItem.getHealing();
+				}
+				return enter.getSecond() + " does not exist";
+			case 16:
 				deleteTables();
+				return "Delete has worked.";
 		}
 		return "Command could not be processed";
 	}

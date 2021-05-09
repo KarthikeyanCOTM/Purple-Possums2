@@ -2,3 +2,12 @@
 1|wooden sword|3|0|0|false|2|0
 2|wooden staff|3|0|0|false|2|0
 3|healing potion|0|0|25|true|2|0
+4|iron armor|0|10|0|false|9|0
+5|iron helmet|0|5|0|false|9|0
+6|iron sword|15|0|0|false|9|0
+7|healing potion|0|0|25|true|9|0
+8|healing potion|0|0|25|true|9|0
+9|healing potion|0|0|25|true|9|0
+10|steel armor of harming|5|20|0|false|6|0
+11|steel helmet of healing|0|20|5|false|11|0
+12|steel sword of draining|25|0|0|false|11|0
