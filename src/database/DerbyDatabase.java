@@ -572,6 +572,7 @@ public class DerbyDatabase implements IDatabase {
 			public String execute(Connection conn) throws SQLException {
 		
 			PreparedStatement gameStmt = null;
+			PreparedStatement playerStmt = null;
 			PreparedStatement roomStmt = null;
 			PreparedStatement inventoryStmt = null;
 			PreparedStatement inventoryStmt2 = null;
@@ -583,7 +584,7 @@ public class DerbyDatabase implements IDatabase {
 			ResultSet resultSet1 = null;
 			ResultSet resultSet2 = null;
 			ResultSet resultSet3 = null;
-			
+			ResultSet resultSet4 = null;
 			
 			try {
 				gameStmt = conn.prepareStatement(
@@ -592,9 +593,17 @@ public class DerbyDatabase implements IDatabase {
 				);
 				gameStmt.setString(1, key);
 				resultSet1 = gameStmt.executeQuery();
-				int gameID = resultSet1.getInt(0);
+				int gameID = resultSet1.getInt(1);
+				System.out.println("Game ID loaded");
 				
-				loadPlayer(player, resultSet1);
+				playerStmt = conn.prepareStatement(
+					"select * from players " +
+					" where game_id = ?"
+				);
+				playerStmt.setInt(1, gameID);
+				resultSet4 = playerStmt.executeQuery();
+				loadPlayer(player, resultSet4);
+				
 				inventoryStmt = conn.prepareStatement("select * from inventory"
 						+ "where inventory_id = ?"
 						);
@@ -605,6 +614,7 @@ public class DerbyDatabase implements IDatabase {
 				equipStmt2.setInt(1, player.getEquipment_ID());
 				resultSet1 = equipStmt2.executeQuery();
 				loadEquipment(player.getEquipment(), resultSet1);
+				System.out.println("Player loaded");
 				
 				roomStmt = conn.prepareStatement("select * from rooms"
 						);
@@ -628,6 +638,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet1 = inventoryStmt.executeQuery();
 					loadEquipment(roomList.get(i).getInventory(), resultSet1);
 				}
+				System.out.println("Rooms loaded");
 				
 				Item loadedItem = new Item();
 				
@@ -638,6 +649,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet2 = itemStmt.executeQuery();
 					loadItem(loadedItem, resultSet2);
 				}
+				System.out.println("Items loaded");
 				
 				for (int i = 0; i < roomList.size(); i++) {
 					connStmt = conn.prepareStatement("select * from connections"
@@ -646,6 +658,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet3 = connStmt.executeQuery();
 					loadConnections(roomList.get(i), resultSet3);
 				}
+				System.out.println("Connections loaded");
 				
 				
 			} finally {
@@ -675,7 +688,7 @@ public class DerbyDatabase implements IDatabase {
 			room.setGame_ID(resultSet.getInt(4));
 		}
 		
-		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{
+		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{			
 			player.setName(resultSet.getString(1));
 			player.setHealth(resultSet.getDouble(2));
 			player.setDefence(resultSet.getDouble(3));

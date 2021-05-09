@@ -20,6 +20,8 @@ public class Game {
 	
 	public Game(){
 		enter.setCommands();
+		player = new Player();
+		currentRoom = new Room();
 	}
 	
 	private void exitGame() {
@@ -35,8 +37,7 @@ public class Game {
 	}
 	
 	private void newGame() {
-		player = new Player("Player");
-		//Map map = new Map();
+		/*player = new Player("Player");
 		player.setInventory_ID(4);
 		player.setEquipment_ID(1);
 		player.setPlayer_ID(2);
@@ -119,11 +120,11 @@ public class Game {
 		ArrayList<NPC> dinningHallNPCs = new ArrayList<NPC>();
 		dinningHallNPCs.add(cultist);
 		dinningHallNPCs.add(demon);
-		Room dinningHall = new Room(null, "Dinning Hall", dinningHallNPCs, dinningHallConnections);
+		Room dinningHall = new Room(null, "Dinning Hall", dinningHallNPCs, dinningHallConnections);*/
 		
 		//creates full map and sets starting room
-		fullMap = map;
-		currentRoom = fullMap.findRoom("Foyer");
+		
+		loadGame("initial");
 	}
 	
 	private String saveGame(String key) {
@@ -131,13 +132,58 @@ public class Game {
 		roomList.add(fullMap.getRooms().get("Foyer"));
 		roomList.add(fullMap.getRooms().get("Closet"));
 		roomList.add(fullMap.getRooms().get("Main Hall"));
+		roomList.add(fullMap.getRooms().get("Sun Room"));
+		roomList.add(fullMap.getRooms().get("Court Yard"));
+		roomList.add(fullMap.getRooms().get("Dining Hall"));
+		roomList.add(fullMap.getRooms().get("Summoning Room"));
+		roomList.add(fullMap.getRooms().get("Throne Room"));
+		roomList.add(fullMap.getRooms().get("Barracks"));
+		roomList.add(fullMap.getRooms().get("Armory"));
+		roomList.add(fullMap.getRooms().get("Antichamber"));
+		roomList.add(fullMap.getRooms().get("Bedroom"));
 		return db.saveGame(key, player, roomList);
 	}
 	
 	private void loadGame(String key) {
 		List<Room> roomList = new ArrayList<Room>();
-		roomList.addAll(fullMap.getRooms().values());
-		//return db.loadGame(key, player, roomList);
+		Room room0 = new Room();
+		roomList.add(room0);
+		Room room1 = new Room();
+		roomList.add(room1);
+		Room room2 = new Room();
+		roomList.add(room2);
+		Room room3 = new Room();
+		roomList.add(room3);
+		Room room4 = new Room();
+		roomList.add(room4);
+		Room room5 = new Room();
+		roomList.add(room5);
+		Room room6 = new Room();
+		roomList.add(room6);
+		Room room7 = new Room();
+		roomList.add(room7);
+		Room room8 = new Room();
+		roomList.add(room8);
+		Room room9 = new Room();
+		roomList.add(room9);
+		Room room10 = new Room();
+		roomList.add(room10);
+		Room room11 = new Room();
+		roomList.add(room11);
+		db.loadGame(key, player, roomList);
+		fullMap.addRoom("Foyer", roomList.get(0));
+		fullMap.addRoom("Closet", roomList.get(1));
+		fullMap.addRoom("Main Hall", roomList.get(2));
+		fullMap.addRoom("Sun Room", roomList.get(3));
+		fullMap.addRoom("Court Yard", roomList.get(4));
+		fullMap.addRoom("Dining Hall", roomList.get(5));
+		fullMap.addRoom("Summoning Room", roomList.get(6));
+		fullMap.addRoom("Throne Room", roomList.get(7));
+		fullMap.addRoom("Barracks", roomList.get(8));
+		fullMap.addRoom("Armory", roomList.get(9));
+		fullMap.addRoom("Antichamber", roomList.get(10));
+		fullMap.addRoom("Bedroom", roomList.get(11));
+		currentRoom = roomList.get(player.getRoom_ID());
 	}
 	
 	//receives command from user and runs the game
@@ -147,6 +193,9 @@ public class Game {
 		enter.setPrompt(prompt);
 		int result = enter.processPrompt(player, currentRoom);
 		if (isLoaded == true) {
+			if (player.getCurHealth() <= 0) {
+				return "game over";
+			}
 			if (player.getEquipment().containsItem("steel helmet of healing") == true) {
 				player.setHealth(player.getEquipment().getItem("steel helmet of healing").getHealing());
 			}
