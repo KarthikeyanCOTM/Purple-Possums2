@@ -149,6 +149,14 @@ public class Room {
 		this.NPCList.addAll(NPCList);
 	}
 	
+	public void addNPC(NPC npc) {
+		this.NPCList.add(npc);
+	}
+	
+	public NPC getNPC(int element) {
+		return this.NPCList.get(element);
+	}
+	
 	public void removeNPCs(ArrayList<NPC> NPCList) {
 		this.NPCList.removeAll(NPCList);
 	}

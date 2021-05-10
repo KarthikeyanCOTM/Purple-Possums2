@@ -34,6 +34,18 @@ public class Game {
 		return player;
 	}
 	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	public Map getMap() {
+		return fullMap;
+	}
+	
+	public void setMap(Map fullMap) {
+		this.fullMap = fullMap;
+	}
+	
 	private void newGame() {
 		player = new Player("Player");
 		//Map map = new Map();
@@ -126,7 +138,7 @@ public class Game {
 	private void loadGame(String key) {
 		List<Room> roomList = new ArrayList<Room>();
 		roomList.addAll(fullMap.getRooms().values());
-		db.loadGame(key, player, roomList);
+		  db.loadGame(key, player, roomList);
 	}
 	
 	private void deleteTables() {
@@ -273,7 +285,7 @@ public class Game {
 				return "You healed for " + tempHealing + "." + "\n" + currentRoom.getDescription() + currentRoom.getContents();
 			case 12:
 				loadGame(enter.getSecond());
-				return "Load Successful";
+				return "Load Successful " + currentRoom.getDescription() + currentRoom.getContents();
 			case 13:
 				if(player.getInventory().getItemList().isEmpty()) {
 					//db.updateGame("temp", player, roomList);

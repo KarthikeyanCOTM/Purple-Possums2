@@ -47,6 +47,10 @@ public class Inventory {
 		itemArrayList.add(temp);
 	}
 	
+	public void addNewItem(Item item) {
+		itemArrayList.add(item);
+	}
+	
 	public void removeItem(String name) {
 		for (int i = 0; i < itemArrayList.size(); i++) {
 			if (itemArrayList.get(i).getName().equals(name)) {

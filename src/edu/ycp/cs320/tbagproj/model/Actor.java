@@ -69,7 +69,7 @@ public class Actor {
 	public void setDefence(double defense) {
 		this.defence = defense;
 	}
-	
+	/*
 	public void equipItem(String item) {
 		Item tempItem = inventory.getItem(item);
 		tempItem.setInventory_ID(0);
@@ -82,6 +82,22 @@ public class Actor {
 			defence += tempItem.getArmour();
 		}
 		inventory.removeItem(item);
+	}
+	*/
+	public void equipItem(String name) {
+		if (inventory.containsItem(name)) {
+			inventory.getItem(name);
+		}
+		inventory.getItem(name).setInventory_ID(0);
+		inventory.getItem(name).setEquipment_ID(this.getEquipment_ID());
+		equipment.addNewItem(inventory.getItem(name));
+		if (inventory.getItem(name).getDamage() > 0) {
+			totalDamage += inventory.getItem(name).getDamage();
+		}
+		if (inventory.getItem(name).getArmour() > 0) {
+			defence += inventory.getItem(name).getArmour();
+		}
+		inventory.removeItem(name);
 	}
 	
 	public void unequipItem(String item) {
