@@ -15,8 +15,8 @@ public class Inventory {
 		gold = 0;
 	}
 	
-	public Inventory(ArrayList items, int gold) {
-		itemArrayList = new ArrayList<Item>(items);
+	public Inventory(ArrayList<Item> items, int gold) {
+		itemArrayList = new ArrayList<Item>();
 		this.gold = gold;
 	}
 	

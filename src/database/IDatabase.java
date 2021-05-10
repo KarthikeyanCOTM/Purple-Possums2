@@ -7,4 +7,6 @@ import edu.ycp.cs320.tbagproj.model.*;
 public interface IDatabase {
 	public String saveGame(String key, Player player, List<Room> list);
 	public String loadGame(String key, Player player, List<Room> roomList);
+	public void deleteGame();
+
 }

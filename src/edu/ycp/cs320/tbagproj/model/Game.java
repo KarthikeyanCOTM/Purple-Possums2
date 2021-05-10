@@ -186,6 +186,10 @@ public class Game {
 		currentRoom = roomList.get(player.getRoom_ID());
 	}
 	
+	private void deleteTables() {
+		db.deleteGame();
+	}
+	
 	//receives command from user and runs the game
 	public String runGame(String prompt) {
 		HashMap<String, Room> tempRoomsMap = new HashMap<String, Room>();
@@ -362,6 +366,28 @@ public class Game {
 					return enter.getSecond() + "\nDamage: " + tempItem.getDamage() + "\nArmor: " + tempItem.getArmour() + "\nHealing: " + tempItem.getHealing();
 				}
 				return enter.getSecond() + " does not exist";
+			case 16:
+				deleteTables();
+				return "Delete has worked.";
+			case 17:
+				if(player.getEquipment().getItemList().isEmpty()) {
+					//db.updateGame("temp", player, roomList);
+					return "Your equipment is empty.";
+				}
+				else {
+				String items = "";
+				ListIterator<Item> iter = player.getEquipment().getItemList().listIterator();
+				
+				
+				while (iter.hasNext()) {
+					if(!iter.hasPrevious())
+						items += " " + iter.next().getName();
+					else
+						items += ", " + iter.next().getName();
+				}
+				//db.updateGame("temp", player, roomList);
+				return "Your equipment has" + items;
+				}
 		}
 		return "Command could not be processed";
 	}

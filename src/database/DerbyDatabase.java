@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 
+
 import edu.ycp.cs320.tbagproj.model.*;
 
 public class DerbyDatabase implements IDatabase {
@@ -569,6 +570,7 @@ public class DerbyDatabase implements IDatabase {
 
 		public String loadGame(String key, Player player, List<Room> roomList) {
 			return executeTransaction(new Transaction<String>() {
+				@Override
 			public String execute(Connection conn) throws SQLException {
 		
 			PreparedStatement gameStmt = null;
@@ -576,15 +578,35 @@ public class DerbyDatabase implements IDatabase {
 			PreparedStatement roomStmt = null;
 			PreparedStatement inventoryStmt = null;
 			PreparedStatement inventoryStmt2 = null;
+			PreparedStatement inventoryStmt3 = null;
 			PreparedStatement equipStmt = null;
 			PreparedStatement equipStmt2 = null;
 			PreparedStatement itemStmt = null;
 			PreparedStatement connStmt = null;
+			PreparedStatement npcStmt = null;
 			
 			ResultSet resultSet1 = null;
 			ResultSet resultSet2 = null;
 			ResultSet resultSet3 = null;
 			ResultSet resultSet4 = null;
+			ResultSet resultSet5 = null;
+			ResultSet resultSet6 = null;
+			ResultSet resultSet7 = null;
+			ResultSet resultSet8 = null;
+			ResultSet resultSet9 = null;
+			ResultSet resultSet10 = null;
+			ResultSet resultSet11 = null;
+			ResultSet resultSet12 = null;
+			
+			ArrayList<NPC> npc = new ArrayList<NPC>();
+			NPC addnpc = new NPC();
+			ArrayList<Item> itemList = new ArrayList<Item>();
+			Item loadedItem = new Item();
+			Inventory inventory = new Inventory();
+			
+			ArrayList<Room> rooms = new ArrayList<Room>();
+			Room room = new Room();
+			int gameID = -1;
 			
 			try {
 				gameStmt = conn.prepareStatement(
@@ -593,42 +615,73 @@ public class DerbyDatabase implements IDatabase {
 				);
 				gameStmt.setString(1, key);
 				resultSet1 = gameStmt.executeQuery();
-				int gameID = resultSet1.getInt(1);
-				System.out.println("Game ID loaded");
+
 				
-				playerStmt = conn.prepareStatement(
-					"select * from players " +
-					" where game_id = ?"
-				);
-				playerStmt.setInt(1, gameID);
-				resultSet4 = playerStmt.executeQuery();
-				loadPlayer(player, resultSet4);
+				if (resultSet1.next()) {
+					gameID = resultSet1.getInt(1);
+					//Player
+					playerStmt = conn.prepareStatement("select * from players where game_id = ?");
+					playerStmt.setInt(1, gameID);
+					resultSet4 = playerStmt.executeQuery();
+					loadPlayer(player, resultSet4);
 				
-				inventoryStmt = conn.prepareStatement("select * from inventory"
-						+ "where inventory_id = ?"
+				
+				inventoryStmt = conn.prepareStatement("select * from inventory where inventory_id = ?"
 						);
 				inventoryStmt.setInt(1, player.getInventory_ID());
-				resultSet1 = inventoryStmt.executeQuery();
-				loadInventory(player.getInventory(), resultSet1);
+				resultSet5 = inventoryStmt.executeQuery();
+				//player.setInventory(inventory);
+				loadInventory(player.getInventory(), resultSet5);
+
+				
 				equipStmt2 = conn.prepareStatement("select * from equipment where equipment_id = ?");
 				equipStmt2.setInt(1, player.getEquipment_ID());
-				resultSet1 = equipStmt2.executeQuery();
-				loadEquipment(player.getEquipment(), resultSet1);
-				System.out.println("Player loaded");
+				resultSet6 = equipStmt2.executeQuery();
+				//player.setEquipment(inventory);
+				loadEquipment(player.getEquipment(), resultSet6);
+
 				
-				roomStmt = conn.prepareStatement("select * from rooms"
-						);
-				resultSet1 = roomStmt.executeQuery();
-				for (int i = 0; i < roomList.size(); i++) {
-					loadRoom(roomList.get(i), resultSet1);
+				//NPC
+				npcStmt = conn.prepareStatement("select * from npcs");
+				resultSet7 = npcStmt.executeQuery();
+				while(resultSet7.next()) {
+					loadNPC(addnpc, resultSet7);
+					npc.add(addnpc);
 				}
 				
+				for (int i = 0; i < npc.size(); i++) {
+					equipStmt = conn.prepareStatement("select * from equipment where equipment_id = ?");
+					equipStmt.setInt(1, npc.get(i).getEquipment_ID());
+					resultSet11 = equipStmt.executeQuery();
+					loadEquipment(npc.get(i).getEquipment(), resultSet11);
+				}
+				
+				for (int i = 0; i < npc.size(); i++) {
+					inventoryStmt3 = conn.prepareStatement("select * from inventory where inventory_id = ?");
+					inventoryStmt3.setInt(1, npc.get(i).getInventory_ID());
+					resultSet12 = inventoryStmt.executeQuery();
+					loadInventory(npc.get(i).getInventory(), resultSet12);
+				}
+				
+				//Room
+				roomStmt = conn.prepareStatement("select * from rooms"
+						);
+				resultSet8 = roomStmt.executeQuery();
+				while(resultSet8.next()) {
+					loadRoom(room, resultSet8);
+					rooms.add(room);
+				}
+				if(!roomList.containsAll(rooms)) {
+					roomList.addAll(rooms);
+				}
+				
+				//Add to Room
 				for (int i = 0; i < roomList.size(); i++) {
-					inventoryStmt2 = conn.prepareStatement("select * from inventory"
-						+ "where inventory_id = ?");
+					inventoryStmt2 = conn.prepareStatement("select * from inventory where inventory_id = ?");
 					inventoryStmt2.setInt(1, roomList.get(i).getInventory_ID());
-					resultSet1 = inventoryStmt2.executeQuery();
-					loadInventory(roomList.get(i).getInventory(), resultSet1);
+					resultSet9 = inventoryStmt2.executeQuery();
+					loadInventory(roomList.get(i).getInventory(), resultSet9);
+						
 				}
 				
 				for (int i = 0; i < roomList.size(); i++) {
@@ -640,39 +693,70 @@ public class DerbyDatabase implements IDatabase {
 				}
 				System.out.println("Rooms loaded");
 				
-				Item loadedItem = new Item();
 				
-				for (int i = 0; i < 4; i++) {
-					itemStmt = conn.prepareStatement("select * from items"
-							+ "where inventory_id = ?");
-					itemStmt.setInt(1, i);
+				//Item
+					itemStmt = conn.prepareStatement("select * from item");
 					resultSet2 = itemStmt.executeQuery();
-					loadItem(loadedItem, resultSet2);
-				}
-				System.out.println("Items loaded");
+					while (resultSet2.next()) {
+						loadItem(loadedItem, resultSet2);
+						itemList.add(loadedItem);
+					}
+					for (int i = 0; i < itemList.size(); i++) {
+						Item item = new Item();
+						item = itemList.get(i);
+						if (item.getEquipment_ID() == player.getEquipment_ID() && item.getEquipment_ID() != 0)
+							player.getEquipment().addNewItem(item.getName(), item.getDamage(), item.getArmour(), item.getHealing(), item.getIsUsable());
+						if (item.getInventory_ID() == player.getInventory_ID() && item.getInventory_ID() != 0) {
+							player.getInventory().addNewItem(item.getName(), item.getDamage(), item.getArmour(), item.getHealing(), item.getIsUsable());
+						}
+					}
+					
+					for (int i = 0; i < itemList.size(); i++) {
+						Item item = new Item();
+						item = itemList.get(i);
+						for (int j = 0; j < roomList.size(); i++) {
+							Room room2 = new Room();
+							room2 = roomList.get(j);
+							if (room2.getInventory_ID() == item.getInventory_ID() && item.getInventory_ID() != 0) {
+								room2.getInventory().addNewItem(item.getName(), item.getDamage(), item.getArmour(), item.getHealing(), item.getIsUsable());
+							}
+						}
+					}
 				
+				//Connection
 				for (int i = 0; i < roomList.size(); i++) {
-					connStmt = conn.prepareStatement("select * from connections"
-							+ "where room_id = ?");
+					connStmt = conn.prepareStatement("select * from connections where room_id = ?");
 					connStmt.setInt(1, roomList.get(i).getRoom_ID());
 					resultSet3 = connStmt.executeQuery();
 					loadConnections(roomList.get(i), resultSet3);
 				}
 				System.out.println("Connections loaded");
 				
-				
+				}	
 			} finally {
 				DBUtil.closeQuietly(gameStmt);
+				DBUtil.closeQuietly(playerStmt);
 				DBUtil.closeQuietly(roomStmt);
 				DBUtil.closeQuietly(inventoryStmt);
 				DBUtil.closeQuietly(inventoryStmt2);
+				DBUtil.closeQuietly(inventoryStmt3);
 				DBUtil.closeQuietly(equipStmt);
 				DBUtil.closeQuietly(equipStmt2);
 				DBUtil.closeQuietly(itemStmt);
 				DBUtil.closeQuietly(connStmt);
+				DBUtil.closeQuietly(npcStmt);
 				DBUtil.closeQuietly(resultSet1);
 				DBUtil.closeQuietly(resultSet2);
 				DBUtil.closeQuietly(resultSet3);
+				DBUtil.closeQuietly(resultSet4);
+				DBUtil.closeQuietly(resultSet5);
+				DBUtil.closeQuietly(resultSet6);
+				DBUtil.closeQuietly(resultSet7);
+				DBUtil.closeQuietly(resultSet8);
+				DBUtil.closeQuietly(resultSet9);
+				DBUtil.closeQuietly(resultSet10);
+				DBUtil.closeQuietly(resultSet11);
+				DBUtil.closeQuietly(resultSet12);
 			}
 			return key;
 			};
@@ -682,47 +766,59 @@ public class DerbyDatabase implements IDatabase {
 		}
 		
 		private void loadRoom(Room room, ResultSet resultSet) throws SQLException {
-			room.setName(resultSet.getString(1));
-			room.setInventory_ID(resultSet.getInt(2));
-			room.setDescription(resultSet.getString(3));
-			room.setGame_ID(resultSet.getInt(4));
+			if (resultSet.next()) {
+			room.setName(resultSet.getString(2));
+			room.setInventory_ID(resultSet.getInt(3));
+			room.setDescription(resultSet.getString(4));
+			room.setGame_ID(resultSet.getInt(5));
+			}
 		}
 		
-		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{			
-			player.setName(resultSet.getString(1));
-			player.setHealth(resultSet.getDouble(2));
-			player.setDefence(resultSet.getDouble(3));
-			player.setTotalDamage(resultSet.getDouble(4));
-			player.setInventory_ID(resultSet.getInt(5));
-			player.setEquipment_ID(resultSet.getInt(6));
-			player.setGame_ID(resultSet.getInt(7));
-			player.setRoom_ID(resultSet.getInt(8));
+
+		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{
+			if (resultSet.next()) {
+			player.setName(resultSet.getString(2));
+			player.setHealth(resultSet.getDouble(3));
+			player.setDefence(resultSet.getDouble(4));
+			player.setTotalDamage(resultSet.getDouble(5));
+			player.setInventory_ID(resultSet.getInt(6));
+			player.setEquipment_ID(resultSet.getInt(7));
+			player.setGame_ID(resultSet.getInt(8));
+			player.setRoom_ID(resultSet.getInt(9));
+			}
 		}
 		
 		private void loadInventory(Inventory inventory, ResultSet resultSet) throws SQLException{
-			inventory.addGold(resultSet.getInt(1));
-			inventory.setOwner(resultSet.getString(2));
+			if (resultSet.next()) {
+			inventory.addGold(resultSet.getInt(2));
+			inventory.setOwner(resultSet.getString(3));
+			}
 		}
 		
 		private void loadEquipment(Inventory equipment, ResultSet resultSet) throws SQLException{
-			equipment.addGold(resultSet.getInt(1));
-			equipment.setOwner(resultSet.getString(2));
+			if (resultSet.next()) {
+			equipment.addGold(resultSet.getInt(2));
+			equipment.setOwner(resultSet.getString(3));
+			}
 		}
 		
 		private void loadItem(Item item, ResultSet resultSet) throws SQLException{
-			item.setName(resultSet.getString(1));
-			item.setDamage(resultSet.getDouble(2));
-			item.setArmour(resultSet.getDouble(3));
-			item.setHealing(resultSet.getDouble(4));
-			item.setIsUsable(resultSet.getBoolean(5));
-			item.setInventory_ID(resultSet.getInt(6));
-			item.setEquipment_ID(resultSet.getInt(7));
+			if (resultSet.next()) {
+			item.setName(resultSet.getString(2));
+			item.setDamage(resultSet.getDouble(3));
+			item.setArmour(resultSet.getDouble(4));
+			item.setHealing(resultSet.getDouble(5));
+			item.setIsUsable(resultSet.getBoolean(6));
+			item.setInventory_ID(resultSet.getInt(7));
+			item.setEquipment_ID(resultSet.getInt(8));
+			}
 		}
 		
 		private void loadConnections(Room room, ResultSet resultSet) throws SQLException{
-			room.setRoom_ID(resultSet.getInt(1));
-			int connectID = resultSet.getInt(2);
-			int dir = resultSet.getInt(3);
+			if (resultSet.next()) {
+			room.setRoom_ID(resultSet.getInt(2));
+			int connectID = resultSet.getInt(3);
+			int dir = resultSet.getInt(4);
 			if (dir == Room.NORTH)
 				room.setConnectionsID("north", connectID);
 			else if (dir == Room.EAST)
@@ -731,11 +827,82 @@ public class DerbyDatabase implements IDatabase {
 				room.setConnectionsID("south", connectID);
 			else if (dir == Room.WEST)
 				room.setConnectionsID("west", connectID);
+			}
 		}
 		
+		private void loadNPC(NPC npc, ResultSet resultSet) throws SQLException {
+			if (resultSet.next()) {
+			npc.setName(resultSet.getString(2));
+			npc.setHealth(resultSet.getDouble(3));
+			npc.setDefence(resultSet.getDouble(4));
+			npc.setTotalDamage(resultSet.getDouble(5));
+			npc.setInventory_ID(resultSet.getInt(6));
+			npc.setEquipment_ID(resultSet.getInt(7));
+			npc.setIsNPCAlive(resultSet.getBoolean(8));
+			npc.setRoom_ID(resultSet.getInt(9));
+			}
+			}
 		
 		//load end
 	
+		/**Delete Game **/
+	public void deleteGame() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement gameStmt = null;
+				PreparedStatement playerStmt = null;
+				PreparedStatement roomStmt = null;
+				PreparedStatement inventoryStmt = null;
+				PreparedStatement equipStmt = null;
+				PreparedStatement itemStmt = null;
+				PreparedStatement connStmt = null;
+				PreparedStatement npcStmt = null;
+				try {
+					
+					
+					itemStmt = conn.prepareStatement("delete from item");
+					itemStmt.executeUpdate();
+					
+					roomStmt = conn.prepareStatement("delete from rooms");
+					roomStmt.executeUpdate();
+					
+					playerStmt = conn.prepareStatement("delete from players");
+					playerStmt.executeUpdate();
+					
+					npcStmt = conn.prepareStatement("delete from npcs");
+					npcStmt.executeUpdate();
+					
+					inventoryStmt = conn.prepareStatement("delete from inventory");
+					inventoryStmt.executeUpdate();
+					
+					equipStmt = conn.prepareStatement("delete from equipment");
+					equipStmt.executeUpdate();
+					
+					connStmt = conn.prepareStatement("delete from connections");
+					connStmt.executeUpdate();
+					
+					gameStmt = conn.prepareStatement("delete from games");
+					gameStmt.executeUpdate();
+					
+					
+					
+					
+				}
+				finally {
+					DBUtil.closeQuietly(gameStmt);
+					DBUtil.closeQuietly(roomStmt);
+					DBUtil.closeQuietly(inventoryStmt);
+					DBUtil.closeQuietly(equipStmt);
+					DBUtil.closeQuietly(itemStmt);
+					DBUtil.closeQuietly(connStmt);
+				}
+				
+				return true;
+			}
+		});
+		}
+		
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
