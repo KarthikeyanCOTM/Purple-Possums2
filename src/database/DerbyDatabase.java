@@ -850,7 +850,7 @@ public class DerbyDatabase implements IDatabase {
 		private void loadNPC(NPC npc, ResultSet resultSet) throws SQLException {
 			npc.setNPC_ID(resultSet.getInt(1));
 			npc.setName(resultSet.getString(2));
-			npc.setHealth(resultSet.getDouble(3));
+			npc.setNewHealth(resultSet.getDouble(3));
 			npc.setDefence(resultSet.getDouble(4));
 			npc.setTotalDamage(resultSet.getDouble(5));
 			npc.setInventory_ID(resultSet.getInt(6));
