@@ -49,7 +49,7 @@ public class Game {
 	}
 	
 	private void newGame() {
-		player = new Player("Player");
+		/*player = new Player("Player");
 		player.setInventory_ID(4);
 		player.setEquipment_ID(1);
 		player.setPlayer_ID(2);
@@ -310,12 +310,12 @@ public class Game {
 		antichamber.setConnections("west", bedRoom);
 		map.addRoom("Antichamber", antichamber);
 		map.addRoom("Throne Room", throneRoom);
-		map.addRoom("Bedroom", bedRoom);
+		map.addRoom("Bedroom", bedRoom);*/
 		
 		//creates full map and sets starting room
-		fullMap = map;
-		currentRoom = foyer;
-		//loadGame("initial");
+		//fullMap = map;
+		//currentRoom = foyer;
+		loadGame("initial");
 	}
 	
 	private String saveGame(String key) {
@@ -337,31 +337,10 @@ public class Game {
 	
 	private void loadGame(String key) {
 		ArrayList<Room> roomList = new ArrayList<Room>();
-		Room room0 = new Room();
-		roomList.add(room0);
-		Room room1 = new Room();
-		roomList.add(room1);
-		Room room2 = new Room();
-		roomList.add(room2);
-		Room room3 = new Room();
-		roomList.add(room3);
-		Room room4 = new Room();
-		roomList.add(room4);
-		Room room5 = new Room();
-		roomList.add(room5);
-		Room room6 = new Room();
-		roomList.add(room6);
-		Room room7 = new Room();
-		roomList.add(room7);
-		Room room8 = new Room();
-		roomList.add(room8);
-		Room room9 = new Room();
-		roomList.add(room9);
-		Room room10 = new Room();
-		roomList.add(room10);
-		Room room11 = new Room();
-		roomList.add(room11);
 		db.loadGame(key, player, roomList);
+		for (int i = 0; i < roomList.size(); i++) {
+			roomList.get(i).updateContents();
+		}
 		fullMap.addRoom("Foyer", roomList.get(0));
 		fullMap.addRoom("Closet", roomList.get(1));
 		fullMap.addRoom("Main Hall", roomList.get(2));
