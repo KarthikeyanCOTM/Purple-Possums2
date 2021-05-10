@@ -101,6 +101,7 @@ public class Inventory {
 					b = tempName.length();
 				}
 			}
+			System.out.println("hello");
 			if (equippedItem.equals(inputItem)) {
 				return true;
 			}
