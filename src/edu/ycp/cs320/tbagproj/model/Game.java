@@ -125,6 +125,7 @@ public class Game {
 		//creates full map and sets starting room
 		
 		loadGame("initial");
+		System.out.println("Hello");
 	}
 	
 	private String saveGame(String key) {
