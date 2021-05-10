@@ -307,6 +307,25 @@ public class Game {
 			case 16:
 				deleteTables();
 				return "Delete has worked.";
+			case 17:
+				if(player.getEquipment().getItemList().isEmpty()) {
+					//db.updateGame("temp", player, roomList);
+					return "Your equipment is empty.";
+				}
+				else {
+				String items = "";
+				ListIterator<Item> iter = player.getEquipment().getItemList().listIterator();
+				
+				
+				while (iter.hasNext()) {
+					if(!iter.hasPrevious())
+						items += " " + iter.next().getName();
+					else
+						items += ", " + iter.next().getName();
+				}
+				//db.updateGame("temp", player, roomList);
+				return "Your equipment has" + items;
+				}
 		}
 		return "Command could not be processed";
 	}

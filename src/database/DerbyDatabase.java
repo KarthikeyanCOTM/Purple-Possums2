@@ -570,6 +570,7 @@ public class DerbyDatabase implements IDatabase {
 
 		public String loadGame(String key, Player player, List<Room> roomList) {
 			return executeTransaction(new Transaction<String>() {
+				@Override
 			public String execute(Connection conn) throws SQLException {
 		
 			PreparedStatement gameStmt = null;
@@ -615,9 +616,9 @@ public class DerbyDatabase implements IDatabase {
 				gameStmt.setString(1, key);
 				resultSet1 = gameStmt.executeQuery();
 
-				gameID = resultSet1.getInt(1);
+				
 				if (resultSet1.next()) {
-					
+					gameID = resultSet1.getInt(1);
 					//Player
 					playerStmt = conn.prepareStatement("select * from players where game_id = ?");
 					playerStmt.setInt(1, gameID);
@@ -625,20 +626,18 @@ public class DerbyDatabase implements IDatabase {
 					loadPlayer(player, resultSet4);
 				
 				
-				inventoryStmt = conn.prepareStatement("select * from inventory"
-
-						+ "where inventory_id = ?"
+				inventoryStmt = conn.prepareStatement("select * from inventory where inventory_id = ?"
 						);
 				inventoryStmt.setInt(1, player.getInventory_ID());
 				resultSet5 = inventoryStmt.executeQuery();
-				player.setInventory(inventory);
+				//player.setInventory(inventory);
 				loadInventory(player.getInventory(), resultSet5);
 
 				
 				equipStmt2 = conn.prepareStatement("select * from equipment where equipment_id = ?");
 				equipStmt2.setInt(1, player.getEquipment_ID());
 				resultSet6 = equipStmt2.executeQuery();
-				player.setEquipment(inventory);
+				//player.setEquipment(inventory);
 				loadEquipment(player.getEquipment(), resultSet6);
 
 				
@@ -678,8 +677,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				//Add to Room
 				for (int i = 0; i < roomList.size(); i++) {
-					inventoryStmt2 = conn.prepareStatement("select * from inventory"
-						+ "where inventory_id = ?");
+					inventoryStmt2 = conn.prepareStatement("select * from inventory where inventory_id = ?");
 					inventoryStmt2.setInt(1, roomList.get(i).getInventory_ID());
 					resultSet9 = inventoryStmt2.executeQuery();
 					loadInventory(roomList.get(i).getInventory(), resultSet9);
@@ -719,8 +717,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				//Connection
 				for (int i = 0; i < roomList.size(); i++) {
-					connStmt = conn.prepareStatement("select * from connections"
-							+ "where room_id = ?");
+					connStmt = conn.prepareStatement("select * from connections where room_id = ?");
 					connStmt.setInt(1, roomList.get(i).getRoom_ID());
 					resultSet3 = connStmt.executeQuery();
 					loadConnections(roomList.get(i), resultSet3);
@@ -759,52 +756,59 @@ public class DerbyDatabase implements IDatabase {
 			
 		}
 		
-		private Room loadRoom(Room room, ResultSet resultSet) throws SQLException {
-			room.setName(resultSet.getString(1));
-			room.setInventory_ID(resultSet.getInt(2));
-			room.setDescription(resultSet.getString(3));
-			room.setGame_ID(resultSet.getInt(4));
-			return room;
+		private void loadRoom(Room room, ResultSet resultSet) throws SQLException {
+			if (resultSet.next()) {
+			room.setName(resultSet.getString(2));
+			room.setInventory_ID(resultSet.getInt(3));
+			room.setDescription(resultSet.getString(4));
+			room.setGame_ID(resultSet.getInt(5));
+			}
 		}
 		
 		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{
-			player.setName(resultSet.getString(1));
-			player.setHealth(resultSet.getDouble(2));
-			player.setDefence(resultSet.getDouble(3));
-			player.setTotalDamage(resultSet.getDouble(4));
-			player.setInventory_ID(resultSet.getInt(5));
-			player.setEquipment_ID(resultSet.getInt(6));
-			player.setGame_ID(resultSet.getInt(7));
-			player.setRoom_ID(resultSet.getInt(8));
+			if (resultSet.next()) {
+			player.setName(resultSet.getString(2));
+			player.setHealth(resultSet.getDouble(3));
+			player.setDefence(resultSet.getDouble(4));
+			player.setTotalDamage(resultSet.getDouble(5));
+			player.setInventory_ID(resultSet.getInt(6));
+			player.setEquipment_ID(resultSet.getInt(7));
+			player.setGame_ID(resultSet.getInt(8));
+			player.setRoom_ID(resultSet.getInt(9));
+			}
 		}
 		
-		private Inventory loadInventory(Inventory inventory, ResultSet resultSet) throws SQLException{
-			inventory.addGold(resultSet.getInt(1));
-			inventory.setOwner(resultSet.getString(2));
-			return inventory;
+		private void loadInventory(Inventory inventory, ResultSet resultSet) throws SQLException{
+			if (resultSet.next()) {
+			inventory.addGold(resultSet.getInt(2));
+			inventory.setOwner(resultSet.getString(3));
+			}
 		}
 		
-		private Inventory loadEquipment(Inventory equipment, ResultSet resultSet) throws SQLException{
-			equipment.addGold(resultSet.getInt(1));
-			equipment.setOwner(resultSet.getString(2));
-			return equipment;
+		private void loadEquipment(Inventory equipment, ResultSet resultSet) throws SQLException{
+			if (resultSet.next()) {
+			equipment.addGold(resultSet.getInt(2));
+			equipment.setOwner(resultSet.getString(3));
+			}
 		}
 		
-		private Item loadItem(Item item, ResultSet resultSet) throws SQLException{
-			item.setName(resultSet.getString(1));
-			item.setDamage(resultSet.getDouble(2));
-			item.setArmour(resultSet.getDouble(3));
-			item.setHealing(resultSet.getDouble(4));
-			item.setIsUsable(resultSet.getBoolean(5));
-			item.setInventory_ID(resultSet.getInt(6));
-			item.setEquipment_ID(resultSet.getInt(7));
-			return item;
+		private void loadItem(Item item, ResultSet resultSet) throws SQLException{
+			if (resultSet.next()) {
+			item.setName(resultSet.getString(2));
+			item.setDamage(resultSet.getDouble(3));
+			item.setArmour(resultSet.getDouble(4));
+			item.setHealing(resultSet.getDouble(5));
+			item.setIsUsable(resultSet.getBoolean(6));
+			item.setInventory_ID(resultSet.getInt(7));
+			item.setEquipment_ID(resultSet.getInt(8));
+			}
 		}
 		
 		private void loadConnections(Room room, ResultSet resultSet) throws SQLException{
-			room.setRoom_ID(resultSet.getInt(1));
-			int connectID = resultSet.getInt(2);
-			int dir = resultSet.getInt(3);
+			if (resultSet.next()) {
+			room.setRoom_ID(resultSet.getInt(2));
+			int connectID = resultSet.getInt(3);
+			int dir = resultSet.getInt(4);
 			if (dir == Room.NORTH)
 				room.setConnectionsID("north", connectID);
 			else if (dir == Room.EAST)
@@ -813,19 +817,21 @@ public class DerbyDatabase implements IDatabase {
 				room.setConnectionsID("south", connectID);
 			else if (dir == Room.WEST)
 				room.setConnectionsID("west", connectID);
+			}
 		}
 		
-		private NPC loadNPC(NPC npc, ResultSet resultSet) throws SQLException {
-			npc.setName(resultSet.getString(1));
-			npc.setHealth(resultSet.getDouble(2));
-			npc.setDefence(resultSet.getDouble(3));
-			npc.setTotalDamage(resultSet.getDouble(4));
-			npc.setInventory_ID(resultSet.getInt(5));
-			npc.setEquipment_ID(resultSet.getInt(6));
-			npc.setIsNPCAlive(resultSet.getBoolean(7));
-			npc.setRoom_ID(resultSet.getInt(8));
-			return npc;
-		}
+		private void loadNPC(NPC npc, ResultSet resultSet) throws SQLException {
+			if (resultSet.next()) {
+			npc.setName(resultSet.getString(2));
+			npc.setHealth(resultSet.getDouble(3));
+			npc.setDefence(resultSet.getDouble(4));
+			npc.setTotalDamage(resultSet.getDouble(5));
+			npc.setInventory_ID(resultSet.getInt(6));
+			npc.setEquipment_ID(resultSet.getInt(7));
+			npc.setIsNPCAlive(resultSet.getBoolean(8));
+			npc.setRoom_ID(resultSet.getInt(9));
+			}
+			}
 		
 		//load end
 	

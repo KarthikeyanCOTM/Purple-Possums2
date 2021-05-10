@@ -66,8 +66,8 @@ public class Command {
 		commandsList.add("inventory");
 		commandsList.add("delete");
 		commandsList.add("inspect");
+		commandsList.add("equipment");
 		}
-
 	}
 	
 	public Stack<String> getPrevious(){
@@ -138,6 +138,8 @@ public class Command {
 						return 13;
 				case "inspect" :
 					return 15;
+				case "equipment" :
+					return 17;
 			}
 		}
 		return 0;
