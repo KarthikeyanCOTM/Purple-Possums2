@@ -3,9 +3,8 @@ package edu.ycp.cs320.tbagproj.controller;
 import edu.ycp.cs320.tbagproj.model.*;
 
 public class GameController {
-	Command command = new Command();
 	String prompt;
-	Game game = new Game();
+	Game game;
 	boolean end = false;
 	
 	public void setModel(Game game) {
@@ -17,7 +16,6 @@ public class GameController {
 	}
 	
 	public String gameRun(String prompt) {
-		//command.setCommands();
 		return game.runGame(prompt);
 	}
 }

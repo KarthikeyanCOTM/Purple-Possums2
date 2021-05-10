@@ -68,6 +68,48 @@ public class Inventory {
 		return false;
 	}
 	
+	public boolean containsEquippedItem(String name) {
+		String equippedItem = "";
+		String inputItem = "";
+		for (int x = 0; x < name.length(); x++) {
+			if (name.charAt(x) == ' ') {
+				for (int y = x + 1; y < name.length(); y++) {
+					if (name.charAt(y) == ' ') {
+						y = name.length();
+					}else {
+						inputItem += name.charAt(y);
+					}
+				}
+				x = name.length();
+			}
+		}
+		for (int a = 0; a < itemArrayList.size(); a++) {
+			String tempName = itemArrayList.get(a).getName();
+			for (int b = 0; b < tempName.length(); b++) {
+				if (tempName.charAt(b) == ' ') {
+					for (int c = b + 1; c < tempName.length(); c++) {
+						if (name.charAt(c) == ' ') {
+							c = name.length();
+						}else {
+							equippedItem += name.charAt(c);
+						}
+					}
+					b = tempName.length();
+				}
+			}
+			if (equippedItem.equals(inputItem)) {
+				return true;
+			}
+			if (equippedItem.equals("staff") && inputItem.equals("sword")) {
+				return true;
+			}
+			if (inputItem.equals("staff") && equippedItem.equals("sword")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public ArrayList<Item> getItemList() {
 		return itemArrayList;
 	}

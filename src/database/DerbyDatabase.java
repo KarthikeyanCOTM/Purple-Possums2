@@ -684,6 +684,14 @@ public class DerbyDatabase implements IDatabase {
 						
 				}
 				
+				for (int i = 0; i < roomList.size(); i++) {
+					equipStmt = conn.prepareStatement("select * from inventory"
+						+ "where inventory_id = ?");
+					equipStmt.setInt(1, roomList.get(i).getInventory_ID());
+					resultSet1 = inventoryStmt.executeQuery();
+					loadEquipment(roomList.get(i).getInventory(), resultSet1);
+				}
+				System.out.println("Rooms loaded");
 				
 				
 				//Item
@@ -722,6 +730,7 @@ public class DerbyDatabase implements IDatabase {
 					resultSet3 = connStmt.executeQuery();
 					loadConnections(roomList.get(i), resultSet3);
 				}
+				System.out.println("Connections loaded");
 				
 				}	
 			} finally {
@@ -765,6 +774,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		}
 		
+
 		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{
 			if (resultSet.next()) {
 			player.setName(resultSet.getString(2));
