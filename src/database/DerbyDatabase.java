@@ -627,6 +627,7 @@ public class DerbyDatabase implements IDatabase {
 					playerStmt = conn.prepareStatement("select * from players where game_id = ?");
 					playerStmt.setInt(1, gameID);
 					resultSet4 = playerStmt.executeQuery();
+
 					while (resultSet4.next()) {
 						player2 = new Player();
 						loadPlayer(player2, resultSet4);
@@ -635,6 +636,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					
 					//Item
+
 					itemStmt = conn.prepareStatement("select * from item");
 					resultSet2 = itemStmt.executeQuery();
 					while (resultSet2.next()) {
@@ -837,8 +839,7 @@ public class DerbyDatabase implements IDatabase {
 					loadConnections(roomList.get(i), resultSet3);
 					}
 				}
-				*/
-				
+*/
 				
 				}	
 				
@@ -882,6 +883,7 @@ public class DerbyDatabase implements IDatabase {
 			room.setGame_ID(resultSet.getInt(5));
 		}
 		
+
 		private void loadPlayer(Player player, ResultSet resultSet) throws SQLException{
 			player.setPlayer_ID(resultSet.getInt(1));
 			player.setName(resultSet.getString(2));

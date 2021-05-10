@@ -36,6 +36,7 @@ public class Room {
 		}else {
 			this.connections = connections;
 		}
+		updateContents();
 	}
 	
 	public Inventory getInventory(){
